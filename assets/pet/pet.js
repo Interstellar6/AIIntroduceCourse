@@ -80,7 +80,10 @@
       '#pet-root .pet-bubble{background:var(--blue, #4d6bfe)}',
       '#pet-root .pet-bubble::after{background:var(--blue, #4d6bfe)}',
       '@media (max-width:899px){#pet-root{display:none !important}}',
-      '@media print{#pet-root{display:none !important}}'
+      '@media print{#pet-root{display:none !important}}',
+      /* 探针还在重试时，静态图轻微呼吸，暗示「还在加载」 */
+      '#pet-root[data-pet-loading]{animation:aico-pet-wait 2.4s ease-in-out infinite}',
+      '@keyframes aico-pet-wait{0%,100%{opacity:.95}50%{opacity:.62}}'
     ].join('');
     document.head.appendChild(style);
   }
@@ -106,21 +109,26 @@
     return root;
   }
 
-  /* 探针偶尔会因为网络抖动读不到视频首帧而误判「不支持透明」，
-     那就再试一次；成功过就记在本机，之后不再探测。 */
-  function probeWithRetry(lib) {
-    var KEY = 'aico-pet-alpha';
-    try { if (localStorage.getItem(KEY) === '1') return Promise.resolve(true); } catch (_) {}
-    function mark(ok) {
-      if (ok) { try { localStorage.setItem(KEY, '1'); } catch (_) {} }
-      return ok;
-    }
-    return lib.probeAlphaSupport().then(function (ok) {
-      if (ok) return mark(true);
-      return new Promise(function (r) { setTimeout(r, 800); })
-        .then(function () { return lib.probeAlphaSupport(); })
-        .then(mark);
-    });
+  /* 探针要下载 idle.webm 才能读出首帧，网络抖一下就误判「不支持透明」。
+     原先一次失败就整轮退化成静态图——所以这里失败后自动重探，
+     只要有一次成功就上线动画宠物；成功过就记在本机，以后不再探测。 */
+  var PROBE_KEY = 'aico-pet-alpha';
+  var PROBE_DELAYS = [0, 1500, 3500, 7000];   // 4 次机会，覆盖十几秒内的网络抖动
+
+  function probeUntilOk(lib, onFail) {
+    try { if (localStorage.getItem(PROBE_KEY) === '1') return Promise.resolve(true); } catch (_) {}
+    return PROBE_DELAYS.reduce(function (chain, delay, i) {
+      return chain.then(function (ok) {
+        if (ok) return true;
+        if (i) onFail(delay);                  // 通知调用方「还在等，先留着静态图」
+        return new Promise(function (r) { setTimeout(r, delay); })
+          .then(function () { return lib.probeAlphaSupport(); })
+          .then(function (ok2) {
+            if (ok2) { try { localStorage.setItem(PROBE_KEY, '1'); } catch (_) {} }
+            return ok2;
+          });
+      });
+    }, Promise.resolve(false));
   }
 
   function boot() {
@@ -141,8 +149,11 @@
        这样网络慢时不会出现一段时间「右下角什么都没有」。 */
     var placeholder = staticFallback(base);
 
-    probeWithRetry(lib).then(function (ok) {
-      if (!ok) return;                       // 两次都失败：留在静态图
+    probeUntilOk(lib, function (delay) {
+      // 还没成功：静态图继续挂着，给个「加载中」的暗示
+      if (placeholder) placeholder.setAttribute('data-pet-loading', String(delay));
+    }).then(function (ok) {
+      if (!ok) return;                       // 全都失败：留在静态图
       if (placeholder && placeholder.parentNode) placeholder.parentNode.removeChild(placeholder);
 
       var pet = new lib.DeskPet({
