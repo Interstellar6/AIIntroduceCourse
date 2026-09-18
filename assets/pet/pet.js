@@ -106,6 +106,23 @@
     return root;
   }
 
+  /* 探针偶尔会因为网络抖动读不到视频首帧而误判「不支持透明」，
+     那就再试一次；成功过就记在本机，之后不再探测。 */
+  function probeWithRetry(lib) {
+    var KEY = 'aico-pet-alpha';
+    try { if (localStorage.getItem(KEY) === '1') return Promise.resolve(true); } catch (_) {}
+    function mark(ok) {
+      if (ok) { try { localStorage.setItem(KEY, '1'); } catch (_) {} }
+      return ok;
+    }
+    return lib.probeAlphaSupport().then(function (ok) {
+      if (ok) return mark(true);
+      return new Promise(function (r) { setTimeout(r, 800); })
+        .then(function () { return lib.probeAlphaSupport(); })
+        .then(mark);
+    });
+  }
+
   function boot() {
     if (window.innerWidth < 900) return;
     try { if (localStorage.getItem(HIDE_KEY) === '1') return; } catch (_) {}
@@ -120,8 +137,13 @@
 
     injectCss();
 
-    lib.probeAlphaSupport().then(function (ok) {
-      if (!ok) { staticFallback(base); return; }
+    /* 先立刻挂上静态图，探针通过后再无缝换成会动的宠物。
+       这样网络慢时不会出现一段时间「右下角什么都没有」。 */
+    var placeholder = staticFallback(base);
+
+    probeWithRetry(lib).then(function (ok) {
+      if (!ok) return;                       // 两次都失败：留在静态图
+      if (placeholder && placeholder.parentNode) placeholder.parentNode.removeChild(placeholder);
 
       var pet = new lib.DeskPet({
         allow: ALLOW,
