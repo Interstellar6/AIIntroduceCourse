@@ -362,6 +362,7 @@ html[data-os="win"] .only-mac{display:none !important}
 }
 .meme.sm img{max-width:300px}
 .meme.lg img{max-width:600px}
+.meme.full img{max-width:100%}
 .meme figcaption{
   font-size:13px;color:var(--ink-3);margin-top:9px;
   text-align:center;line-height:1.65;max-width:520px;
