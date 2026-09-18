@@ -301,6 +301,35 @@
     document.title = cur.t + ' · 人工智能导论实操手册';
   }
 
+  /* ---------------- 角落桌宠（可选，延迟加载） ----------------
+     素材与核心逻辑来自 dsh-pet（MIT）：https://github.com/PC2005-cloud/dsh-pet
+     只在桌面端加载，且等页面空闲之后再拉，不拖慢首屏。 */
+  (function loadPet() {
+    if (window.innerWidth < 900) return;
+    var self = (document.currentScript && document.currentScript.src) || location.href;
+    var base;
+    try { base = new URL('pet/', self).href; } catch (e) { base = 'assets/pet/'; }
+
+    function attach() {
+      window.__PET_ASSET_BASE__ = base + 'webm/';
+      var core = document.createElement('script');
+      core.src = base + 'deskpet.js';
+      core.onload = function () {
+        var boot = document.createElement('script');
+        boot.src = base + 'pet.js';
+        boot.setAttribute('data-pet-base', base);
+        document.body.appendChild(boot);
+      };
+      document.body.appendChild(core);
+    }
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(attach, { timeout: 2500 });
+    } else {
+      window.addEventListener('load', function () { setTimeout(attach, 800); });
+    }
+  })();
+
   // 点击正文里的锚点后关掉移动端菜单
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href^="#"]');

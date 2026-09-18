@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><title>probing</title>
+<video id="v" muted playsinline preload="auto" src="assets/pet/webm/idle.webm"></video>
+<script>
+const v=document.getElementById('v');
+v.addEventListener('loadeddata',()=>{
+  try{
+    const c=document.createElement('canvas');c.width=160;c.height=90;
+    const ctx=c.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(v,0,0,160,90);
+    const d=ctx.getImageData(0,0,160,90).data;
+    let t=0;for(let i=3;i<d.length;i+=4)if(d[i]<200)t++;
+    document.title='PROBE::ok transparent='+(t/(160*90)).toFixed(3);
+  }catch(e){document.title='PROBE::canvas error '+e.message;}
+});
+v.addEventListener('error',()=>{document.title='PROBE::video error code='+(v.error&&v.error.code);});
+setTimeout(()=>{if(document.title.indexOf('PROBE::')!==0)document.title='PROBE::timeout readyState='+v.readyState;},9000);
+</script>
