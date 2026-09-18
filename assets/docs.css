@@ -352,6 +352,23 @@ html[data-os="win"] .only-mac{display:none !important}
 
 @media print{.fig{overflow:visible}.fig svg{min-width:0}}
 
+/* ---------------- 表情包插图 ---------------- */
+
+.meme{margin:6px 0 28px;display:flex;flex-direction:column;align-items:center}
+.meme img{
+  display:block;max-width:420px;width:100%;height:auto;
+  border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg-2);box-shadow:0 2px 10px rgba(20,26,53,.06);
+}
+.meme.sm img{max-width:300px}
+.meme.lg img{max-width:600px}
+.meme figcaption{
+  font-size:13px;color:var(--ink-3);margin-top:9px;
+  text-align:center;line-height:1.65;max-width:520px;
+}
+.meme figcaption b{color:var(--ink-2)}
+@media print{.meme img{box-shadow:none;max-width:360px}}
+
 /* ---------------- 杂项 ---------------- */
 
 .pill{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.03em;
