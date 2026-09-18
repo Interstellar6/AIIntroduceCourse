@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>想用别的模型 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>想用别的模型？</h1>
+        <p class="lede">这一页只是两条推荐，不讲怎么用。如果你只想把课上的东西做完，DeepSeek 已经足够了——可以直接跳到<a href="tasks.html">四个练习任务</a>。</p>
+
+        <div class="callout good">
+          <div class="ic">✅</div>
+          <div class="bd">
+            <span class="t">先说结论</span>
+            <b>这门课不需要中转站。</b>DeepSeek 官方直连、支付宝付款、便宜，而且它同时提供了 OpenAI、Anthropic、Responses 三种接口格式——Claude Code 和 Codex 都能直接接上。<br>
+            下面这些只是给「想试试别的模型」的同学留的备选项。
+          </div>
+        </div>
+
+        <h2>什么情况下你会想看这一页</h2>
+        <ul>
+          <li>你听过 Claude、GPT 这些模型，想知道和 DeepSeek 用起来有什么不一样</li>
+          <li>你想对比同一个任务在不同模型上的表现</li>
+          <li>你没有外币信用卡，但想试试国外的模型</li>
+          <li>你在做的某个具体任务，觉得换个模型可能效果更好</li>
+        </ul>
+
+        <h2>什么是「中转站」</h2>
+        <p>它是一个<b>中间商</b>：你只跟它打交道，它在背后替你连接各家模型的服务。你拿到一个地址（base_url）和一把钥匙（API Key），就能调用它支持的多种模型，用一种方式付费。</p>
+        <p>它解决的真实问题是「省事」——不用为每家模型分别注册、分别付款、分别管理密钥。</p>
+
+        <h2>两条推荐</h2>
+        <p>下面两家是第三方 API 中转服务。本课不对它们的价格、稳定性、模型清单做任何担保，<b>请自己判断、自己了解清楚再付款</b>。</p>
+
+        <div class="cards">
+          <div class="card accent">
+            <span class="k">推荐一</span>
+            <h3>可达鸭</h3>
+            <p>第三方 API 中转服务。</p>
+            <p><a href="https://kedaya.ai/register?aff=NLBD3ULB9X7W" target="_blank" rel="noopener nofollow">前往注册页面 →</a></p>
+          </div>
+          <div class="card accent">
+            <span class="k">推荐二</span>
+            <h3>MuzeAI</h3>
+            <p>第三方 API 中转服务。</p>
+            <p><a href="https://api.muzeai.top/sign-up?aff=9DCh" target="_blank" rel="noopener nofollow">前往注册页面 →</a></p>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">💡</div>
+          <div class="bd">
+            <span class="t">怎么用？</span>
+            注册之后，站点会给你<b>一个 base_url 和一个 API Key</b>。把它们填进 <a href="cc-switch.html">cc-switch</a> 的「自定义供应商」，或者直接写进对应工具的配置里就行。<br>
+            <b>具体该填什么地址、支持哪些模型、支持哪种接口格式，以该站自己的文档和客服答复为准</b>——每个站的规则都不一样，本课不提供使用指导。
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="ic">🌐</div>
+          <div class="bd">
+            <span class="t">打不开是正常的</span>
+            这类服务的可访问性、注册条件、支付方式各站不同，可能会遇到打不开、加载不出来或提示地区限制的情况。这不代表你的操作有问题，换个网络环境再试。
+          </div>
+        </div>
+
+        <h2>用之前请务必知道这几件事</h2>
+        <p>中转站是<b>你和模型之间的中间人</b>。这不是危言耸听，而是它的工作方式决定的：</p>
+
+        <ul>
+          <li><b>你的每一句对话它都看得见。</b>这不是「它要不要记录」的问题——它在中间转发，技术上必然能读到明文。</li>
+          <li><b>它可能跑路。</b>余额可能取不回来。充值金额就是你能承受的最大损失。</li>
+          <li><b>它可能超售、限速，甚至用便宜模型冒充贵的模型。</b>你很难验证自己实际用的是什么。</li>
+          <li><b>你的 Key 可能被记录、被转卖。</b></li>
+          <li><b>部分服务涉及合规问题。</b>调用未在境内备案的境外模型，本身处在监管的灰色地带。</li>
+        </ul>
+
+        <div class="callout danger">
+          <div class="ic">🔐</div>
+          <div class="bd">
+            <span class="t">五条原则</span>
+            ① <b>能官方就官方</b>——学生做实验，DeepSeek 官方几块钱就够<br>
+            ② 真要买，<b>小额充值</b>，把它当一次性消费，别当银行<br>
+            ③ <b>不放敏感数据</b>——个人信息、还没发表的实验数据、别人的代码，都不要经过它<br>
+            ④ <b>没有公开退款条款的平台，默认「钱要不回来」</b><br>
+            ⑤ 别用别人送的 Key，也别把你的 Key 给别人
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="ic">💭</div>
+          <div class="bd">
+            <span class="t">最后一句实话</span>
+            「便宜到离谱」本身不是优点，而是一个需要解释的现象。真正会把学生带进坑的诱因，就是「便宜」和「额度看起来用不完」这两件事。
+          </div>
+        </div>
+
+        <div class="pagefoot">
+          <p>决定用官方还是中转，其实不影响你学这门课——工具和配置方法完全一样，只是 base_url 和 Key 换了而已。</p>
+          <p class="muted">下一步 → <a href="tasks.html">四个练习任务</a></p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

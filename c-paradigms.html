@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三种经典范式 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>三种经典范式：ReAct · Plan-and-Solve · Reflection</h1>
+        <p class="lede">上一页讲的 Agent 循环是骨架，但骨架里每一步具体该怎么组织——先想还是先做？一口气做完还是边走边看？做完就交还是再改一遍？——业界总结出了三种经典范式。看懂这三种，你会立刻明白很多产品功能为什么长成那个样子。</p>
+
+        <h2>先说说要解决什么问题</h2>
+        <p>把模型接上工具之后，事情并不会自动变好。智能体会遇到三类典型麻烦：</p>
+        <ul>
+          <li><b>幻觉</b>——模型凭记忆编事实，而不是去查</li>
+          <li><b>推理循环</b>——在复杂任务里绕圈，反复做同一件事</li>
+          <li><b>工具误用</b>——调错工具、传错参数，还不知道自己错了</li>
+        </ul>
+        <p>为了组织好「<b>思考</b>」与「<b>行动</b>」这两件事的关系，出现了几种有代表性的范式。下面三种是最经典的，也是后面所有 Agent 工具的底子。</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:22%">范式</th><th style="width:26%">一句话</th><th>提出</th></tr>
+            <tr>
+              <td><b>ReAct</b></td>
+              <td>边想边做，每一步都看结果</td>
+              <td>Yao 等，2022（ICLR 2023）</td>
+            </tr>
+            <tr>
+              <td><b>Plan-and-Solve</b></td>
+              <td>先出完整计划，再逐步执行</td>
+              <td>Wang 等，2023</td>
+            </tr>
+            <tr>
+              <td><b>Reflection</b></td>
+              <td>先做出来，再批判，再改</td>
+              <td>Shinn 等，2023（NeurIPS）</td>
+            </tr>
+          </table>
+        </div>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 310" role="img" aria-label="三种范式的流程对比图：ReAct 是思考、行动、观察的循环；Plan-and-Solve 是先规划再逐步执行；Reflection 是初稿、反思、优化的循环">
+            <defs>
+              <marker id="pd1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+            </defs>
+
+            <!-- ===== ReAct ===== -->
+            <text class="t-h t-mid" x="160" y="34">ReAct</text>
+
+            <rect class="b-a" x="35" y="56" width="190" height="52" rx="10"/>
+            <text class="t-b t-mid" x="130" y="78">思考</text>
+            <text class="t-s t-mid" x="130" y="96">Thought</text>
+
+            <path class="ln" d="M130,108 V128" marker-end="url(#pd1)"/>
+
+            <rect class="b" x="35" y="132" width="190" height="52" rx="10"/>
+            <text class="t-b t-mid" x="130" y="154">行动</text>
+            <text class="t-s t-mid" x="130" y="172">Action</text>
+
+            <path class="ln" d="M130,184 V204" marker-end="url(#pd1)"/>
+
+            <rect class="b" x="35" y="208" width="190" height="52" rx="10"/>
+            <text class="t-b t-mid" x="130" y="230">观察</text>
+            <text class="t-s t-mid" x="130" y="248">Observation</text>
+
+            <path class="ln" d="M225,234 H265 V82 H229" marker-end="url(#pd1)"/>
+            <text class="t-s t-mid" x="160" y="290">重复，直到输出 Finish[答案]</text>
+
+            <!-- ===== Plan-and-Solve ===== -->
+            <text class="t-h t-mid" x="450" y="34">Plan-and-Solve</text>
+
+            <rect class="b-g" x="325" y="56" width="190" height="52" rx="10"/>
+            <text class="t-b t-mid" x="420" y="78">规划</text>
+            <text class="t-s t-mid" x="420" y="96">Plan</text>
+
+            <path class="ln" d="M420,108 V128" marker-end="url(#pd1)"/>
+
+            <rect class="b" x="325" y="132" width="190" height="52" rx="10"/>
+            <text class="t-b t-mid" x="420" y="154">执行步骤 1</text>
+            <text class="t-s t-mid" x="420" y="172">Solve</text>
+
+            <path class="ln" d="M420,184 V204" marker-end="url(#pd1)"/>
+
+            <rect class="b" x="325" y="208" width="190" height="52" rx="10"/>
+            <text class="t-b t-mid" x="420" y="230">执行步骤 2 ……</text>
+            <text class="t-s t-mid" x="420" y="248">Solve</text>
+
+            <path class="ln" d="M420,260 V278" marker-end="url(#pd1)"/>
+            <text class="t-s t-mid" x="420" y="298">按计划走完，得到最终答案</text>
+
+            <!-- ===== Reflection ===== -->
+            <text class="t-h t-mid" x="740" y="34">Reflection</text>
+
+            <rect class="b" x="615" y="56" width="190" height="52" rx="10"/>
+            <text class="t-b t-mid" x="710" y="78">初稿</text>
+            <text class="t-s t-mid" x="710" y="96">Draft</text>
+
+            <path class="ln" d="M710,108 V128" marker-end="url(#pd1)"/>
+
+            <rect class="b-w" x="615" y="132" width="190" height="52" rx="10"/>
+            <text class="t-b t-mid" x="710" y="154">反思</text>
+            <text class="t-s t-mid" x="710" y="172">Reflect</text>
+
+            <path class="ln" d="M710,184 V204" marker-end="url(#pd1)"/>
+
+            <rect class="b-a" x="615" y="208" width="190" height="52" rx="10"/>
+            <text class="t-b t-mid" x="710" y="230">优化</text>
+            <text class="t-s t-mid" x="710" y="248">Refine</text>
+
+            <path class="ln" d="M805,234 H845 V82 H809" marker-end="url(#pd1)"/>
+            <text class="t-s t-mid" x="740" y="290">重复，直到反思说「无需改进」</text>
+          </svg>
+          <figcaption>三种范式的形状不一样：<b>ReAct 是一圈一圈往下走</b>，<b>Plan-and-Solve 是一条直线</b>，<b>Reflection 是先在原地打磨再交</b>。</figcaption>
+        </figure>
+
+        <h2>一、ReAct：边想边做</h2>
+        <p>在 ReAct 出现之前，主流方法分两类：一类是<b>纯思考</b>，比如思维链（Chain-of-Thought）——能推理，但无法与外部世界交互，容易产生事实幻觉；另一类是<b>纯行动</b>——直接输出要执行的动作，但缺乏规划和纠错能力。</p>
+        <p>ReAct 的洞察是：<b>思考与行动本来就是相辅相成的</b>。思考指导行动，而行动的结果又反过来修正思考。</p>
+
+        <p>它用一套固定的输出格式来强制这个过程，每一步都遵循同一套轨迹：</p>
+        <div class="tw">
+          <table>
+            <tr><th style="width:24%">要素</th><th>是什么</th></tr>
+            <tr><td><b>Thought</b>（思考）</td><td>智能体的「内心独白」：分析当前情况、分解任务、制定下一步计划，或者反思上一步的结果</td></tr>
+            <tr><td><b>Action</b>（行动）</td><td>决定采取的具体动作，通常是调用一个工具，比如 <code>Search[华为最新手机]</code></td></tr>
+            <tr><td><b>Observation</b>（观察）</td><td>执行 Action 之后，工具返回的真实结果</td></tr>
+          </table>
+        </div>
+
+        <p>不断重复 <b>思考 → 行动 → 观察</b> 这个循环，每次把新的观察追加到历史里，直到模型在思考中认为已经找到答案，就输出 <code>Finish[最终答案]</code>。</p>
+
+        <div class="callout good">
+          <div class="ic">🎯</div>
+          <div class="bd">
+            一句话概括它的价值：<b>推理让行动更有目的性，行动给推理提供事实依据。</b>
+          </div>
+        </div>
+
+        <h3>它适合什么任务</h3>
+        <ul>
+          <li><b>需要外部知识的</b>：查实时信息（天气、新闻、股价）、搜索专业领域的知识</li>
+          <li><b>需要精确计算的</b>：把数学交给计算器工具，避免模型算错</li>
+          <li><b>需要与 API 交互的</b>：操作数据库、调用某个服务完成特定功能</li>
+        </ul>
+        <p class="small muted">共同点：<b>你事先不知道要走几步，必须看一步走一步。</b></p>
+
+        <h2>二、Plan-and-Solve：先谋后动</h2>
+        <p>如果说 ReAct 像一个经验丰富的侦探，根据现场的蛛丝马迹一步步推理、随时调整调查方向；那么 Plan-and-Solve 更像一位建筑师——<b>动工之前必须先画出完整的蓝图，然后严格按照蓝图施工。</b></p>
+
+        <p>它把流程拆成两个解耦的阶段：</p>
+        <ol class="steps">
+          <li>
+            <h3>规划阶段</h3>
+            <p>接到问题后，智能体的第一个任务<b>不是</b>直接去解决或调工具，而是把问题分解，制定出一份清晰的分步计划。这份计划本身就是一次模型调用的产物。</p>
+          </li>
+          <li>
+            <h3>执行阶段</h3>
+            <p>拿到完整计划后，<b>严格按照计划逐步执行</b>。每一步可能是一次独立的模型调用，也可能是对上一步结果的加工，直到所有步骤完成。</p>
+          </li>
+        </ol>
+
+        <p>它要解决的问题是：思维链在处理多步骤复杂问题时，很容易<b>「偏离轨道」</b>——走着走着就忘了原来的目标。先出计划再执行，可以让智能体保持更高的<b>目标一致性</b>。</p>
+
+        <h3>它适合什么任务</h3>
+        <ul>
+          <li><b>多步数学应用题</b>：先列出计算步骤，再逐一求解</li>
+          <li><b>需要整合多个信息源的报告</b>：先规划好结构（引言、来源 A、来源 B、总结），再逐一填充</li>
+          <li><b>代码生成</b>：先构思好函数、类、模块的结构，再逐一实现</li>
+        </ul>
+        <p class="small muted">共同点：<b>路径基本确定，重推理而不是重探索。</b></p>
+
+        <div class="callout warn">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <span class="t">它的软肋</span>
+            计划是<b>一次性生成、不可修改</b>的。如果执行到中途发现某个步骤做不了、或者结果不符合预期，它不会自己回头改计划——这是它和 ReAct 最大的差别。
+          </div>
+        </div>
+
+        <h2>三、Reflection：做完再批判一遍</h2>
+        <p>前两种范式都在解决「怎么把事做出来」。Reflection 解决的是另一个问题：<b>做出来的东西不够好，怎么办？</b></p>
+
+        <p>它把一次性的任务执行，变成一个持续优化的过程——<b>执行 → 反思 → 优化</b>，循环若干轮：</p>
+        <ul>
+          <li><b>执行</b>：先拿出一个初稿</li>
+          <li><b>反思</b>：扮演「严格的评审员」，批判性地分析初稿，给出具体的、可操作的改进意见</li>
+          <li><b>优化</b>：结合任务、上一版稿子和评审意见，产出新版本</li>
+        </ul>
+        <p>终止条件是：评审意见里说「<b>无需改进</b>」，或者达到预设的最大迭代次数。</p>
+
+        <h3>一个真实例子：写一个找素数的函数</h3>
+        <p>这个例子很能说明问题，因为它的优化路径非常清晰：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:16%">轮次</th><th>发生了什么</th></tr>
+            <tr>
+              <td><b>初稿</b></td>
+              <td>模型写出一个用<b>试除法</b>的实现，功能正确，时间复杂度 <code>O(n√n)</code></td>
+            </tr>
+            <tr>
+              <td><b>第 1 轮反思</b></td>
+              <td>评审角色指出：每个数都要试除，n 大时性能显著下降，<b>建议改用埃拉托斯特尼筛法</b>，复杂度降到 <code>O(n log log n)</code></td>
+            </tr>
+            <tr>
+              <td><b>第 1 轮优化</b></td>
+              <td>按建议重写为筛法实现</td>
+            </tr>
+            <tr>
+              <td><b>第 2 轮反思</b></td>
+              <td>评审认为筛法已经足够高效，还顺便提到了分段筛法等更高级的方向，但结论是<b>「一般情况下无需改进」</b>——触发终止</td>
+            </tr>
+          </table>
+        </div>
+
+        <p>注意第二轮：它<b>没有为了改而改</b>。判断「已经够好了」并停下来，和发现问题一样重要。</p>
+
+        <h3>它的价值，以及它的代价</h3>
+        <div class="cards">
+          <div class="card">
+            <h3>价值</h3>
+            <p>它提供了一个<b>内部纠错回路</b>——不再完全依赖外部工具的反馈，因此能修正更高层次的逻辑和策略错误。</p>
+            <p>它把「合格」的初稿，迭代成「优秀」的成品。</p>
+          </div>
+          <div class="card">
+            <h3>代价</h3>
+            <p>每轮至少多调用两次模型（一次反思、一次优化），<b>成本和耗时成倍增加</b>。</p>
+            <p>整个流程是串行的，延迟明显，不适合要快速响应的场景。</p>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">⚖️</div>
+          <div class="bd">
+            Reflection 是一种典型的<b>「以成本换质量」</b>策略。适合那些<b>对最终结果质量要求极高、对实时性要求宽松</b>的场景。<br>
+            反过来，如果只是要一个「大致正确」的答案，用更轻量的 ReAct 或 Plan-and-Solve 更划算。
+          </div>
+        </div>
+
+        <h2>三者对比：什么时候用哪个</h2>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:18%">范式</th><th style="width:28%">它怎么组织</th><th style="width:24%">核心优势</th><th>适合</th></tr>
+            <tr>
+              <td><b>ReAct</b></td>
+              <td>边想边做，每一步都看真实的观察结果</td>
+              <td><b>环境适应性</b>、动态纠错</td>
+              <td>探索性任务、需要外部工具输入</td>
+            </tr>
+            <tr>
+              <td><b>Plan-and-Solve</b></td>
+              <td>先一次性出完整计划，再逐步执行</td>
+              <td><b>结构性</b>、稳定性、目标一致性</td>
+              <td>逻辑路径确定、内部推理密集</td>
+            </tr>
+            <tr>
+              <td><b>Reflection</b></td>
+              <td>先做出来，再批判，再改，循环若干轮</td>
+              <td>最终<b>质量显著提升</b></td>
+              <td>对准确性和可靠性要求极高、时间不紧</td>
+            </tr>
+          </table>
+        </div>
+
+        <p>三者<b>不是互斥的</b>。真实产品里往往是组合使用——比如先用 Plan-and-Solve 定框架，执行每一步时内部用 ReAct，最后对关键产出做一轮 Reflection。</p>
+
+        <h2>它们和你接下来要装的东西是什么关系</h2>
+        <p>这一页听起来很「理论」，但你会立刻在界面上撞见它们。这三种范式回答的其实是同一个问题：<b>Agent 循环里的每一步，该怎么组织。</b></p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:30%">你在产品里看到的</th><th>它就是</th></tr>
+            <tr>
+              <td>Agent 默认的「边做边看报错、自己改」</td>
+              <td><b>ReAct</b>——几乎所有 Agent 工具的默认行为</td>
+            </tr>
+            <tr>
+              <td>DSH 的<b>计划模式</b>：先出方案给你批，批了才动手</td>
+              <td><b>Plan-and-Solve</b> 的产品化形态</td>
+            </tr>
+            <tr>
+              <td>DSH 的<b>目标模式</b>：给个长期目标，它自己一轮轮做</td>
+              <td>Plan-and-Solve 的长期版本</td>
+            </tr>
+            <tr>
+              <td>Claude Code 派<b>子代理</b>去审一遍代码、跑一遍测试</td>
+              <td><b>Reflection</b> 的工程化形态</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="callout good">
+          <div class="ic">🧭</div>
+          <div class="bd">
+            <span class="t">接下来两页的位置</span>
+            这三种范式讲的是「<b>循环里每一步怎么组织</b>」。<br>
+            下一页 <a href="c-loop.html">Agent 循环</a> 讲「<b>循环本身怎么设计</b>」——也就是循环工程。<br>
+            再下一页 <a href="c-harness.html">Harness</a> 讲「<b>循环外面还包着什么</b>」——工具、沙箱、会话、界面。
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">📚</div>
+          <div class="bd">
+            <span class="t">这一页的内容来自哪里</span>
+            整理自 Datawhale 开源教程《Hello-Agents》第四章「智能体经典范式构建」，那一章会带你从零把这些范式用 Python 实现一遍——包括自己写提示词模板、自己解析模型输出、自己处理工具调用失败。<b>想真正搞懂，建议去看原文。</b><br>
+            <span class="small">
+              <a href="https://datawhalechina.github.io/hello-agents/" target="_blank" rel="noopener">datawhalechina.github.io/hello-agents</a> ·
+              原始论文：ReAct（Yao 等，ICLR 2023）、Plan-and-Solve（Wang 等，2023）、Reflexion（Shinn 等，NeurIPS 2023）
+            </span>
+          </div>
+        </div>
+
+        <div class="pagefoot">
+          <p>下一步 → <a href="c-loop.html">Agent 循环</a>：把这三种范式放回那个五步循环里，看看循环本身还有什么可设计的。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

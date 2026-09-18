@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harness：模型怎么变成产品 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>Harness：模型怎么变成产品</h1>
+        <p class="lede">同一个模型，装在不同软件里，能力差很多——这不是你的错觉。这一页讲清楚那个「中间层」是什么，顺便解释后面要装的几个工具之间到底是什么关系。</p>
+
+        <h2>Harness 是什么</h2>
+        <p>这个词原意是<b>马具</b>——把一匹马拉上车的那整套东西：笼头、缰绳、鞍、车辕。</p>
+        <p>马有力量，但没有马具，你既坐不上去，也控制不了方向。</p>
+        <p>在 AI 里，<b>harness 指的是「把模型包装成一个能干活的产品」所需要的那一整套工程</b>。它不是一个具体软件的名字，而是一类东西的统称。Claude Code 是 harness，Codex 是 harness，DeepSeek Harness 也是 harness。</p>
+
+        <h3>这一整套工程具体包括什么</h3>
+        <div class="cards">
+          <div class="card">
+            <h3>模型适配</h3>
+            <p>把各家五花八门的接口（DeepSeek / Claude / GPT）统一成一种内部格式。</p>
+            <p class="muted small">这就是为什么同一个工具能接不同厂商的模型。</p>
+          </div>
+          <div class="card">
+            <h3>Agent 循环</h3>
+            <p><a href="c-loop.html">上一页</a>讲的那五步转圈，就是它实现的。</p>
+          </div>
+          <div class="card">
+            <h3>工具与执行</h3>
+            <p>读写文件、跑终端、搜索、跑代码——以及<b>怎么安全地执行</b>。</p>
+          </div>
+          <div class="card">
+            <h3>沙箱与审批</h3>
+            <p>哪些能碰、哪些先问你、哪些一律禁止。</p>
+          </div>
+          <div class="card">
+            <h3>会话与日志</h3>
+            <p>把每一步存下来：能恢复、能分叉、能追责。</p>
+          </div>
+          <div class="card">
+            <h3>上下文管理</h3>
+            <p>什么时候截断、什么时候压缩、压缩时丢掉什么。</p>
+          </div>
+          <div class="card">
+            <h3>界面</h3>
+            <p>终端里的，还是网页里的；怎么让你看见它正在干什么。</p>
+          </div>
+          <div class="card">
+            <h3>配置与插件</h3>
+            <p>怎么换模型、怎么加自己的工具、怎么改它的规矩。</p>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">🚗</div>
+          <div class="bd">
+            <span class="t">一个比喻</span>
+            <b>模型是发动机；harness 是底盘、变速箱、方向盘、仪表盘和刹车。</b><br>
+            发动机再好，没有底盘你开不走；刹车不好，你不敢踩油门。
+          </div>
+        </div>
+
+        <h2>四层关系</h2>
+        <p>把这几个词叠起来，它们的关系是这样的（越往下越「底层」）：</p>
+
+        <div class="layer l1">你面前那个界面<span>终端里的 Claude Code / Codex · 网页里的 DeepSeek Harness</span></div>
+        <div class="layer l2">Harness<span>循环 + 工具 + 沙箱 + 会话 + 压缩 + 配置</span></div>
+        <div class="layer l3">Agent 循环<span>组装 → 请求 → 调工具 → 写回 → 再请求</span></div>
+        <div class="layer l4">模型<span>DeepSeek · Claude · GPT —— 真正「聪明」的那部分</span></div>
+
+        <div class="cards" style="margin-top:20px">
+          <div class="card">
+            <h3>模型决定它有多聪明</h3>
+            <p>这是别人训练好的，你只能选，不能改。</p>
+          </div>
+          <div class="card accent">
+            <h3>Harness 决定它能干多少活、以及会不会闯祸</h3>
+            <p>这是<b>同一个模型在不同工具里表现不同的真正原因</b>。</p>
+          </div>
+        </div>
+
+        <p>所以以后遇到「为什么同样是 DeepSeek，在那个软件里好像更强」这种疑问，答案就在这里——大概率是那个 harness 的循环设计得更好，或者给模型看的上下文更合适。</p>
+
+        <h2>Agent 模式（预设）：给一个会话装什么</h2>
+        <p>同一个 harness 里，你也可以调整「这一次给它装哪些工具、什么规矩」。这个打包好的配置叫<b>预设</b>或<b>模式</b>。</p>
+
+        <p>DSH 出厂带了四个：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:16%">模式</th><th style="width:44%">它有什么</th><th>什么时候用</th></tr>
+            <tr>
+              <td><b>标准</b></td>
+              <td>全套：读写文件、终端、搜索、技能、计划、目标、子代理、工作流</td>
+              <td><b>默认就用它</b>，九成任务够用</td>
+            </tr>
+            <tr>
+              <td><b>极简</b></td>
+              <td>只有两个工具：持久终端 + 文件编辑器</td>
+              <td>看明白「Agent 到底靠什么活着」；也是最省的模式</td>
+            </tr>
+            <tr>
+              <td><b>PTC</b></td>
+              <td>标准模式的能力，但让模型<b>写一段程序</b>来一次性组合很多步操作</td>
+              <td>步骤很多、又很重复的活（批量处理一堆文件）</td>
+            </tr>
+            <tr>
+              <td><b>创造</b></td>
+              <td>标准模式的能力 + 运行时自省 + <b>改造自己的能力</b></td>
+              <td>进阶：想自己写一个新模式或新插件</td>
+            </tr>
+          </table>
+        </div>
+
+        <p>另外还有两个<b>会话级</b>的开关，在<a href="c-session.html">会话与上下文</a>里讲过：计划模式（动手前先给你看方案）和目标模式（给个长期目标自己干）。</p>
+
+        <h3>一个反直觉的结论：为什么必须玩一下「极简模式」</h3>
+        <p>极简模式只有两个工具，却几乎什么都能干。原因是<b>终端本身就是万能工具</b>——能读文件、能写文件、能装东西、能跑代码、能上网。</p>
+        <p>给它一个终端，就等于给了它一双手。</p>
+
+        <div class="callout good">
+          <div class="ic">🎯</div>
+          <div class="bd">
+            <span class="t">工具越多 ≠ 越强</span>
+            工具越多，模型<b>越容易选错</b>，越容易在一个小问题上乱试十种办法。多出来的工具，同时也多出了出错的面。<br><br>
+            而且工具列表本身也要占用上下文——少给工具，还更省钱。<br><br>
+            <b>一句话：Agent 的能力不是来自「很多按钮」，而是来自「一个循环 + 一双能执行命令的手」。</b>
+          </div>
+        </div>
+
+        <p>所以装好 DSH 之后，强烈建议你<b>开一个新会话、切到极简模式、把同样的任务再发一次</b>。看着两个工具把事做完，你对 Agent 的理解会上一个台阶。</p>
+
+        <h2>「一切皆插件」：一个值得知道的设计</h2>
+        <p>DSH 的设计准则叫<b>一切皆插件</b>。意思是它的内核被刻意做得极小，只包含：</p>
+        <ul>
+          <li>几个抽象服务（会话、工具注册表、提示词组装、模型路由）</li>
+          <li><b>一个</b> Agent 循环插件</li>
+        </ul>
+        <p>其余的<b>全部</b>是插件，包括：模型适配器、每一个工具、会话日志与存储、<b>压缩策略</b>、沙箱与审批、网页界面，甚至那个循环本身。</p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>扩展的方式</h3>
+            <p>在<b>旁边挂一个</b>插件，而不是给内核打补丁。内核永远保持干净。</p>
+          </div>
+          <div class="card">
+            <h3>卸载即撤销</h3>
+            <p>插件带来的东西，在它被卸下时<b>全部撤回</b>，不留残渣。</p>
+          </div>
+        </div>
+
+        <p>为什么这件事值得知道？因为它把「选 harness」这个决定的性质说清楚了：</p>
+        <div class="callout tip">
+          <div class="ic">🧩</div>
+          <div class="bd">
+            传统软件像一栋已经盖好的楼，你想加个窗户得砸墙；插件式的 harness 像乐高，你想加什么就在旁边插一块。<br>
+            <b>所以选 harness，其实是选生态——你选的不只是今天的功能，而是以后能往哪儿长。</b>
+          </div>
+        </div>
+
+        <div class="pagefoot">
+          <p>下一步 → <a href="c-skills.html">怎么用 Skill</a>：你不需要会写代码，写一个 Markdown 文件就能改变它的行为——这是「一切皆插件」最日常的用法。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+/* ============================================================
+   人工智能导论 · 实操手册
+   页面外壳由本脚本渲染，改导航只需改下面的 NAV。
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* ---------------- 导航（加页面 = 在这里加一行） ---------------- */
+
+  var NAV = [
+    { group: '开始', items: [
+      { f: 'index.html',        n: '0', t: '这份手册怎么用' },
+      { f: 'c-vibe.html',       n: '1', t: '先说说 vibe coding' }
+    ]},
+    { group: '原理 · 第 1 节课', items: [
+      { f: 'c-agent.html',      n: '2', t: '模型与 Agent' },
+      { f: 'c-prompt.html',     n: '3', t: '怎么跟 Agent 说话' },
+      { f: 'c-session.html',    n: '4', t: '会话与上下文' },
+      { f: 'c-paradigms.html',  n: '5', t: '三种经典范式' },
+      { f: 'c-loop.html',       n: '6', t: 'Agent 循环' },
+      { f: 'c-harness.html',    n: '7', t: 'Harness：模型怎么变成产品' },
+      { f: 'c-skills.html',     n: '8', t: '怎么用 Skill' },
+      { f: 'c-tools.html',      n: '9', t: '工具地图与怎么选' }
+    ]},
+    { group: '动手 · 第 2–3 节课', items: [
+      { f: 'api.html',          n: '10', t: '拿到你的 API Key' },
+      { f: 'node.html',         n: '11', t: '安装 Node.js' },
+      { f: 'dsh.html',          n: '12', t: 'DeepSeek Harness' },
+      { f: 'claude-code.html',  n: '13', t: 'Claude Code' },
+      { f: 'codex.html',        n: '14', t: 'Codex' },
+      { f: 'cc-switch.html',    n: '15', t: 'cc-switch' }
+    ]},
+    { group: '其他', items: [
+      { f: 'relay.html',        n: '16', t: '想用别的模型' },
+      { f: 'tasks.html',        n: '17', t: '三个练习任务' }
+    ]},
+    { group: '帮助', items: [
+      { f: 'help.html',         n: '18', t: '排错 · 术语 · 速查' }
+    ]}
+  ];
+  var FLAT = [];
+  NAV.forEach(function (g) { g.items.forEach(function (it) { FLAT.push(it); }); });
+
+  var here = (location.pathname.split('/').pop() || 'index.html');
+  var curIdx = -1;
+  FLAT.forEach(function (it, i) { if (it.f === here) curIdx = i; });
+  var cur = curIdx >= 0 ? FLAT[curIdx] : FLAT[0];
+
+  /* ---------------- 工具 ---------------- */
+
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+  function store(k, v) {
+    try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); }
+    catch (e) { return null; }
+  }
+  function toast(msg) {
+    var t = document.getElementById('docs-toast');
+    if (!t) { t = el('div', ''); t.id = 'docs-toast';
+      t.style.cssText = 'position:fixed;left:50%;bottom:26px;transform:translateX(-50%);' +
+        'background:rgba(16,21,39,.94);color:#fff;padding:9px 16px;border-radius:10px;' +
+        'font:600 13.5px/1 var(--font);z-index:99;opacity:0;transition:opacity .2s;pointer-events:none';
+      document.body.appendChild(t); }
+    t.textContent = msg; t.style.opacity = '1';
+    clearTimeout(t._h); t._h = setTimeout(function () { t.style.opacity = '0'; }, 1600);
+  }
+
+  /* ---------------- 明暗 ---------------- */
+
+  function applyTheme(v) { document.documentElement.setAttribute('data-theme', v); store('docs-theme', v); }
+
+  /* ---------------- 操作系统 ---------------- */
+
+  function guessOS() {
+    var ua = (navigator.userAgent || '') + ' ' + (navigator.platform || '');
+    return /Win/i.test(ua) ? 'win' : 'mac';
+  }
+  function applyOS(v) {
+    document.documentElement.setAttribute('data-os', v);
+    store('docs-os', v);
+    document.querySelectorAll('[data-set-os]').forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-set-os') === v);
+    });
+  }
+
+  /* ---------------- 侧栏 ---------------- */
+
+  function buildSidebar() {
+    var sb = document.getElementById('sidebar');
+    if (!sb) return;
+    var h = '<a class="brand" href="index.html"><b>人工智能导论 · 实操手册</b>' +
+            '<span>把 AI 装进你的电脑</span></a><nav>';
+    NAV.forEach(function (g) {
+      h += '<div class="grp">' + g.group + '</div>';
+      g.items.forEach(function (it) {
+        h += '<a href="' + it.f + '"' + (it.f === here ? ' class="on"' : '') + '>' +
+             '<span class="num">' + it.n + '</span><span>' + it.t + '</span></a>';
+      });
+    });
+    sb.innerHTML = h + '</nav>';
+  }
+
+  /* ---------------- 顶栏 ---------------- */
+
+  function buildTopbar() {
+    var tb = document.getElementById('topbar');
+    if (!tb) return;
+    tb.innerHTML =
+      '<button class="iconbtn" id="menubtn" aria-label="目录">☰ 目录</button>' +
+      '<div class="crumb">实操手册 <span class="muted">/</span> <b>' + cur.t + '</b></div>' +
+      '<div class="spacer"></div>' +
+      '<div class="os-switch" role="group" aria-label="切换操作系统">' +
+        '<button data-set-os="mac">macOS / Linux</button>' +
+        '<button data-set-os="win">Windows</button>' +
+      '</div>' +
+      '<button class="iconbtn" id="themebtn" title="切换明暗">◐</button>';
+
+    tb.querySelectorAll('[data-set-os]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        applyOS(b.getAttribute('data-set-os'));
+        toast(b.getAttribute('data-set-os') === 'win' ? '已切换为 Windows 命令' : '已切换为 macOS / Linux 命令');
+      });
+    });
+    var mb = document.getElementById('menubtn');
+    if (mb) mb.addEventListener('click', function () {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+    var tb2 = document.getElementById('themebtn');
+    if (tb2) tb2.addEventListener('click', function () {
+      applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+  }
+
+  /* ---------------- 正文标题锚点 + 右侧目录 ---------------- */
+
+  function buildTOC() {
+    var art = document.querySelector('article');
+    if (!art) return;
+    var hs = art.querySelectorAll('h2, h3');
+    if (hs.length < 2) return;
+    document.body.classList.add('has-toc');
+
+    var list = [];
+    hs.forEach(function (h, i) {
+      if (!h.id) h.id = 'sec-' + (i + 1);
+      var a = el('a', 'anchor', '#');
+      a.href = '#' + h.id;
+      h.appendChild(a);
+      list.push(h);
+    });
+
+    var toc = document.getElementById('toc');
+    if (!toc) return;
+    var h = '<div class="h">本页内容</div>';
+    list.forEach(function (x) {
+      h += '<a href="#' + x.id + '"' + (x.tagName === 'H3' ? ' class="lv3"' : '') + '>' +
+           x.textContent.replace(/#$/, '') + '</a>';
+    });
+    toc.innerHTML = h;
+
+    var links = toc.querySelectorAll('a');
+    function spy() {
+      var y = window.scrollY + 96, best = 0;
+      list.forEach(function (x, i) { if (x.offsetTop <= y) best = i; });
+      links.forEach(function (l, i) { l.classList.toggle('on', i === best); });
+    }
+    var tick = false;
+    window.addEventListener('scroll', function () {
+      if (tick) return; tick = true;
+      requestAnimationFrame(function () { spy(); tick = false; });
+    }, { passive: true });
+    spy();
+  }
+
+  /* ---------------- 代码块复制 ---------------- */
+
+  function buildCopy() {
+    document.querySelectorAll('pre').forEach(function (pre) {
+      // 页面里可能已经手写了 .codeblock 包裹层，两种写法都要能处理
+      var box;
+      if (pre.parentNode && pre.parentNode.classList && pre.parentNode.classList.contains('codeblock')) {
+        box = pre.parentNode;
+      } else {
+        box = el('div', 'codeblock');
+        pre.parentNode.insertBefore(box, pre);
+        box.appendChild(pre);
+      }
+      if (box.querySelector('.copy')) return;
+
+      var lang = pre.getAttribute('data-lang');
+      var codeEl = pre.querySelector('code');
+      if (!lang && codeEl) lang = codeEl.getAttribute('data-lang');
+      if (lang) {
+        if (!box.querySelector('.lang')) box.appendChild(el('span', 'lang', lang));
+      } else {
+        pre.classList.add('nohead');
+      }
+
+      var btn = el('button', 'copy', '复制');
+      btn.type = 'button';
+      box.appendChild(btn);
+
+      btn.addEventListener('click', function () {
+        var text = pre.innerText.replace(/\n$/, '');
+        var done = function () {
+          btn.textContent = '已复制'; btn.classList.add('done');
+          setTimeout(function () { btn.textContent = '复制'; btn.classList.remove('done'); }, 1400);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+        } else { fallback(text, done); }
+      });
+    });
+
+    function fallback(text, done) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;top:-1000px;left:0;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); }
+      catch (e) { toast('复制失败，请手动选中复制'); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  /* ---------------- 勾选清单（进度会被记住） ---------------- */
+
+  function buildChecklist() {
+    var lists = document.querySelectorAll('.checklist');
+    if (!lists.length) return;
+
+    lists.forEach(function (ul, li) {
+      ul.querySelectorAll('li').forEach(function (item, ii) {
+        var key = 'docs-check:' + here + ':' + li + ':' + ii;
+        var cb = item.querySelector('input[type=checkbox]');
+        var lab = item.querySelector('label');
+        if (!cb) {
+          var txt = item.innerHTML;
+          cb = el('input'); cb.type = 'checkbox';
+          lab = el('label', '', txt);
+          item.innerHTML = ''; item.appendChild(cb); item.appendChild(lab);
+        }
+        var id = lab && lab.getAttribute('for');
+        if (id) cb.id = id;
+        if (store(key) === '1') cb.checked = true;
+        cb.addEventListener('change', function () {
+          store(key, cb.checked ? '1' : '0');
+          updateCount(ul);
+        });
+      });
+      updateCount(ul);
+    });
+
+    function updateCount(ul) {
+      var all = ul.querySelectorAll('input[type=checkbox]');
+      var on = ul.querySelectorAll('input[type=checkbox]:checked').length;
+      var c = ul.nextElementSibling;
+      if (!c || !c.classList.contains('done-count')) {
+        c = el('div', 'done-count'); ul.parentNode.insertBefore(c, ul.nextSibling);
+      }
+      c.textContent = on === all.length && all.length
+        ? '✓ 全部完成（' + all.length + '/' + all.length + '）'
+        : '已完成 ' + on + ' / ' + all.length + ' —— 勾选状态会保存在本机浏览器里';
+    }
+  }
+
+  /* ---------------- 上下页 ---------------- */
+
+  function buildPager() {
+    var p = document.getElementById('pager');
+    if (!p) return;
+    var prev = curIdx > 0 ? FLAT[curIdx - 1] : null;
+    var next = curIdx >= 0 && curIdx < FLAT.length - 1 ? FLAT[curIdx + 1] : null;
+    p.innerHTML =
+      (prev ? '<a href="' + prev.f + '"><span class="lbl">← 上一页</span><span class="ttl">' + prev.t + '</span></a>'
+            : '<span class="empty"></span>') +
+      (next ? '<a class="next" href="' + next.f + '"><span class="lbl">下一页 →</span><span class="ttl">' + next.t + '</span></a>'
+            : '<span class="empty"></span>');
+  }
+
+  /* ---------------- 初始化 ---------------- */
+
+  applyTheme(store('docs-theme') || 'light');
+  // 可用 ?os=win / ?os=mac 直接指定并记住，方便把链接发给不同系统的同学
+  var m = /[?&]os=(mac|win)/i.exec(location.search);
+  applyOS(m ? m[1].toLowerCase() : (store('docs-os') || guessOS()));
+  buildSidebar();
+  buildTopbar();
+  buildTOC();
+  buildCopy();
+  buildChecklist();
+  buildPager();
+
+  // 页面标题补全
+  if (cur && document.title.indexOf('·') < 0) {
+    document.title = cur.t + ' · 人工智能导论实操手册';
+  }
+
+  // 点击正文里的锚点后关掉移动端菜单
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (a && window.innerWidth <= 860) {
+      var sb = document.getElementById('sidebar');
+      if (sb) sb.classList.remove('open');
+    }
+  });
+})();

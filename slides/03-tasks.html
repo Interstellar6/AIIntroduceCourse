@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 3 讲 · 三个真实任务（上机）</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+
+<div id="viewport">
+<div id="stage">
+
+<!-- ========================= 封面 ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>人工智能导论 · 第 3 讲</div>
+  <h1>三个真实任务</h1>
+  <p class="sub">上机课 · 45 分钟<br>装上 Claude Code 和 Codex，然后用它们真的做三件事</p>
+  <aside class="notes">
+    <p>节奏建议：装 Claude Code + 接 DeepSeek（10 分钟）→ 装 Codex + 接 DeepSeek（10 分钟）→ 三个任务（20 分钟）→ 收尾（5 分钟）。</p>
+    <p>如果时间不够，<strong>优先保住三个任务</strong>。装工具可以课后补，亲手做一遍任务的经验补不回来。</p>
+  </aside>
+</section>
+
+<!-- ========================= 三个任务 ========================= -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>今天的三个任务<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">每一件都要求它真的动手，而不是给你一段话</h1>
+  <div class="body">
+    <div class="cols c3 grow">
+      <div class="card accent">
+        <h3><span class="num">1</span>教你用终端</h3>
+        <p class="fs-17">让 AI 当老师，教会你五个最基本的终端操作。<br><strong>你必须自己手敲一遍。</strong></p>
+        <p class="fs-15 dim" style="margin-top:6px">目标：不再怕命令行。</p>
+      </div>
+      <div class="card accent">
+        <h3><span class="num">2</span>做一个贪吃蛇</h3>
+        <p class="fs-17">在你的电脑上，真的能跑起来、能玩的一个小游戏。</p>
+        <p class="fs-15 dim" style="margin-top:6px">目标：体验「一个人带一个团队」。</p>
+      </div>
+      <div class="card accent">
+        <h3><span class="num">3</span>读懂 Transformer 论文</h3>
+        <p class="fs-17">把《Attention Is All You Need》变成<strong>你能用自己的话讲出来</strong>的东西。</p>
+        <p class="fs-15 dim" style="margin-top:6px">目标：AI 当助教，你当学生。</p>
+      </div>
+    </div>
+    <div class="card warn">
+      <h3>三个任务共同的一条规则</h3>
+      <p class="fs-17"><strong>不许自己写代码、不许自己查资料。</strong>你的工作是：<strong>把要求说清楚 → 让它做 → 跑一遍看结果 → 把真实的问题反馈给它</strong>。这正是第 1 讲说的「让模型看到上一步的真实结果」——现在轮到你来做这个循环的一环。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>把「不许自己写代码」这条说重一点。学生看到 AI 卡住，第一反应是自己上手改——那这堂课就白上了。</p>
+    <p>可以补一句：<em>「你以后的工作，就是把『说清楚』和『判断对不对』做好。代码本身，越来越不是你的活。」</em>这句话对本课的目标画像很重要。</p>
+  </aside>
+</section>
+
+<!-- ========================= 一、Claude Code ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>准备工作 A</div>
+  <h1>装上 Claude Code</h1>
+  <p class="sub">并且让它连上 DeepSeek</p>
+  <aside class="notes"><p>过渡。</p></aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>安装<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">三种装法，选一种</h1>
+  <div class="body">
+    <div class="cols c2-1 grow">
+      <div class="stack">
+        <div class="card accent">
+          <h3>推荐：官方安装脚本</h3>
+          <pre class="sm"><span class="c"># macOS / Linux / WSL</span>
+curl -fsSL https://claude.ai/install.sh | bash
+
+<span class="c"># Windows PowerShell</span>
+irm https://claude.ai/install.ps1 | iex</pre>
+          <p class="fs-16" style="margin-top:8px">装的是<strong>原生程序</strong>，不需要 Node，而且会自动后台更新。</p>
+        </div>
+        <div class="card">
+          <h3>其他方式</h3>
+          <pre class="sm">brew install --cask claude-code   <span class="c"># macOS</span>
+npm install -g @anthropic-ai/claude-code</pre>
+          <p class="fs-16 dim" style="margin-top:6px">走 npm 的话需要 <strong>Node 22 或更新</strong>。</p>
+        </div>
+      </div>
+      <div class="card good">
+        <h3>装完验证</h3>
+        <pre class="sm">claude --version
+
+<span class="c"># 只读诊断：检查安装健康度、</span>
+<span class="c"># 顺便检查配置文件有没有写错</span>
+claude doctor</pre>
+        <p class="fs-16" style="margin-top:10px"><code>claude doctor</code> 是个好习惯——<strong>配置写完先体检，别等报错才发现括号少了一个。</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>Windows 用户注意：Claude Code 在 Windows 上体验不如 macOS/Linux。如果学生用的是 Windows 且不想折腾，<strong>可以用 WSL，或者今天先用 Codex</strong>（Codex 的原生 Windows 支持更好）。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>接上 DeepSeek<span class="clock">约 3 分钟</span></div>
+  <h1 class="sm">Claude Code 说的是「Anthropic 协议」，DeepSeek 正好也提供</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card accent">
+        <h3>macOS / Linux</h3>
+        <pre class="sm">export ANTHROPIC_BASE_URL=\
+  https://api.deepseek.com/anthropic
+export ANTHROPIC_AUTH_TOKEN=&lt;你的 Key&gt;
+export ANTHROPIC_MODEL=deepseek-flash[1m]
+export ANTHROPIC_DEFAULT_OPUS_MODEL=\
+  deepseek-flash[1m]
+export ANTHROPIC_DEFAULT_SONNET_MODEL=\
+  deepseek-flash[1m]
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=\
+  deepseek-flash
+export CLAUDE_CODE_SUBAGENT_MODEL=\
+  deepseek-flash
+export CLAUDE_CODE_EFFORT_LEVEL=max
+export CLAUDE_CODE_AUTO_COMPACT_WINDOW=786432</pre>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h3>Windows PowerShell</h3>
+          <pre class="sm">$env:ANTHROPIC_BASE_URL=\
+  "https://api.deepseek.com/anthropic"
+$env:ANTHROPIC_AUTH_TOKEN="&lt;你的 Key&gt;"
+$env:ANTHROPIC_MODEL="deepseek-flash[1m]"</pre>
+          <p class="fs-15 dim" style="margin-top:6px">其余变量同上，把 <code>export A=B</code> 换成 <code>$env:A="B"</code>。</p>
+        </div>
+        <div class="card good">
+          <h3>验证</h3>
+          <pre class="sm">cd ~/ai-lab
+claude
+<span class="c"># 进去后输入：</span>
+/status</pre>
+          <p class="fs-16" style="margin-top:6px">能看到 <strong>base URL 是 api.deepseek.com</strong>，就通了。</p>
+        </div>
+      </div>
+    </div>
+    <p class="fs-17 center dim">这几行是 <strong>DeepSeek 官方文档</strong>给的配置，不是我们自己凑的。<code>[1m]</code> 是让它用 100 万 token 的超长上下文。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>关键教学点：<strong>这几行 export 只对当前这个终端窗口有效</strong>，关掉就没了。想永久生效要写进 <code>~/.zshrc</code> 或 <code>~/.bashrc</code>。</p>
+    <p>学生最常问：「为什么是 AUTH_TOKEN 不是 API_KEY？」——第 1 讲的协议那张图：两个变量对应两个不同的请求头（<code>Authorization: Bearer</code> vs <code>x-api-key</code>），用错就到不了网关。<strong>拿不准时先用 AUTH_TOKEN。</strong></p>
+    <p>也可以顺势演示 cc-switch：上节课装的工具，这里正好能一键写进 settings.json。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>省事的做法<span class="clock">约 1 分钟</span></div>
+  <h1 class="sm">不想每次敲这一堆？写进配置文件</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card">
+        <h3>手工方式</h3>
+        <p class="fs-17">写进 <code>~/.claude/settings.json</code>：</p>
+        <pre class="sm">{
+  "env": {
+    "ANTHROPIC_BASE_URL":
+      "https://api.deepseek.com/anthropic",
+    "ANTHROPIC_AUTH_TOKEN": "sk-xxxx",
+    "ANTHROPIC_MODEL": "deepseek-flash[1m]"
+  }
+}</pre>
+        <p class="fs-16 dim" style="margin-top:6px">注意：这里的 <code>env</code> <strong>优先级高于</strong>你在终端里 export 的同名变量。</p>
+      </div>
+      <div class="card good">
+        <h3>用 cc-switch（上节课装的）</h3>
+        <p class="fs-17">选 DeepSeek 预设 → 填 Key → <strong>Enable</strong>。它替你写上面这个文件。</p>
+        <p class="fs-17" style="margin-top:8px">Claude Code 是它<strong>唯一支持热切换、不用重启</strong>的工具。</p>
+        <p class="fs-17 good" style="margin-top:8px">这就是上节课那个「你可能暂时用不到」的工具，今天开始用得上了。</p>
+      </div>
+    </div>
+    <p class="fs-17 center dim">两种方式都对。区别只是：一个让你<strong>理解发生了什么</strong>，一个让你<strong>省事</strong>。建议先用第一种配通，再用第二种。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这个「先手工再自动化」的顺序很重要。学生如果只会点按钮，出问题就完全无从下手。</p>
+  </aside>
+</section>
+
+<!-- ========================= 二、Codex ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>准备工作 B</div>
+  <h1>装上 Codex</h1>
+  <p class="sub">OpenAI 的终端 Agent，只看 Responses 协议</p>
+  <aside class="notes"><p>过渡。</p></aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>安装<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">和 Claude Code 几乎一样的流程</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card accent">
+        <h3>安装</h3>
+        <pre class="sm"><span class="c"># macOS / Linux</span>
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+
+<span class="c"># Windows PowerShell</span>
+powershell -ExecutionPolicy ByPass -c \
+  "irm https://chatgpt.com/codex/install.ps1 | iex"
+
+<span class="c"># 或者</span>
+brew install --cask codex
+npm install -g @openai/codex</pre>
+      </div>
+      <div class="card warn">
+        <h3>装完先做一件事</h3>
+        <p class="fs-17"><strong>先运行一次 <code>codex</code> 再退出</strong>（或者随便跟它说句话）。</p>
+        <p class="fs-17" style="margin-top:8px">目的是让它把 <code>~/.codex</code> 目录建出来——<strong>下一步的配置脚本需要这个目录已经存在</strong>。</p>
+        <p class="fs-16 dim" style="margin-top:8px">如果它让你登录 ChatGPT，跳过或者随便登录一下都行，我们马上要把它改成走 DeepSeek。</p>
+      </div>
+    </div>
+    <div class="card flat">
+      <p class="fs-17"><strong>配置文件的位置要注意：</strong>供应商配置必须写在<strong>用户级</strong>的 <code>~/.codex/config.toml</code>。写在项目目录里的 <code>.codex/config.toml</code> 会被<strong>忽略并警告</strong>——这是最常见的坑。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>「先跑一次建目录」这个细节很关键，不说的话下一步脚本会失败。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>接上 DeepSeek：官方一键脚本<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">Codex 只认 Responses 协议 —— 而 DeepSeek 原生支持</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card accent">
+        <h3>一键配置</h3>
+        <pre class="sm"><span class="c"># macOS / Linux</span>
+bash &lt;(curl -fsSL \
+ https://cdn.deepseek.com/api-docs/codex-deepseek-setup.sh)
+
+<span class="c"># Windows PowerShell</span>
+irm https://cdn.deepseek.com/api-docs/\
+codex-deepseek-setup.ps1 | iex</pre>
+        <p class="fs-17" style="margin-top:10px">按菜单选：<strong>1</strong> = 用 <code>deepseek-flash</code>（支持图片）&nbsp; <strong>2</strong> = 用 <code>deepseek-v4-pro</code> &nbsp; <strong>9</strong> = 恢复原配置。</p>
+        <p class="fs-17" style="margin-top:6px">首次运行会让你输入 API Key。</p>
+      </div>
+      <div class="card good">
+        <h3>它替你做了三件事</h3>
+        <ul class="tight fs-16">
+          <li><strong>备份</strong>你原来的 <code>config.toml</code></li>
+          <li>写一个 <code>~/.codex/models.json</code>，告诉 Codex「DeepSeek 这个模型有什么能力」</li>
+          <li>在 <code>config.toml</code> 里加上 <code>[model_providers.deepseek]</code> 段</li>
+        </ul>
+        <p class="fs-16" style="margin-top:8px">它只改必要字段，<strong>你原有的其他配置都会保留</strong>。选 9 可以随时还原。</p>
+      </div>
+    </div>
+    <div class="card warn">
+      <p class="fs-17"><strong>顺便复习第 1 讲：</strong>Codex 之所以挑供应商，是因为它<strong>只支持 Responses 协议</strong>。DeepSeek 原生支持，所以能直连。<br>有些平台只提供 Chat Completions 格式——那种情况下 Codex 用不了，得靠本地代理转换。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页把第 1 讲「协议」那张图落到了实处，值得多花一分钟。</p>
+    <p>同时点明：<strong>我们全程没用中转站</strong>。这是刻意的——学生第一次配工具，应该走最干净的路。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>它给了 Agent 多大的权力<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">Codex 的两个安全开关（第 1 讲说的「闸门」）</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card">
+        <h3>sandbox_mode：它能碰哪里</h3>
+        <table class="kv fs-16" style="margin-top:6px">
+          <tr><td class="mono">read-only</td><td>只能看，不能改</td></tr>
+          <tr><td class="mono">workspace-write</td><td>只能在当前工作目录里写</td></tr>
+          <tr><td class="mono">danger-full-access</td><td>什么都能干（危险）</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>approval_policy：什么时候要问你</h3>
+        <table class="kv fs-16" style="margin-top:6px">
+          <tr><td class="mono">untrusted</td><td>除了安全只读命令，全都要问</td></tr>
+          <tr><td class="mono">on-request</td><td>由模型自己决定何时问（默认）</td></tr>
+          <tr><td class="mono">never</td><td>从不问（只适合自动化场景）</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card good">
+      <h3>给学生的建议组合</h3>
+      <pre class="sm">codex --sandbox workspace-write --ask-for-approval on-request</pre>
+      <p class="fs-17" style="margin-top:6px">官方的低摩擦组合：<strong>允许它在工作目录里干活，但每走一步都先问你。</strong>等你信任它了再逐步放宽。</p>
+    </div>
+    <p class="fs-17 center dim">一句话：<strong>沙箱管「能碰哪里」，审批管「什么时候停下来问你」。</strong>这两个概念在每一个 Agent 工具里都有，只是叫法不同。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这页信息密度高，但值得讲——它是学生以后用任何 Agent 工具都会遇到的东西。</p>
+    <p>如果时间紧，只讲「建议组合」那一行 + 最后一句话。</p>
+  </aside>
+</section>
+
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>现场实操 · 10 分钟</div>
+  <h1>两个都装上，都连上 DeepSeek</h1>
+  <p class="sub">在 <code>~/ai-lab</code> 里分别运行 <code>claude</code> 和 <code>codex</code>，各打一句招呼</p>
+  <aside class="notes">
+    <p>巡视时的关注点：</p>
+    <ul>
+      <li>Claude Code：<code>/status</code> 里的 base URL 对不对</li>
+      <li>Codex：有没有先跑一次建出 <code>~/.codex</code>；脚本菜单有没有选 1</li>
+      <li>Windows 用户：优先保 Codex</li>
+    </ul>
+    <p>都通了就往下走，不用等所有人。</p>
+  </aside>
+</section>
+
+<!-- ========================= 三、三个任务 ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>第三部分</div>
+  <h1>三个任务</h1>
+  <p class="sub">自己挑一个开始，做不完可以带回去继续</p>
+  <aside class="notes">
+    <p>不用三个都做完。<strong>让每个人至少完整做完一个</strong>，比三个都浅尝辄止有价值。</p>
+    <p>建议按基础分：没碰过命令行的 → 任务一；写过一点代码的 → 任务二；任何专业 → 任务三。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>任务一<span class="clock">题目</span></div>
+  <h1 class="sm">让 AI 教你用终端</h1>
+  <div class="body">
+    <div class="card accent">
+      <h3>题目</h3>
+      <p class="fs-19">让 AI 当你的终端老师，教会你<strong>五个最基本的操作</strong>，并且让你明白每一条命令<strong>为什么这么设计</strong>。</p>
+      <p class="fs-17" style="margin-top:8px">这五个操作是：① 我在哪 &nbsp;② 这里有什么 &nbsp;③ 新建一个文件夹 &nbsp;④ 走进去 &nbsp;⑤ 新建并查看一个文件。</p>
+    </div>
+    <div class="cols c2">
+      <div class="card">
+        <h3>要求</h3>
+        <ul class="tight fs-16">
+          <li>每一步都让它<strong>解释这条命令在干什么</strong></li>
+          <li>你必须<strong>自己在终端里手敲一遍</strong>，不许复制粘贴</li>
+          <li>最后让它出 <strong>3 道小题</strong>考你</li>
+        </ul>
+      </div>
+      <div class="card good">
+        <h3>验收</h3>
+        <p class="fs-16">在终端里完成五个操作 + 交一段<strong>一百字以内</strong>的说明：<br>「我原来以为终端是什么，现在觉得它是什么。」</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>为什么要「手敲」：手敲才会遇到真正的报错，遇到报错才会去问 AI，问了 AI 才是完整的循环。</p>
+    <p>「为什么这么设计」这个问题本身就很值——比如为什么 <code>cd</code> 要叫 change directory，为什么 <code>ls</code> 叫 list。<strong>命令名都是缩写的英文单词</strong>，这个发现对初学者是开窍时刻。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>任务二<span class="clock">题目</span></div>
+  <h1 class="sm">做一个贪吃蛇</h1>
+  <div class="body">
+    <div class="card accent">
+      <h3>题目</h3>
+      <p class="fs-19">用一个会话，做出一个<strong>能在你自己电脑上真的跑起来</strong>的贪吃蛇。命令行版或图形界面版都可以。</p>
+    </div>
+    <div class="cols c2">
+      <div class="card">
+        <h3>要求</h3>
+        <ul class="tight fs-16">
+          <li>能跑起来，能玩</li>
+          <li>至少要有：蛇会动、吃到食物变长、撞墙或撞自己就结束、有分数</li>
+          <li>代码放在<strong>一个独立文件夹</strong>里</li>
+          <li>最后让它写一个 <strong>README</strong>，说明怎么运行</li>
+          <li class="bad">不许自己写代码——你负责说清楚要什么、跑一遍、把问题反馈给它</li>
+        </ul>
+      </div>
+      <div class="card good">
+        <h3>验收</h3>
+        <p class="fs-16">当场演示能玩 + README 能让别人照着跑起来。</p>
+        <p class="fs-16" style="margin-top:8px"><strong>进阶（自愿）：</strong>让它加暂停、加速、最高分记录。<br>每加一个功能就<strong>开一个新会话</strong>试试，感受一下区别。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这个任务的隐藏考点是 <strong>「反馈循环」</strong>：蛇跑不动、按键没反应、中文乱码……这些都必须由学生<strong>跑一遍才能发现</strong>，然后把真实现象告诉 AI。这正是第 1 讲说的「让模型看到上一步的真实结果」。</p>
+    <p>如果学生说「它写的跑不起来」——不要帮他改代码，让他把<strong>完整报错</strong>粘回去。这是本任务唯一的教学动作。</p>
+    <p>「进阶用新会话」是让他亲身体验会话管理。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>任务三<span class="clock">题目</span></div>
+  <h1 class="sm">读懂 Transformer 论文</h1>
+  <div class="body">
+    <div class="card accent">
+      <h3>题目</h3>
+      <p class="fs-19">把《Attention Is All You Need》变成<strong>你能用自己的话讲出来的东西</strong>。用 AI 当助教，你当学生。</p>
+    </div>
+    <div class="cols c2">
+      <div class="card">
+        <h3>要求</h3>
+        <ul class="tight fs-16">
+          <li>把论文 PDF 放进工作目录，让它读完</li>
+          <li>让它用「<strong>给大三本科生讲</strong>」的方式解释第 3 节（模型架构）</li>
+          <li>让它<strong>画出数据流</strong>：从输入到输出，张量的形状怎么变</li>
+          <li>你自己找出 <strong>3 个不懂的术语</strong>，逐个问，直到能复述</li>
+          <li>最后让它出 <strong>5 道自测题</strong>，你做完让它批改</li>
+        </ul>
+      </div>
+      <div class="card good">
+        <h3>验收</h3>
+        <p class="fs-16">交一页 Markdown 笔记 + 3 个术语的解释。</p>
+        <p class="fs-16 bad" style="margin-top:8px"><strong>必须用你自己的话，不许复制它的原文。</strong></p>
+        <p class="fs-16 dim" style="margin-top:8px">判据很简单：<strong>你讲给同学听，他能不能听懂。</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这个任务最难，也最能区分「会用的」和「不会用的」。</p>
+    <p>关键在最后一条：<strong>不许复制原文</strong>。因为 AI 的解释可以非常流畅，但流畅不等于你懂了。<strong>用自己的话复述，是唯一能验证「真懂」的办法。</strong></p>
+    <p>提示学生：如果它讲得太抽象，可以要求「用类比」「举个具体例子」「画表格」——<strong>同一个概念，让它换三种方式讲</strong>。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>做任务时会遇到的坑<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">这些坑，都是今天讲过的概念</h1>
+  <div class="body">
+    <table class="kv">
+      <tr><th style="width:36%">你会遇到的</th><th>原因 / 怎么办</th></tr>
+      <tr>
+        <td>它说「已完成」，但其实没做完</td>
+        <td>模型只会产文字。<strong>去看文件到底改了没有</strong>——用结果验证，不要信它的汇报。</td>
+      </tr>
+      <tr>
+        <td>聊到后面它开始忘事、变笨</td>
+        <td>上下文满了。<strong>任务告一段落就开新会话</strong>，把结论写进文件带走。</td>
+      </tr>
+      <tr>
+        <td>它卡在同一个错误上反复试</td>
+        <td>你没给它足够的真实信息。<strong>把完整报错原样贴回去</strong>，别说「它还是不行」。</td>
+      </tr>
+      <tr>
+        <td>它在错误的目录里干活</td>
+        <td>启动前先 <code>cd</code> 到目标目录；会话里也要说清路径。</td>
+      </tr>
+      <tr>
+        <td>它一直问你要权限，很烦</td>
+        <td>这是<strong>闸门在工作</strong>，不是 bug。熟了之后再放宽 sandbox 设置。</td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页其实是<strong>整门课的知识点复习</strong>，只是换成了「你会遇到的症状」的说法。</p>
+    <p>带着学生做一遍映射：每一条对应第 1 讲哪一页？这比再讲一遍概念有效得多。</p>
+  </aside>
+</section>
+
+<!-- ========================= 收尾 ========================= -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>课程收尾<span class="clock">约 3 分钟</span></div>
+  <h1 class="sm">三节课之后，你手上有什么</h1>
+  <div class="body">
+    <div class="cols c3 grow">
+      <div class="card accent">
+        <h3>一个能干活的环境</h3>
+        <p class="fs-17">DeepSeek API + cc-switch + DSH + Claude Code + Codex，全都直连官方，<strong>没有一处依赖中转站</strong>。</p>
+      </div>
+      <div class="card accent">
+        <h3>一套判断标准</h3>
+        <p class="fs-17">什么时候该用 Agent、什么时候用聊天框；协议不匹配该查哪三样；钱花在哪里。</p>
+      </div>
+      <div class="card accent">
+        <h3>一种工作方式</h3>
+        <p class="fs-17">说清要求 → 让它做 → <strong>看真实结果</strong> → 反馈 → 再来一轮。这个循环可以用一辈子。</p>
+      </div>
+    </div>
+    <div class="card good">
+      <h3>最后三句话</h3>
+      <p class="fs-17">① <strong>能自己验证的任务，交给它收益最大</strong>；只能靠你判断的任务，它帮不上多少忙。 &nbsp;② <strong>需要留下的东西，让它写进文件</strong>，别留在对话里。 &nbsp;③ <strong>它是工具，不是答案</strong>——最终的判断和署名，永远是你的。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>第三句是对一整门课最重要的一句。AI 课很容易上成「工具培训」，最后一定要落回<strong>人的判断和责任</strong>。</p>
+    <p>可以补一句现实提醒：课程作业、论文投稿，很多地方已经明确要求<strong>声明是否使用 AI 及使用范围</strong>。用工具不丢人，隐瞒才是问题。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>继续往下走<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">想更深入，从这两份资料开始</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card">
+        <h3>看思路 · 视频课</h3>
+        <p class="fs-17"><strong>《生成式软件工程》</strong><br>南京大学 蒋炎岩</p>
+        <p class="fs-16" style="margin-top:6px">从软件工程的角度讲人怎么跟 AI 协作。想理解「为什么会有 harness 和 loop 这些东西」，这门课讲得比我们深。</p>
+        <p class="fs-15 mono dim" style="margin-top:6px">jyywiki.cn/GSE/2026/</p>
+      </div>
+      <div class="card">
+        <h3>上手做 · 开源教程</h3>
+        <p class="fs-17"><strong>Datawhale《Hello-Agents》</strong></p>
+        <p class="fs-16" style="margin-top:6px">16 章，从智能体定义到手写 ReAct、上下文工程、通信协议、性能评估，最后有完整项目。<strong>想自己造一个 Agent 的人从这本开始。</strong></p>
+        <p class="fs-15 mono dim" style="margin-top:6px">datawhalechina.github.io/hello-agents</p>
+      </div>
+    </div>
+    <p class="fs-19 center">这门课教的是「会用」。想「会造」，就从这两份资料往下走。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 3 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>收尾不要再讲新东西。把资料发到班级群里，让大家自己按需要取。</p>
+  </aside>
+</section>
+
+</div>
+</div>
+
+<div id="progress"></div>
+<div id="toast"></div>
+<div id="notes-panel"></div>
+<div id="hud">
+  <button data-act="ov" title="总览 (O)">总览</button>
+  <button data-act="notes" title="讲稿 (S)">讲稿</button>
+  <button data-act="theme" title="明暗 (T)">明暗</button>
+  <button data-act="fs" title="全屏 (F)">全屏</button>
+  <button data-act="print" title="导出 PDF (P)">PDF</button>
+  <button data-act="prev" title="上一页">←</button>
+  <span class="pos">1/1</span>
+  <button data-act="next" title="下一页">→</button>
+</div>
+
+<script src="assets/deck.js"></script>
+</body>
+</html>

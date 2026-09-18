@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepSeek Harness · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>DeepSeek Harness</h1>
+        <p class="lede">这是你第一个真正的 Agent 工具。它有网页界面，不用背命令，装起来只要一行。做完这一页，你会亲眼看到 AI 在你的文件夹里创建出真的文件。</p>
+
+        <div class="osbar">
+          <span>当前显示的是 <b class="only-mac">macOS / Linux</b><b class="only-win">Windows</b> 的命令</span>
+          <div class="os-switch" role="group" aria-label="切换操作系统">
+            <button data-set-os="mac">macOS / Linux</button>
+            <button data-set-os="win">Windows</button>
+          </div>
+        </div>
+
+        <h2>它是什么</h2>
+        <p>DeepSeek Harness（简称 <b>dsh</b>）是 DeepSeek 开源的一个 agent harness——也就是「把模型包装成能干活的产品」的那一整套东西。</p>
+        <p>它和你在网页上用的聊天框有个根本区别：<b>它能读写你电脑上的文件、能执行命令、能看到真实的报错并自己改。</b></p>
+
+        <div class="cards">
+          <div class="card accent">
+            <h3>为什么先装它</h3>
+            <p>有网页界面，不用记命令。第一次接触 Agent，从这里开始最不容易被劝退。</p>
+          </div>
+          <div class="card accent">
+            <h3>它可以直接用 DeepSeek</h3>
+            <p>填一个 Key 就能跑，不需要任何中间服务。</p>
+          </div>
+          <div class="card accent">
+            <h3>它有一个好玩的开关</h3>
+            <p>可以切换「模式」，把工具从几十个减到两个。你会亲眼看到：工具少了，它照样能把事做完。</p>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="ic">🚧</div>
+          <div class="bd">
+            <span class="t">它是「开发者预览版」</span>
+            会更新、会有 bug、界面会变。碰到奇怪的问题不用怀疑自己——先记下报错，去 <a href="help.html">排错页</a> 看看，或者直接搜一下报错原文。
+          </div>
+        </div>
+
+        <h2>安装并启动</h2>
+        <p>确认你已经装好 Node.js 22+（<a href="node.html">安装 Node.js</a> 那一页）。然后打开终端，<b>按顺序</b>执行下面三条。</p>
+
+        <div class="only-mac">
+          <div class="codeblock"><pre data-lang="bash"><span class="c"># 1. 建一个专门做实验的文件夹</span>
+mkdir -p ~/ai-lab
+
+<span class="c"># 2. 进入这个文件夹（很重要，见下面的说明）</span>
+cd ~/ai-lab
+
+<span class="c"># 3. 启动 dsh，它会自动下载并运行</span>
+npx @deepseek-ai/dsh web</pre></div>
+        </div>
+
+        <div class="only-win">
+          <div class="codeblock"><pre data-lang="powershell"><span class="c"># 1. 建一个专门做实验的文件夹</span>
+mkdir $HOME\ai-lab
+
+<span class="c"># 2. 进入这个文件夹（很重要，见下面的说明）</span>
+cd $HOME\ai-lab
+
+<span class="c"># 3. 启动 dsh，它会自动下载并运行</span>
+npx @deepseek-ai/dsh web</pre></div>
+          <div class="callout tip">
+            <div class="ic">💡</div>
+            <div class="bd">
+              <span class="t">Windows 上为什么要分三行写</span>
+              老版本的 PowerShell（5.1）<b>不支持用 <code>&amp;&amp;</code> 连接命令</b>，写成一行会直接报语法错误。逐行执行最稳。如果你用的是 PowerShell 7，一行写也没问题。
+            </div>
+          </div>
+        </div>
+
+        <div class="callout danger">
+          <div class="ic">📁</div>
+          <div class="bd">
+            <span class="t">为什么要先 cd 再启动</span>
+            <b>dsh 会把「你启动它时所在的目录」当成默认的工作位置。</b>你在哪个目录里启动它，它就默认在哪个目录里干活。所以养成「先 cd 到练习文件夹，再启动」的习惯——这同时也是一道安全边界：它默认碰不到这个文件夹以外的东西。
+          </div>
+        </div>
+
+        <p>启动成功后，它会自动用默认浏览器打开一个本地地址：</p>
+        <div class="codeblock"><pre>http://127.0.0.1:3080</pre></div>
+
+        <div class="callout tip">
+          <div class="ic">⏳</div>
+          <div class="bd">
+            <span class="t">第一次跑会等一会儿</span>
+            <code>npx</code> 需要先把程序下载下来，可能等一到两分钟，屏幕上看起来像卡住了。耐心等一下。只有第一次是这样。
+          </div>
+        </div>
+
+        <p>如果不想让它自动打开浏览器，加一个参数：</p>
+        <div class="codeblock"><pre data-lang="bash">npx @deepseek-ai/dsh web --no-open</pre></div>
+
+        <h2>配置模型</h2>
+        <p>界面打开后，先别急着说话——它还不知道该用哪个模型。</p>
+
+        <ol class="steps">
+          <li><h3>打开设置</h3><p>点界面上的 <b>设置</b>，找到 <b>模型</b> 这一页。</p></li>
+          <li><h3>填 DeepSeek 的 Key</h3><p>在 <b>DeepSeek</b> 卡片里，把你在<a href="api.html">拿到 API Key</a> 那一页拿到的 Key 粘进去，保存。</p></li>
+          <li><h3>确认生效</h3><p>不需要重启，下一次请求就会用上。</p></li>
+        </ol>
+
+        <div class="callout good">
+          <div class="ic">🔒</div>
+          <div class="bd">
+            <span class="t">关于你的 Key，一个让人放心的细节</span>
+            这个 Key 输入框是<b>只写</b>的：保存之后，界面只会显示脱敏后的样子，不会再显示明文。它存在你本机的凭据文件里，不会上传到别处。<br>
+            这也是专业工具的做法——<b>能少存一次明文，就少存一次</b>。
+          </div>
+        </div>
+
+        <div class="callout danger">
+          <div class="ic">📵</div>
+          <div class="bd">
+            <span class="t">不要截图发群里问「我这里对不对」</span>
+            截图等于泄露。要问就把<b>报错文字</b>复制出来问，或者把 Key 那一段打码。
+          </div>
+        </div>
+
+        <h2>选择工作区</h2>
+        <p>配好模型之后你会发现输入框还是灰的——因为你还没告诉它「可以碰哪个目录」。</p>
+
+        <ol class="steps">
+          <li><h3>点「选择工作区」</h3><p>然后添加你刚才 <code>cd</code> 进去的那个文件夹，比如 <code>ai-lab</code>。</p></li>
+          <li><h3>选中它</h3><p>添加之后要点一下把它选中。</p></li>
+          <li><h3>输入框亮了</h3><p>现在可以开始了。</p></li>
+        </ol>
+
+        <p>这一步其实是在划定 Agent 的活动范围。它只能在你选中的目录里读写文件——这就是「沙箱」的实际样子。</p>
+
+        <h2>让它第一次动手</h2>
+        <p>把下面整段复制到对话框里发出去。注意这个任务的特点是：<b>它必须真的动手才能完成</b>，光靠嘴说做不到。</p>
+
+        <div class="codeblock"><pre data-lang="提示词">在当前目录下创建一个 notes 文件夹，里面放三个文件：
+
+1. about-me.md：用 Markdown 写一小段自我介绍，内容包括你的专业、
+   以及你现在最想学会的一件事。
+2. todo.md：三件你这周要完成的事，用待办清单的格式。
+3. README.md：说明上面两个文件分别是干什么的。
+
+写完后，把这三个文件的路径和大小列给我。</pre></div>
+
+        <h3>做完之后一定要做这两件事</h3>
+        <ul>
+          <li><b>打开你的文件夹看一眼。</b>文件真的在那儿。这不是它「说」它建了，是它真的建了——这就是 Agent 和聊天框的根本区别。</li>
+          <li><b>展开它的步骤记录看一下。</b>你会看到它先列了目录，然后写文件，可能还读回来检查了一遍。这些步骤加起来，才是你看到的那句「已完成」。</li>
+        </ul>
+
+        <div class="callout tip">
+          <div class="ic">🤔</div>
+          <div class="bd">
+            <span class="t">一个值得停下来想的问题</span>
+            如果这是聊天框，你现在在干什么？答案是：复制它给的文字、自己新建文件、自己粘贴、自己改名、再确认一遍。<br>
+            <b>这些动作现在都不需要你做了。</b>省下的就是你以后可以花在别处的时间。
+          </div>
+        </div>
+
+        <h2>它的界面，你都学过了</h2>
+        <p>这个界面上的每一个元素，背后都是一个概念：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th>你在界面上看到的</th><th>它其实是</th></tr>
+            <tr><td>模式选择器（标准 / 极简 / PTC / 创造）</td><td>agent 预设：给这个会话装哪些工具、什么规矩</td></tr>
+            <tr><td>模型选择器</td><td>model id —— 你要哪一个模型</td></tr>
+            <tr><td>每一步展开的工具调用</td><td>Agent 循环：请求模型 → 模型要工具 → 执行 → 结果写回</td></tr>
+            <tr><td>「是否允许执行」的弹窗</td><td>沙箱与审批：它有多大的权力</td></tr>
+            <tr><td>上下文快满时的提示</td><td>压缩：把前面的对话总结掉，腾出空间</td></tr>
+            <tr><td>「+ 新会话」</td><td>会话管理：换任务就开新会话</td></tr>
+          </table>
+        </div>
+
+        <h2>换个模式再跑一次</h2>
+        <p>这是这一页最有意思的部分。请这样做：</p>
+
+        <ol class="steps">
+          <li><h3>开一个新会话</h3><p>不要接着上一个继续，点「新会话」。</p></li>
+          <li><h3>把模式切换成「极简模式」</h3><p>这个模式只给 AI 两个工具：一个终端，一个文件编辑器。</p></li>
+          <li><h3>把同样的任务再发一次</h3><p>就用上面那段提示词。</p></li>
+          <li><h3>对比两次的做法</h3><p>注意看它用的命令和步骤数有什么不同。</p></li>
+        </ol>
+
+        <div class="callout good">
+          <div class="ic">🎯</div>
+          <div class="bd">
+            <span class="t">你会看到什么</span>
+            只有两个工具，它照样能建文件夹、写文件、列路径。<br>
+            因为它会用终端命令去完成这些事——<b>一个循环，加一双能执行命令的手，就够了。</b><br>
+            <span class="muted small">这也说明一件事：工具越多不等于越强。工具越多，它越容易选错，出错的面也越大。极简模式还更便宜——工具列表本身也要占用上下文。</span>
+          </div>
+        </div>
+
+        <h2>常见问题</h2>
+
+        <h3>跑 <code>npx</code> 的时候卡住不动</h3>
+        <p>第一次要在下载，等 1–2 分钟是正常的。如果超过 5 分钟，可能是网络问题——试试换国内 npm 镜像（见 <a href="node.html">安装 Node.js</a>），或者换个网络环境。</p>
+
+        <h3>浏览器打不开 <code>127.0.0.1:3080</code></h3>
+        <ul>
+          <li>先回到终端看：那个 <code>npx</code> 窗口还开着吗？关掉它服务就停了</li>
+          <li>端口可能被占用（比如你已经开着一个），换一个端口启动，或者在终端里看它实际打印出来的地址</li>
+          <li>手动在浏览器地址栏输入完整地址，注意是 <code>127.0.0.1</code> 不是 <code>localhost</code> 也行，两者都可以</li>
+        </ul>
+
+        <h3>输入框是灰的，打不了字</h3>
+        <p>没选工作区。回到上面「选择工作区」那一步。</p>
+
+        <h3>提示 <code>MISSING_CREDENTIAL</code> 或 <code>401</code></h3>
+        <p>Key 没填、填错，或者复制时前后带了空格。回「设置 → 模型」重新粘一次。</p>
+
+        <h3>提示 <code>UNKNOWN_MODEL</code></h3>
+        <p>选了当前配置里不存在的模型。回模型选择器换一个。</p>
+
+        <h3>Windows 上弹出防火墙提示</h3>
+        <p>允许它在本机通信即可——它只是个本地服务，只监听你自己的电脑。</p>
+
+        <div class="pagefoot">
+          <p>这一步做完，你就有了一个能干活、能验证、能看到过程的 AI。接下来去装另外两个 Agent。</p>
+          <p class="muted">下一步 → <a href="claude-code.html">Claude Code</a></p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

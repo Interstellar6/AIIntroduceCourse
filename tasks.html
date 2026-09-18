@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>四个练习任务 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>四个练习任务</h1>
+        <p class="lede">环境装好了，接下来要真的用一次。<b>四个任务难度递增</b>：前两个是工具基础，后两个是真刀真枪。做完之后，把成果写成一个 Issue 交上来。</p>
+
+        <div class="callout danger">
+          <div class="ic">🎯</div>
+          <div class="bd">
+            <span class="t">三个任务共同的规则：不许自己写代码、不许自己查资料</span>
+            你的工作是三件事：<b>把要求说清楚 → 让它做 → 跑一遍看真实结果 → 把真实的问题反馈给它</b>。<br>
+            看到它卡住时，第一反应不要是自己上手改。你的价值在「说清楚」和「判断对不对」，不在敲代码。
+          </div>
+        </div>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 268" role="img" aria-label="人机分工示意图：说清要求、看真实结果这两段是你的活；动手做、把问题反馈给它这两段是它的活；四段循环往复直到事情做对">
+            <defs>
+              <marker id="tk1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+            </defs>
+
+            <text class="t-g t-mid" x="140" y="28">你</text>
+            <text class="t-s t-mid" x="352" y="28">它</text>
+            <text class="t-g t-mid" x="564" y="28">你</text>
+            <text class="t-s t-mid" x="776" y="28">它</text>
+
+            <rect class="b-a" x="40" y="40" width="200" height="70" rx="12"/>
+            <text class="t-h t-mid" x="140" y="82">说清要求</text>
+
+            <rect class="b-s" x="252" y="40" width="200" height="70" rx="12"/>
+            <text class="t-h t-mid" x="352" y="82">动手做</text>
+
+            <rect class="b-a" x="464" y="40" width="200" height="70" rx="12"/>
+            <text class="t-h t-mid" x="564" y="82">看真实结果</text>
+
+            <rect class="b-s" x="676" y="40" width="200" height="70" rx="12"/>
+            <text class="t-h t-mid" x="776" y="82">把问题反馈给它</text>
+
+            <path class="ln" d="M776,110 V198 H140 V114" marker-end="url(#tk1)"/>
+            <text class="t-s t-mid" x="458" y="220">一直重复，直到事情做对</text>
+
+            <text class="t-s t-mid" x="450" y="254">整个循环里只有两段是你的活：<tspan class="t-g">说清楚</tspan>和<tspan class="t-g">判断对不对</tspan></text>
+          </svg>
+          <figcaption>蓝色的是你的工作，灰色的是它的工作。<b>不要把灰色的那两段抢过来做</b>——你抢了，它就没机会看到真实结果，也就没法自己改对。</figcaption>
+        </figure>
+
+        <h2>怎么选</h2>
+        <div class="cards">
+          <div class="card">
+            <h3>没怎么碰过命令行</h3>
+            <p>从<b>任务一</b>和<b>任务二</b>开始。它们是后面所有任务的基础，而且学一次能用很久。</p>
+          </div>
+          <div class="card">
+            <h3>写过一点代码</h3>
+            <p>直接做<b>任务三</b>。你会体验到「一个人带一个团队」的感觉。</p>
+          </div>
+          <div class="card">
+            <h3>不限专业</h3>
+            <p><b>任务四</b>任何人都能做，也是四个里最能锻炼判断力的。</p>
+          </div>
+        </div>
+
+        <hr>
+
+        <h2>任务一 · 让 AI 教你用终端</h2>
+
+        <h3>题目</h3>
+        <p>让 AI 当你的终端老师，教会你<b>五个最基本的操作</b>，并且让你明白每一条命令<b>为什么这么设计</b>。</p>
+        <p>这五个操作是：① 我在哪 ② 这里有什么 ③ 新建一个文件夹 ④ 走进去 ⑤ 新建并查看一个文件。</p>
+
+        <h3>要求</h3>
+        <ul class="checklist">
+          <li><input type="checkbox"><label>每一步都让它<b>解释这条命令在干什么</b>，以及为什么这么命名</label></li>
+          <li><input type="checkbox"><label>你必须<b>自己在终端里手敲一遍</b>，不许复制粘贴</label></li>
+          <li><input type="checkbox"><label>最后让它出 <b>3 道小题</b>考你，看你真的会了没有</label></li>
+        </ul>
+
+        <h3>怎么开始</h3>
+        <p>在 <code>~/ai-lab</code> 里启动任意一个工具，然后说：</p>
+        <div class="codeblock"><pre data-lang="提示词">我想学会用终端，但我完全没基础。
+
+请你当我的老师，教会我下面五件事，一件一件来，每教完一件等我确认再继续：
+1. 怎么看我现在在哪个目录
+2. 怎么看这个目录里有什么
+3. 怎么新建一个文件夹
+4. 怎么进入这个文件夹
+5. 怎么新建一个文件并查看它的内容
+
+每教一个命令，请解释：这条命令的全称是什么、为什么这样命名、
+它接受的参数是什么意思。最后出三道小题考我。</pre></div>
+
+        <div class="callout tip">
+          <div class="ic">💡</div>
+          <div class="bd">
+            <span class="t">为什么要「手敲」</span>
+            手敲才会打错字，打错才会遇到报错，遇到报错你才会去问它——<b>这一圈下来才是完整的循环</b>。复制粘贴会让你什么也学不到。
+          </div>
+        </div>
+
+        <h3>验收</h3>
+        <p>在终端里完成五个操作，并交一段 <b>100 字以内</b>的说明：</p>
+        <blockquote style="margin:0 0 14px;padding:12px 16px;border-left:3px solid var(--blue);background:var(--bg-2);border-radius:0 12px 12px 0;font-size:15px">
+          我原来以为终端是什么，现在觉得它是什么。
+        </blockquote>
+
+        <div class="callout good">
+          <div class="ic">🔍</div>
+          <div class="bd">
+            <span class="t">一个你大概会有的发现</span>
+            <code>cd</code> 是 <b>c</b>hange <b>d</b>irectory，<code>ls</code> 是 <b>l</b>i<b>s</b>t，<code>mkdir</code> 是 <b>m</b>a<b>k</b>e <b>dir</b>ectory……<b>命令名基本都是英文单词的缩写。</b>一旦意识到这一点，终端就从「天书」变成了「缩写词典」。
+          </div>
+        </div>
+
+        <hr>
+
+        <h2>任务二 · 让 AI 教你用 Git</h2>
+
+        <h3>题目</h3>
+        <p>让 AI 当老师，教你用 Git 管住自己的代码，并完成一次真实的「<b>改坏 → 救回来</b>」。</p>
+
+        <h3>要求</h3>
+        <ul class="checklist">
+          <li><input type="checkbox"><label>五个基本操作：初始化仓库、看状态、提交、看历史、回退</label></li>
+          <li><input type="checkbox"><label>必须搞清楚这三个东西的区别：<b>工作区 / 暂存区 / 提交</b>——这是 Git 最容易让人懵的地方</label></li>
+          <li><input type="checkbox"><label>做一次真实练习：把 <code>ai-lab</code> 变成仓库、提交几次、<b>故意改坏一个文件</b>，然后用 Git 恢复回来</label></li>
+          <li><input type="checkbox"><label>最后问它一个问题：「为什么要多一个暂存区？直接提交不行吗？」</label></li>
+        </ul>
+
+        <h3>怎么开始</h3>
+        <div class="codeblock"><pre data-lang="提示词">我想学会用 Git，但我完全没基础。
+
+请你当我的老师，先教我五件事，一件一件来，每教完一件等我确认：
+1. 怎么把一个普通文件夹变成 Git 仓库
+2. 怎么看当前有哪些改动还没提交
+3. 怎么把改动提交上去
+4. 怎么看提交历史
+5. 怎么把文件恢复到之前的状态
+
+每教一个命令，请解释它到底在干什么、为什么要这么设计。
+
+另外我有个问题一直没搞懂：工作区、暂存区、提交
+这三个东西为什么要分成三层？直接提交不行吗？
+
+教完之后陪我做个练习：我会故意把我练习目录里的一个文件改坏，
+你告诉我怎么用 Git 把它救回来。</pre></div>
+
+        <div class="callout tip">
+          <div class="ic">🧯</div>
+          <div class="bd">
+            <span class="t">为什么 Git 值得花这个时间</span>
+            你会经常遇到这种情况：<b>「刚才还能跑的，现在不行了」</b>。没有版本控制，你只能靠记忆和运气猜自己改了什么；有了它，你可以直接看出来，还能一步退回去。<br>
+            而且——这门课后面所有「让 AI 改你的代码」的场景，<b>Git 就是你的安全网</b>。它改坏了，退回去就行。
+          </div>
+        </div>
+
+        <h3>验收</h3>
+        <p>三样东西，都要能当场演示：</p>
+        <ul>
+          <li><code>git log</code> 里至少 <b>3 次提交</b>，每次的说明都能看懂</li>
+          <li>能完整演示一次「<b>改坏 → 用 Git 恢复</b>」</li>
+          <li>交一段 <b>100 字以内</b>的说明：版本控制到底帮你解决了什么问题</li>
+        </ul>
+
+        <div class="callout warn">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <span class="t">一个很多人会犯的错</span>
+            把 Git 当成「上传代码的工具」——<b>那是 GitHub，不是 Git。</b><br>
+            Git 先在你本机管版本，GitHub 只是其中一个放仓库的地方。先在本机练熟，再考虑往上传。
+          </div>
+        </div>
+
+        <hr>
+
+        <h2>任务三 · 做一个贪吃蛇</h2>
+
+        <h3>题目</h3>
+        <p>做出一个<b>能在你自己电脑上真的跑起来</b>的贪吃蛇。命令行版或图形界面版都可以。</p>
+
+        <h3>要求</h3>
+        <ul class="checklist">
+          <li><input type="checkbox"><label>能跑起来，能玩</label></li>
+          <li><input type="checkbox"><label>至少要有：蛇会动、吃到食物变长、撞墙或撞自己就结束、有分数</label></li>
+          <li><input type="checkbox"><label>代码放在一个<b>独立的文件夹</b>里</label></li>
+          <li><input type="checkbox"><label>最后让它写一个 <b>README</b>，说明怎么安装依赖、怎么运行</label></li>
+          <li><input type="checkbox"><label>全程不许自己写代码——你负责说清要求、跑一遍、把问题反馈给它</label></li>
+        </ul>
+
+        <h3>怎么开始</h3>
+        <div class="codeblock"><pre data-lang="提示词">在 snake 文件夹里帮我做一个贪吃蛇小游戏。
+
+要求：
+- 用 Python 写（如果我的电脑上没有 Python，先告诉我怎么装）
+- 就用命令行界面，不要额外的图形库，依赖越少越好
+- 蛇会动、吃到食物变长、撞墙或撞到自己就结束
+- 屏幕上要显示当前分数
+- 操作说明写在 README.md 里
+
+做完之后告诉我怎么运行它。</pre></div>
+
+        <h3>验收</h3>
+        <p>当场演示能玩，并且 README 能让别人照着跑起来。</p>
+
+        <div class="callout good">
+          <div class="ic">🔁</div>
+          <div class="bd">
+            <span class="t">这个任务的真正考点：反馈循环</span>
+            蛇跑不动、按键没反应、中文乱码、窗口一闪就没了……这些只有<b>你跑一遍才能发现</b>。<br>
+            发现之后要做的事只有一件：<b>把完整的报错原样贴回去给它</b>。不要说「还是不行」——那句话里没有任何它能用的信息。
+          </div>
+        </div>
+
+        <h3>进阶（自愿）</h3>
+        <p>让它加暂停、加速、最高分记录。<b>每加一个功能就开一个新会话</b>，然后感受一下差别。</p>
+        <p class="small muted">开新会话时要记得：读一下那个文件夹里的代码，它才知道前面做了什么。这也是为什么「把结论写进文件」很重要。</p>
+
+        <hr>
+
+        <h2>任务四 · 读懂 Transformer 论文</h2>
+
+        <h3>题目</h3>
+        <p>把《Attention Is All You Need》变成<b>你能用自己的话讲出来的东西</b>。用 AI 当助教，你当学生。</p>
+
+        <h3>要求</h3>
+        <ul class="checklist">
+          <li><input type="checkbox"><label>把论文 PDF 放进工作目录，让它读完</label></li>
+          <li><input type="checkbox"><label>让它用「给大三本科生讲」的方式解释第 3 节（模型架构）</label></li>
+          <li><input type="checkbox"><label>让它<b>画出数据流</b>：从输入到输出，张量的形状怎么变</label></li>
+          <li><input type="checkbox"><label>你自己找出 <b>3 个不懂的术语</b>，逐个问它，直到能复述</label></li>
+          <li><input type="checkbox"><label>最后让它出 <b>5 道自测题</b>，你做完让它批改</label></li>
+        </ul>
+
+        <h3>怎么开始</h3>
+        <p>先把论文 PDF 下载到 <code>~/ai-lab</code>，然后：</p>
+        <div class="codeblock"><pre data-lang="提示词">这个目录里有一篇论文的 PDF。请你读完它。
+
+然后：
+1. 用「讲给大三本科生听」的方式，解释第 3 节（模型架构）
+2. 画一个数据流图，说明从输入到输出，数据经过了哪些步骤、
+   每一步张量的形状是怎么变的
+3. 列出你认为初学者最容易搞混的 5 个术语，各用一句话解释
+
+我读完会问你问题。</pre></div>
+
+        <h3>验收</h3>
+        <p>交一页 Markdown 笔记 + 3 个术语的解释。</p>
+
+        <div class="callout danger">
+          <div class="ic">✍️</div>
+          <div class="bd">
+            <span class="t">必须用你自己的话，不许复制它的原文</span>
+            因为 AI 的解释可以非常流畅，<b>而流畅不等于你懂了</b>。<br>
+            判断标准很简单：<b>你讲给同学听，他能不能听懂。</b>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">🧰</div>
+          <div class="bd">
+            <span class="t">一个很好用的技巧</span>
+            如果它讲得太抽象，就要求它换一种方式：<b>「用类比重讲一遍」「举一个具体数字的例子」「做成表格对比」</b>。<br>
+            同一个概念让它换三种方式讲，你对它的理解会比读十遍原文都深。
+          </div>
+        </div>
+
+        <hr>
+
+        <h2>交作业：写一个 Issue</h2>
+        <p>四个任务做完之后，把<b>简要成果</b>写成一个 Issue，提交到课程仓库。用不了多少字——重点不是你做了多漂亮的东西，而是<b>中途遇到了什么、你怎么解决的</b>。</p>
+
+        <div class="callout tip">
+          <div class="ic">📮</div>
+          <div class="bd">
+            <span class="t">提交入口</span>
+            仓库：<a href="https://github.com/Interstellar6/AIIntroduceCourse" target="_blank" rel="noopener">github.com/Interstellar6/AIIntroduceCourse</a><br>
+            直接提 Issue：<a href="https://github.com/Interstellar6/AIIntroduceCourse/issues/new" target="_blank" rel="noopener">github.com/Interstellar6/AIIntroduceCourse/issues/new</a>
+          </div>
+        </div>
+
+        <h3>步骤</h3>
+        <ol class="steps">
+          <li><h3>有一个 GitHub 账号</h3><p>没有的话去 <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a> 注册一个，免费。邮箱验证一下就能用。</p></li>
+          <li><h3>打开提交页面</h3><p>点上面的链接，或者到仓库页面点 <b>Issues</b> → <b>New issue</b>。</p></li>
+          <li><h3>标题写清楚是谁</h3><p>格式：<code>作业 · 你的姓名</code>。这样老师一眼就能找到你的。</p></li>
+          <li><h3>正文按模板填</h3><p>把下面的模板复制过去，逐条填。写不出来的可以先留空，但尽量都填上。</p></li>
+          <li><h3>点 Submit new issue</h3><p>提交完把链接记一下，下节课演示用。</p></li>
+        </ol>
+
+        <h3>Issue 模板（直接复制）</h3>
+        <div class="codeblock"><pre data-lang="markdown">## 任务一 · 让 AI 教你用终端
+
+- 我最常用的三条命令：
+- 一句话感受（我原来以为终端是什么，现在觉得它是什么）：
+
+## 任务二 · 让 AI 教你用 Git
+
+- `git log` 里一共几次提交：
+- 我演示的「改坏 → 恢复」是怎么做的：
+- 版本控制帮我解决了什么问题：
+
+## 任务三 · 做一个贪吃蛇
+
+- 能跑起来吗：
+- 中途它哪里做错了、我是怎么发现并让它改对的：
+
+## 任务四 · 读懂 Transformer 论文
+
+- 我搞懂的 3 个术语：
+- 一句话总结 Transformer 在干什么：
+- 我的笔记放在哪：</pre></div>
+
+        <div class="callout warn">
+          <div class="ic">🔒</div>
+          <div class="bd">
+            <span class="t">三条注意</span>
+            ① <b>Issue 是公开的</b>，任何人都能看到。不要放 API Key、学号、手机号这类东西。<br>
+            ② 每个任务两三句话就够，<b>不要长篇大论</b>——写「我卡在哪、怎么出来的」比贴一大段代码有价值。<br>
+            ③ 要贴代码或报错，用三个反引号包起来（<code>```</code>），不然排版会乱。
+          </div>
+        </div>
+
+        <h3>加分项</h3>
+        <p>如果你已经把 <a href="c-skills.html">skill</a> 用起来了，可以在 Issue 里<b>贴上你写的 SKILL.md 内容</b>——那是最能说明「你已经开始把 AI 当工具用，而不是当搜索引擎用」的证据。</p>
+
+        <p class="muted small">下节课开头会现场抽几位同学演示。演示时要说清楚一件事：<b>中途它哪里做错了，你是怎么发现、怎么让它改过来的。</b>那一段才是最有价值的部分。</p>
+
+        <h2>做任务时会遇到的坑</h2>
+        <p>下面这些症状，每一个背后都有一个具体的原因。</p>
+
+        <div class="tw">
+          <table>
+            <tr><th>你会遇到的</th><th>原因 / 怎么办</th></tr>
+            <tr>
+              <td>它说「已完成」，但实际没做完</td>
+              <td>模型只会产出文字，它的「已完成」也只是一串文字。<b>去看文件到底改了没有</b>——永远用结果验证，不要信它的汇报。</td>
+            </tr>
+            <tr>
+              <td>聊到后面它开始忘事、变笨</td>
+              <td>上下文满了，触发了压缩。<b>任务告一段落就开新会话</b>，把结论写进文件带走。</td>
+            </tr>
+            <tr>
+              <td>它卡在同一个错误上反复试</td>
+              <td>你给的真实信息不够。<b>把完整报错原样贴回去</b>，不要说「还是不行」。</td>
+            </tr>
+            <tr>
+              <td>它在错误的目录里干活</td>
+              <td>启动前先 <code>cd</code> 到目标目录；在对话里也要把路径说清楚。</td>
+            </tr>
+            <tr>
+              <td>它一直问你要权限，很烦</td>
+              <td>那是审批机制在工作，不是 bug。<b>刚上手时多被问几次是好事</b>，熟悉了再放宽。</td>
+            </tr>
+          </table>
+        </div>
+
+        <hr>
+
+        <h2>三节课之后，你手上有什么</h2>
+
+        <div class="cards">
+          <div class="card accent">
+            <h3>一个能干活的环境</h3>
+            <p>DeepSeek API + DSH + Claude Code + Codex（+ 可选的 cc-switch），全部直连官方，<b>没有一处依赖中转站</b>。</p>
+          </div>
+          <div class="card accent">
+            <h3>一套判断标准</h3>
+            <p>什么时候该用 Agent、什么时候用聊天框；Key / 地址 / 协议这三样怎么排查；钱花在哪里。</p>
+          </div>
+          <div class="card accent">
+            <h3>一种工作方式</h3>
+            <p>说清要求 → 让它做 → <b>看真实结果</b> → 反馈 → 再来一轮。这个循环可以用很久。</p>
+          </div>
+        </div>
+
+        <div class="callout good">
+          <div class="ic">🎓</div>
+          <div class="bd">
+            <span class="t">最后三句话</span>
+            ① <b>能自己验证的任务，交给它收益最大</b>；只能靠你判断的任务，它帮不上多少忙。<br>
+            ② <b>需要留下的东西，让它写进文件</b>，别留在对话里。<br>
+            ③ <b>它是工具，不是答案</b>——最终的判断和署名，永远是你的。
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="ic">📋</div>
+          <div class="bd">
+            <span class="t">一条现实提醒</span>
+            课程作业、论文投稿，很多地方已经明确要求<b>声明是否使用了 AI 以及使用的范围</b>。用工具不丢人，隐瞒才是问题。动手之前先看清楚你们学校和你目标期刊的要求。
+          </div>
+        </div>
+
+        <div class="pagefoot">
+          <p>做完这些，你就真正用过 Agent 了——而不只是听说过它。</p>
+          <p class="muted">遇到问题 → <a href="help.html">排错 · 术语 · 速查</a></p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

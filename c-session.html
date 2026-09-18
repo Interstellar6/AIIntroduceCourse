@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>会话与上下文 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>会话与上下文</h1>
+        <p class="lede">Agent 里的「一次对话」，和你以为的很不一样。这一页解释了为什么它有时候很快、有时候很费钱、有时候聊到一半突然变笨——以及你该怎么应对。</p>
+
+        <h2>一次「回复」背后发生了什么</h2>
+        <p>在聊天框里，你发一句、它回一句，一来一回。在 Agent 里不是这样。</p>
+
+        <div class="cards">
+          <div class="card accent">
+            <h3>轮次 Turn</h3>
+            <p>你按下回车 → 它一直干到<b>停下来</b>。这整个过程叫一轮。</p>
+            <p>你以为的「一次对话」，就是一轮。</p>
+          </div>
+          <div class="card">
+            <h3>步骤 Step</h3>
+            <p><b>一次模型请求，加上它引发的工具执行</b>，等于一个步骤。</p>
+            <p>一轮里可以有零个步骤，也可以有几十个。</p>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">📊</div>
+          <div class="bd">
+            <span class="t">一个实测参考</span>
+            让它「把这个文件里的 bug 修掉」，通常是 <b>5 到 30 个步骤</b>。每多一个步骤，就多烧一次 token、多花一点钱。
+          </div>
+        </div>
+
+        <p>所以 Agent 慢、贵，并不是因为它笨，而是因为<b>它在真的干活</b>。它给你的「回复」其实是一份<b>工作日志</b>，不是一段答案。</p>
+
+        <p>这也解释了第一次用它时的困惑：为什么它「想了那么久才回一句话」？因为它在那段时间里发了十几次请求。</p>
+
+        <h2>上下文：Agent 的办公桌</h2>
+        <p>模型每次只能看到你递给它的一堆文字。这一堆文字叫<b>上下文</b>，里面装着：</p>
+        <ul>
+          <li><b>系统提示词</b> —— 它的身份和规矩。你看不见，但它每一轮都在读</li>
+          <li><b>工具列表</b> —— 它能用哪些工具、每个工具怎么用</li>
+          <li><b>这几轮的所有对话历史</b>，以及<b>所有工具的输出</b></li>
+          <li><b>你刚发的那句话</b></li>
+        </ul>
+
+        <div class="callout warn">
+          <div class="ic">📏</div>
+          <div class="bd">
+            <span class="t">它有一个上限</span>
+            DeepSeek 的上下文窗口是 100 万 token，听起来非常多。但<b>一条命令的输出就能吃掉几千 token</b>——读一个大文件、跑一次测试、贴一份日志，桌面很快就满了。
+          </div>
+        </div>
+
+        <h2>压缩：桌面满了怎么办</h2>
+        <p>满了之后，Agent 会做一件事：<b>把前面那一大段对话总结成一段摘要，用它替换掉原文，然后接着干。</b>这个过程叫压缩。</p>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 350" role="img" aria-label="压缩前后对比示意图：压缩前上下文窗口被系统提示词、工具列表、历史对话、很长的工具输出和你说的话填满；压缩后中间的内容被一段摘要替代，腾出大量空间">
+            <defs>
+              <marker id="cs1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+            </defs>
+
+            <!-- ---------- 压缩前 ---------- -->
+            <text class="t-h t-mid" x="215" y="34">压缩前</text>
+            <rect class="panel" x="50" y="50" width="330" height="250" rx="14"/>
+
+            <rect class="b-a" x="62" y="64" width="306" height="30" rx="7"/>
+            <text class="t-b" x="74" y="84">系统提示词</text>
+
+            <rect class="b-s" x="62" y="102" width="306" height="30" rx="7"/>
+            <text class="t-b" x="74" y="122">工具列表</text>
+
+            <rect class="b-s" x="62" y="140" width="306" height="30" rx="7"/>
+            <text class="t-b" x="74" y="160">历史对话</text>
+
+            <rect class="b-w" x="62" y="178" width="306" height="30" rx="7"/>
+            <text class="t-b" x="74" y="198">工具输出（很长）</text>
+
+            <rect class="b-a" x="62" y="216" width="306" height="30" rx="7"/>
+            <text class="t-b" x="74" y="236">你刚说的那句话</text>
+
+            <rect class="b-r" x="62" y="256" width="306" height="30" rx="7"/>
+            <text class="t-b t-mid" x="215" y="276" style="fill:var(--bad)">满了，再放就装不下</text>
+
+            <!-- 压缩箭头 -->
+            <path class="ln" d="M390,175 H506" marker-end="url(#cs1)"/>
+            <text class="t t-mid" x="448" y="165">压缩</text>
+
+            <!-- ---------- 压缩后 ---------- -->
+            <text class="t-h t-mid" x="685" y="34">压缩后</text>
+            <rect class="panel" x="520" y="50" width="330" height="250" rx="14"/>
+
+            <rect class="b-a" x="532" y="64" width="306" height="30" rx="7"/>
+            <text class="t-b" x="544" y="84">系统提示词</text>
+
+            <rect class="b-s" x="532" y="102" width="306" height="30" rx="7"/>
+            <text class="t-b" x="544" y="122">工具列表</text>
+
+            <rect class="b-g" x="532" y="140" width="306" height="30" rx="7"/>
+            <text class="t-b" x="544" y="160">摘要：前面发生过什么</text>
+
+            <rect class="b-a" x="532" y="178" width="306" height="30" rx="7"/>
+            <text class="t-b" x="544" y="198">你刚说的那句话</text>
+
+            <rect class="dash" x="532" y="218" width="306" height="68" rx="10"/>
+            <text class="t-s t-mid" x="685" y="258">腾出来的空间</text>
+
+            <text class="t-s t-mid" x="450" y="330">摘要里没写的东西，它就真的再也想不起来了</text>
+          </svg>
+          <figcaption>压缩把<b>一大段历史</b>换成<b>一段摘要</b>，换来继续做下去的空间——代价是细节。<br>所以任务告一段落时主动压缩，比系统在关键时刻自动压缩丢得少。</figcaption>
+        </figure>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:34%">好处</th><th>代价</th></tr>
+            <tr>
+              <td>腾出空间，任务可以继续做下去，不至于半路崩掉</td>
+              <td><b>细节丢了。</b>摘要里没写的东西，它就真的再也想不起来了</td>
+            </tr>
+          </table>
+        </div>
+
+        <p>很多 Agent 支持<b>手动压缩</b>。手动触发比系统在关键时刻自动压缩要好——因为你清楚哪个时间点任务告一段落了，可以安全地丢细节。</p>
+
+        <div class="callout danger">
+          <div class="ic">⭐</div>
+          <div class="bd">
+            <span class="t">由此得到一条最实用的经验</span>
+            <b>需要留下来的东西，让 AI 写进文件，不要只留在对话里。</b><br><br>
+            对话会被压缩、会被丢掉；文件不会。这也是为什么 Agent 最好的用法，永远围绕着一个<b>工作目录</b>。
+          </div>
+        </div>
+
+        <p>对照一下这两句话的差别：</p>
+        <div class="codeblock"><pre><span class="p">✗</span> 「这个结论你自己记着，后面要用。」     <span class="c">← 压缩一次就没了</span>
+<span class="s">✓</span> 「把这个结论写进 notes.md。」           <span class="c">← 它记得住一辈子</span></pre></div>
+
+        <h2>你会用到的四个会话操作</h2>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:18%">操作</th><th>什么时候用</th></tr>
+            <tr>
+              <td><b>新建</b></td>
+              <td>换一件<b>不相关</b>的任务时，一定开新会话。混在一个会话里干三件事：前面的无关内容会干扰它的判断，而且你每一轮都在为那些无关内容付钱。</td>
+            </tr>
+            <tr>
+              <td><b>恢复</b></td>
+              <td>关掉电脑，明天接着干，日志还在。这是 Agent 相对聊天框的一个大优势——<b>任务可以跨天</b>。</td>
+            </tr>
+            <tr>
+              <td><b>分叉</b></td>
+              <td>从当前这一步<b>复制一份</b>，去试另一种方案，原来的对话完全不动。典型场景：「这个改法我不满意，但我不想丢掉前面聊的东西。」</td>
+            </tr>
+            <tr>
+              <td><b>压缩</b></td>
+              <td>主动让它总结并清空前面的内容，腾出空间。典型场景：一个大任务刚做完，准备开始下一个阶段。</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="callout good">
+          <div class="ic">🎯</div>
+          <div class="bd">
+            <span class="t">如果这一页只记住一句话</span>
+            <b>会不会用 AI，很大程度上看你会不会管会话。</b>
+          </div>
+        </div>
+
+        <h2>管住它的两个开关</h2>
+        <p>Agent 一旦动起来，你很难在中间拦住它。所以大多数工具给了你两个「事前」和「事中」的控制手段。</p>
+
+        <h3>计划模式：动手之前先给你看方案</h3>
+        <p>开启之后，它<b>只出方案、绝不动手</b>。你看完它写的完整计划，点「同意」，它才开始改文件。</p>
+        <ul>
+          <li><b>适合</b>：会动到重要文件的重活</li>
+          <li><b>不适合</b>：你想让它顺手改个错别字</li>
+        </ul>
+        <p>它管的是「开始之前」。</p>
+
+        <h3>目标模式：给一个长期目标，它自己接着干</h3>
+        <p>你给一个目标，它自己一轮一轮做下去，不用你每次催。中途你可以暂停、改目标、或者看它卡在哪一步。</p>
+        <ul>
+          <li><b>适合</b>：一次讲不完、要跑很久的大任务</li>
+        </ul>
+        <p>它管的是「中途不跑丢」。</p>
+
+        <h3>子代理：派一个干净的分身</h3>
+        <p>让它派一个「分身」去干一件独立的事——查资料、跑一遍测试、审一遍代码。这个分身有自己的上下文，<b>不会污染你的主对话</b>，干完只带回来一个结论。</p>
+        <p>类比：你不会让同一个人一边写论文、一边跑腿取快递、还一边记着他做过的所有事。</p>
+
+        <div class="callout tip">
+          <div class="ic">🗂️</div>
+          <div class="bd">
+            <span class="t">这三个概念在哪见</span>
+            计划模式和目标模式在 DSH 的界面上就是两个开关；子代理在 Claude Code 里对应 <code>CLAUDE_CODE_SUBAGENT_MODEL</code> 那个环境变量——你之前配置的时候已经见过它了。
+          </div>
+        </div>
+
+        <h2>所以，具体该怎么做</h2>
+        <ol class="steps">
+          <li><h3>开工前先想好工作目录</h3><p>所有相关材料放进同一个文件夹，让 Agent 在那个文件夹里干活。</p></li>
+          <li><h3>一个任务一个会话</h3><p>换任务就新建，别舍不得。</p></li>
+          <li><h3>阶段成果立刻落盘</h3><p>每完成一小步，让它把结论写进 <code>notes.md</code> 之类的文件。这样即使压缩了、即使会话丢了，你还能继续。</p></li>
+          <li><h3>大任务先看计划</h3><p>用计划模式过一遍方案，比事后收拾烂摊子省事得多。</p></li>
+          <li><h3>觉得它变笨了，就是该开新会话了</h3><p>不用怀疑自己。上下文满了就是会变笨，这是机制决定的。</p></li>
+        </ol>
+
+        <div class="pagefoot">
+          <p>下一步 → <a href="c-paradigms.html">三种经典范式</a>：循环里每一步具体该怎么组织，业界有三种成熟答案。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

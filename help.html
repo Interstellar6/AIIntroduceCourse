@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>排错 · 术语 · 速查 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>排错 · 术语 · 速查</h1>
+        <p class="lede">这一页是查手册用的。遇到问题先在这里找，九成的情况都有答案。</p>
+
+        <div class="osbar">
+          <span>命令速查显示的是 <b class="only-mac">macOS / Linux</b><b class="only-win">Windows</b> 的写法</span>
+          <div class="os-switch" role="group" aria-label="切换操作系统">
+            <button data-set-os="mac">macOS / Linux</button>
+            <button data-set-os="win">Windows</button>
+          </div>
+        </div>
+
+        <h2>报错对照表</h2>
+        <p>这些错误码来自模型服务。记住它们，你就能自己诊断绝大多数问题。</p>
+
+        <div class="tw">
+          <table>
+            <tr><th>报错</th><th>含义</th><th>怎么办</th></tr>
+            <tr><td class="mono">400</td><td>请求格式不对</td><td>通常是模型名写错了，或者请求体格式有问题</td></tr>
+            <tr><td class="mono">401</td><td>认证失败</td><td>Key 错了、多了空格，或者放错了变量名</td></tr>
+            <tr><td class="mono">402</td><td>余额不足</td><td>去充值</td></tr>
+            <tr><td class="mono">404 / 连不上</td><td>地址不对</td><td>检查 base_url，看有没有多写或少写 <code>/v1</code></td></tr>
+            <tr><td class="mono">429</td><td>请求太快 / 并发超限</td><td>等一会儿再试；正常学习用量碰不到</td></tr>
+            <tr><td class="mono">MISSING_CREDENTIAL</td><td>没找到凭据</td><td>Key 没填或者没保存</td></tr>
+            <tr><td class="mono">UNKNOWN_MODEL</td><td>选了不存在的模型</td><td>回模型选择器换一个已配置的</td></tr>
+          </table>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">🔍</div>
+          <div class="bd">
+            <span class="t">最有用的一条心法</span>
+            <b>报错信息里几乎总是写着答案。</b>先完整读一遍，再去搜，最后才问人。<br>
+            还有一个进阶用法：<b>把报错直接粘给已经装好的 AI 工具，让它自己诊断。</b>它能看到你的实际情况，往往比搜出来的答案更准。
+          </div>
+        </div>
+
+        <h2>按步骤排错</h2>
+
+        <h3>命令找不到（command not found / 不是内部或外部命令）</h3>
+        <ul>
+          <li><b>最常见原因：装完之后没重开终端。</b>关掉所有终端窗口，重新开一个</li>
+          <li>确认上一步真的装成功了（比如 <code>node -v</code>、<code>claude --version</code> 能不能打印版本）</li>
+          <li>Windows 上，如果安装时没勾「Add to PATH」，需要重新运行安装包并勾上</li>
+        </ul>
+
+        <h3>安装包下载很慢或者超时</h3>
+        <ul>
+          <li>换国内 npm 镜像：<code>npm config set registry https://registry.npmmirror.com</code></li>
+          <li>换个网络环境试试</li>
+          <li><code>npx</code> 第一次运行要下载，等 1–2 分钟是正常的</li>
+        </ul>
+
+        <h3>浏览器打不开本地地址</h3>
+        <ul>
+          <li>回到终端看：启动它的那个窗口还开着吗？关掉它服务就停了</li>
+          <li>端口可能被占用，看终端实际打印出来的地址</li>
+          <li>手动在地址栏输入完整地址（<code>http://127.0.0.1:3080</code>）</li>
+        </ul>
+
+        <h3>AI 说「已完成」但实际什么都没做</h3>
+        <p>这是最常见也最容易被忽略的一条。<b>模型唯一的输出就是文字</b>，它写的「已完成」也只是一串文字。<b>永远去实际检查结果</b>——文件改了没有、命令跑通了没有。</p>
+
+        <h3>它聊到后面变笨、忘事</h3>
+        <p>上下文满了，触发了压缩，细节被总结掉了。解决办法：<b>任务告一段落就开新会话，把重要结论写进文件带走。</b></p>
+
+        <h3>它反复在同一个错误上打转</h3>
+        <p>你给它的信息不够。别说「还是不行」——<b>把完整的报错原文贴回去</b>。它需要看到真实的结果才能改对。</p>
+
+        <h2>三要素速查</h2>
+        <p>配置任何工具、接任何模型，问的都是这三样。填错任何一样都通不了。</p>
+
+        <div class="tw">
+          <table>
+            <tr><th>要素</th><th>DeepSeek 官方</th><th>说明</th></tr>
+            <tr><td><code>base_url</code></td><td class="mono">https://api.deepseek.com</td><td>不加 <code>/v1</code></td></tr>
+            <tr><td><code>api key</code></td><td class="mono">sk-...</td><td>就是你的钱，别外传</td></tr>
+            <tr><td><code>model id</code></td><td class="mono">deepseek-flash<br>deepseek-v4-pro</td><td><code>deepseek-chat</code> 已停用</td></tr>
+          </table>
+        </div>
+
+        <h3>协议速查</h3>
+        <p>「协议」只是信封，跟背后是哪家的模型没关系。同一个模型可以被包成三种信封——DeepSeek 官方三种都提供，一个 Key 通用。</p>
+
+        <div class="tw">
+          <table>
+            <tr><th>格式</th><th>DeepSeek 的地址</th><th>谁在用</th></tr>
+            <tr><td>OpenAI（Chat Completions）</td><td class="mono">https://api.deepseek.com</td><td>最通用，几乎所有工具和平台都支持</td></tr>
+            <tr><td>Responses</td><td class="mono">https://api.deepseek.com</td><td><b>Codex 只认它</b></td></tr>
+            <tr><td>Anthropic（Messages）</td><td class="mono">https://api.deepseek.com/anthropic</td><td><b>Claude Code 用它</b></td></tr>
+          </table>
+        </div>
+
+        <h2>命令速查</h2>
+
+        <div class="only-mac">
+          <div class="codeblock"><pre data-lang="bash"><span class="c"># ---- 环境 ----</span>
+node -v                                  <span class="c"># 检查 Node（需要 22+）</span>
+npm config set registry https://registry.npmmirror.com   <span class="c"># 换国内镜像</span>
+
+<span class="c"># ---- DeepSeek Harness ----</span>
+mkdir -p ~/ai-lab && cd ~/ai-lab
+npx @deepseek-ai/dsh web                 <span class="c"># 打开 http://127.0.0.1:3080</span>
+
+<span class="c"># ---- Claude Code ----</span>
+curl -fsSL https://claude.ai/install.sh | bash
+claude --version && claude doctor
+export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+export ANTHROPIC_AUTH_TOKEN=<span class="s">"sk-你的Key"</span>
+export ANTHROPIC_MODEL=deepseek-flash[1m]
+
+<span class="c"># ---- Codex（先跑一次 codex 建出 ~/.codex）----</span>
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+bash &lt;(curl -fsSL https://cdn.deepseek.com/api-docs/codex-deepseek-setup.sh)
+codex --sandbox workspace-write --ask-for-approval on-request
+
+<span class="c"># ---- cc-switch ----</span>
+brew tap farion1231/ccswitch
+brew install --cask cc-switch</pre></div>
+        </div>
+
+        <div class="only-win">
+          <div class="codeblock"><pre data-lang="powershell"><span class="c"># ---- 环境 ----</span>
+node -v                                  <span class="c"># 检查 Node（需要 22+）</span>
+npm config set registry https://registry.npmmirror.com   <span class="c"># 换国内镜像</span>
+
+<span class="c"># ---- DeepSeek Harness ----</span>
+mkdir $HOME\ai-lab
+cd $HOME\ai-lab
+npx @deepseek-ai/dsh web                 <span class="c"># 打开 http://127.0.0.1:3080</span>
+
+<span class="c"># ---- Claude Code ----</span>
+irm https://claude.ai/install.ps1 | iex
+claude --version
+<span class="k">$env:</span>ANTHROPIC_BASE_URL=<span class="s">"https://api.deepseek.com/anthropic"</span>
+<span class="k">$env:</span>ANTHROPIC_AUTH_TOKEN=<span class="s">"sk-你的Key"</span>
+<span class="k">$env:</span>ANTHROPIC_MODEL=<span class="s">"deepseek-flash[1m]"</span>
+
+<span class="c"># ---- Codex（先跑一次 codex 建出 ~/.codex）----</span>
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+irm https://cdn.deepseek.com/api-docs/codex-deepseek-setup.ps1 | iex
+codex --sandbox workspace-write --ask-for-approval on-request
+
+<span class="c"># ---- cc-switch ----</span>
+<span class="c"># 从 GitHub Releases 下载 .msi 或 Portable.zip</span></pre></div>
+
+          <div class="callout tip">
+            <div class="ic">💡</div>
+            <div class="bd">
+              <span class="t">Windows 上三个常见的写法差异</span>
+              ① 设环境变量用 <code>$env:名字="值"</code>，不是 <code>export</code><br>
+              ② 命令换行用反引号 <code>`</code>，不是反斜杠 <code>\</code><br>
+              ③ 老版本 PowerShell（5.1）<b>不能用 <code>&amp;&amp;</code> 连接命令</b>，要一行一行执行
+            </div>
+          </div>
+        </div>
+
+        <h3>Git 常用命令（两个系统完全一样）</h3>
+        <div class="codeblock"><pre data-lang="bash"><span class="c"># ---- 一次性配置（只做一次）----</span>
+git config --global user.name  "你的名字"
+git config --global user.email "你的邮箱"
+
+<span class="c"># ---- 最常用的五个 ----</span>
+git init                     <span class="c"># 把当前文件夹变成 Git 仓库</span>
+git status                   <span class="c"># 现在有哪些改动还没提交</span>
+git add .                    <span class="c"># 把改动放进暂存区</span>
+git commit -m "说明这次改了什么"   <span class="c"># 提交，留下一个记录点</span>
+git log --oneline            <span class="c"># 看提交历史</span>
+
+<span class="c"># ---- 反悔用的（这才是 Git 的价值）----</span>
+git diff                     <span class="c"># 我到底改了什么</span>
+git restore 文件名            <span class="c"># 把某个文件恢复到上次提交的样子</span>
+git restore --staged 文件名    <span class="c"># 从暂存区拿出来（改动还在）</span>
+git log --oneline --graph    <span class="c"># 看分支图形</span></pre></div>
+
+        <div class="callout tip">
+          <div class="ic">🧯</div>
+          <div class="bd">
+            <span class="t">最该记住的一条</span>
+            <b><code>git restore 文件名</code> 能把你改坏的文件退回上一次提交。</b>这是新手最需要的一根救命绳——<code>git status</code> 在提示里也会告诉你这条命令怎么写，照着抄就行。
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <span class="t">两个新手最容易踩的坑</span>
+            ① <b>第一次提交前要先配 <code>user.name</code> 和 <code>user.email</code></b>，不然会报错。<br>
+            ② <b>不要把 Git 和 GitHub 搞混。</b><code>git init</code> / <code>commit</code> 全在你本机完成，不联网、不需要账号；只有 <code>push</code> 到 GitHub 才需要。
+          </div>
+        </div>
+
+        <h2>术语表</h2>
+        <p>按「你会听到它的场景」分组。</p>
+
+        <h3>基本概念</h3>
+        <div class="tw">
+          <table>
+            <tr><th>词</th><th>意思</th></tr>
+            <tr><td><b>模型</b></td><td>输入文字、输出文字的一段程序。没有记忆、不能碰你的文件，一次调用就结束</td></tr>
+            <tr><td><b>Agent</b></td><td>模型 + 循环 + 工具 + 持久日志。能把事情真的做完，而不只是告诉你该怎么做</td></tr>
+            <tr><td><b>Agent 循环</b></td><td>组装上下文 → 请求模型 → 模型要工具 → 执行工具 → 结果写回 → 再请求。转很多圈，直到模型不再要工具</td></tr>
+            <tr><td><b>Harness</b></td><td>把模型包装成能干活的产品的那一整套工程。模型是发动机，harness 是底盘、方向盘和刹车</td></tr>
+            <tr><td><b>预设 / 模式</b></td><td>给一个会话装哪些工具、什么规矩。比如「标准模式」给全套工具，「极简模式」只给两个</td></tr>
+            <tr><td><b>轮次 / 步骤</b></td><td>轮次 = 你发一句话后它一直干到停下；步骤 = 一次模型请求加上它引发的工具执行</td></tr>
+            <tr><td><b>子代理</b></td><td>派一个干净的「分身」去干独立的事，不污染你主对话的上下文</td></tr>
+          </table>
+        </div>
+
+        <h3>上下文与成本</h3>
+        <div class="tw">
+          <table>
+            <tr><th>词</th><th>意思</th></tr>
+            <tr><td><b>token</b></td><td>计费和长度的单位。约 1 个汉字 ≈ 0.6–1 token</td></tr>
+            <tr><td><b>上下文窗口</b></td><td>模型一次能「同时看到」的全部文字，有上限</td></tr>
+            <tr><td><b>压缩</b></td><td>快满了就把前面的对话总结成一段摘要替换掉。<b>代价是丢细节</b></td></tr>
+            <tr><td><b>缓存命中</b></td><td>重复出现的内容只按很低的价收费，便宜 50 倍</td></tr>
+            <tr><td><b>流式输出</b></td><td>token 一个个吐出来，所以你看到它「边想边打字」。不代表更快，只是更早看见</td></tr>
+          </table>
+        </div>
+
+        <h3>安全与权限</h3>
+        <div class="tw">
+          <table>
+            <tr><th>词</th><th>意思</th></tr>
+            <tr><td><b>沙箱</b></td><td>它能碰哪些目录、哪些命令</td></tr>
+            <tr><td><b>审批</b></td><td>哪些操作必须先问过你</td></tr>
+            <tr><td><b>系统提示词</b></td><td>你看不见、但它每一轮都在读的那段话。决定了它的身份和规矩</td></tr>
+            <tr><td><b>幻觉</b></td><td>模型编东西。在 Agent 里它的形态是「编一个不存在的命令或文件名」——然后被真实报错纠正</td></tr>
+          </table>
+        </div>
+
+        <h3>配置相关</h3>
+        <div class="tw">
+          <table>
+            <tr><th>词</th><th>意思</th></tr>
+            <tr><td><b>base_url</b></td><td>请求发到哪台服务器</td></tr>
+            <tr><td><b>API Key</b></td><td>你是谁、从谁的账上扣钱。<b>就是你账户里的钱</b></td></tr>
+            <tr><td><b>model id</b></td><td>要哪一个模型</td></tr>
+            <tr><td><b>协议</b></td><td>请求的「信封格式」。有 OpenAI Chat Completions、OpenAI Responses、Anthropic Messages 三种</td></tr>
+            <tr><td><b>中转站</b></td><td>在用户和模型厂商之间的第三方代理。一个地址、一个 Key 调用多家模型。<b>你的对话内容它会看到</b></td></tr>
+          </table>
+        </div>
+
+        <h2>还想继续学</h2>
+
+        <div class="cards">
+          <div class="card">
+            <h3>看思路 · 视频课</h3>
+            <p><b>《生成式软件工程》</b>，南京大学 蒋炎岩（B 站搜「生成式软件工程」）。</p>
+            <p>从软件工程的角度讲人怎么跟 AI 协作。想理解「为什么会出现 harness、循环这些概念」，这门课讲得更深。</p>
+            <p><a href="https://jyywiki.cn/GSE/2026/" target="_blank" rel="noopener">jyywiki.cn/GSE/2026/</a></p>
+          </div>
+          <div class="card">
+            <h3>上手做 · 开源教程</h3>
+            <p><b>Datawhale《Hello-Agents》</b>，16 章，免费开源。</p>
+            <p>从智能体定义，到手写 ReAct、上下文工程、通信协议、性能评估，最后有完整项目。想自己造一个 Agent 就从这本开始。</p>
+            <p><a href="https://datawhalechina.github.io/hello-agents/" target="_blank" rel="noopener">datawhalechina.github.io/hello-agents</a></p>
+          </div>
+        </div>
+
+        <div class="pagefoot">
+          <p>手册里所有事实的核对日期是 <b>2026 年 9 月 18 日</b>。发现和官方文档对不上时，以官方文档为准。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

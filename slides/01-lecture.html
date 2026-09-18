@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 1 讲 · 从模型到 Agent：把 AI 装进你的电脑</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+
+<div id="viewport">
+<div id="stage">
+
+<!-- ========================= 封面 ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>人工智能导论 · 第 1 讲</div>
+  <h1>从模型到 Agent<br>把 AI 装进你的电脑</h1>
+  <p class="sub">45 分钟：讲 25 分钟，动手 20 分钟<br>后面两次课，我们把它真正用起来</p>
+  <aside class="notes">
+    <p><strong>开场（30 秒）：</strong>先问大家一个问题——「在座的同学，用过 ChatGPT / DeepSeek 网页版的，举个手。」（大部分人会举手）「那用 AI 改过自己电脑里文件的，举个手。」（几乎没有）</p>
+    <p>「今天这堂课要做的，就是把这两件事之间的差距补上。」</p>
+    <p>按 <code>S</code> 可以开关这份讲稿。按 <code>O</code> 是总览。</p>
+  </aside>
+</section>
+
+<!-- ========================= 目标 ========================= -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>这节课的目标<span class="clock">约 1 分钟</span></div>
+  <h1>今天结束时，你要能回答 3 个问题</h1>
+  <div class="body">
+    <div class="cols c3 grow">
+      <div class="card accent">
+        <h3><span class="num">1</span>它到底是什么</h3>
+        <p>模型和 Agent 差在哪？为什么同一个模型，装进不同的软件里，能力差那么多？</p>
+        <p class="fs-15 dim" style="margin-top:8px">关键词：Agent 循环 · Harness</p>
+      </div>
+      <div class="card accent">
+        <h3><span class="num">2</span>它靠什么活</h3>
+        <p>一个 API Key、一个网址、一个模型名字——为什么换一个字符就全部报错？</p>
+        <p class="fs-15 dim" style="margin-top:8px">关键词：base_url · API Key · 协议</p>
+      </div>
+      <div class="card accent">
+        <h3><span class="num">3</span>我该用哪个</h3>
+        <p>Claude Code、Codex、DeepSeek Harness、中转站、cc-switch，分别解决什么问题？</p>
+        <p class="fs-15 dim" style="margin-top:8px">关键词：工具地图</p>
+      </div>
+    </div>
+    <p class="center fs-19 dim">今天不讲提示词技巧。今天讲<strong>把 AI 接到你电脑上</strong>需要知道的全部概念。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>快速过，30 秒。强调最后一句：<strong>这门课不教「怎么问 AI」，教「怎么把 AI 装进你的电脑」。</strong></p>
+  </aside>
+</section>
+
+<!-- ========================= 定调 ========================= -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>先定个调<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">大多数人对 AI 的使用，停在第一个格子里</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card flat" style="border-left:4px solid var(--ink-3);border-radius:0 14px 14px 0">
+        <h3>用法一：把它当搜索引擎</h3>
+        <ul class="tight fs-17">
+          <li>问它问题，复制答案</li>
+          <li>它说错了，你重新问一遍</li>
+          <li>它说「你可以这样删除文件」，然后<strong>你自己去删</strong></li>
+          <li>用完关掉网页，一切归零</li>
+        </ul>
+        <p class="fs-17 dim" style="margin-top:10px">→ 你在<strong>搬运</strong>信息。</p>
+      </div>
+      <div class="card" style="border-left:4px solid var(--ds-blue);border-radius:0 14px 14px 0">
+        <h3>用法二：把它当同事</h3>
+        <ul class="tight fs-17">
+          <li>给它一个目标，不是一句话</li>
+          <li>它<strong>自己</strong>去读文件、跑命令、看报错</li>
+          <li>报错了它自己改，改完自己再试一次</li>
+          <li>干完给你，还留有完整记录</li>
+        </ul>
+        <p class="fs-17 dim" style="margin-top:10px">→ 你在<strong>派活</strong>。</p>
+      </div>
+    </div>
+    <p class="big center" style="font-size:30px">差别不在模型有多聪明，而在<em>它能不能动手，以及动完手之后能不能看到后果</em>。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页是全课的引子，要讲出「啊，原来我一直只用了一半」的感觉。</p>
+    <p>举一个具体例子：<em>「帮我看看我这段代码为什么报错」</em>——在聊天框里，你要复制代码、复制报错、来回三轮。在 Agent 里，它自己打开文件、自己跑一遍、自己看到真报错。这个差距就是整堂课。</p>
+  </aside>
+</section>
+
+<!-- ========================= 一、模型与 Agent ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>第一部分</div>
+  <h1>模型 与 Agent</h1>
+  <p class="sub">一个是「会说话的」，一个是「会干活的」</p>
+  <aside class="notes"><p>过渡 5 秒，直接进。</p></aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>模型是什么<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">模型：一个只会「接着往下写」的函数</h1>
+  <div class="body">
+    <pre class="sm">输入一段文字  →  <span class="k">算出下一个字</span>  →  再算下一个字  →  ……  →  停下
+
+这就是一次 <span class="v">API 调用</span>的全部内容。没有别的。</pre>
+    <div class="cols c3 grow">
+      <div class="card bad">
+        <h3>它没有记忆</h3>
+        <p>你关掉网页，它连你是谁都不知道。<br>「它记得我」是软件在外面替它把对话存下来、每次重新念给它听。</p>
+      </div>
+      <div class="card bad">
+        <h3>它没有手</h3>
+        <p>它唯一的输出是<strong>文字</strong>。<br>它说「我已经帮你删掉那个文件了」——<strong>其实它什么都没删，它在骗你</strong>。</p>
+      </div>
+      <div class="card bad">
+        <h3>它是一次性的</h3>
+        <p>你问 → 它答 → 这次调用结束。<br>想让它在中间停下来、看一眼结果、再决定下一步？<br><strong>它自己做不到，需要外面的程序帮它做。</strong></p>
+      </div>
+    </div>
+    <p class="fs-19 center dim">所以：单靠模型，它只能「告诉你该怎么做」。<strong>告诉</strong>和<strong>做到</strong>之间，隔着今天剩下的所有内容。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>重点讲「它在骗你」这条。很多同学被 AI 说「已完成」骗过。根因就是：模型只会产文字，它产出的「已完成」也只是一串文字。</p>
+    <p>可以说：<em>模型是一台只会打字的机器，它打的字恰好经常是对的。</em></p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>Agent 是什么<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">Agent：给这个模型配上循环、手、和记忆</h1>
+  <div class="body">
+    <p class="fs-24 center"><strong>Agent = 模型 + 循环 + 工具 + 持久日志</strong></p>
+    <div class="cols c4 grow">
+      <div class="card">
+        <h3><span class="num">1</span>循环</h3>
+        <p>模型说完不算完。如果它说「我要读 a.py」，程序真的去读，把内容塞回去，<strong>再问它一次</strong>。转很多圈，直到它不再要工具。</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">2</span>工具</h3>
+        <p>读写文件、执行终端命令、上网搜索、跑代码、派分身。<br>模型只会「说要用」，<strong>真正执行的是外面的程序</strong>。</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">3</span>日志</h3>
+        <p>每一步都写进一份只追加的记录。<br>所以它可以<strong>恢复</strong>、可以<strong>分叉</strong>、可以事后追查它到底干了什么。</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">4</span>闸门</h3>
+        <p>因为它能真的动你的电脑，所以必须有沙箱和审批：<br>哪些能碰、哪些要先问你。</p>
+      </div>
+    </div>
+    <p class="fs-19 center">结果：它从「回答问题的」变成了「<em>干活的</em>」。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>「闸门」这一项不是可有可无，是 Agent 能存在的前提。补一句：<em>没有闸门的 Agent 不叫 Agent，叫定时炸弹。</em></p>
+    <p>如果时间紧，这页讲 4 个词就够：循环、手、记忆、闸门。</p>
+  </aside>
+</section>
+
+<section class="slide table-slide">
+  <div class="kicker"><span class="dot"></span>一张表看清区别<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">模型 vs Agent</h1>
+  <div class="body">
+    <table class="kv">
+      <tr><th style="width:22%"></th><th style="width:39%">模型（聊天网页 / 裸 API）</th><th>Agent（装在 harness 里）</th></tr>
+      <tr><td><strong>你给它</strong></td><td>一段话</td><td>一个目标 + 一个工作目录</td></tr>
+      <tr><td><strong>它给你</strong></td><td>一段话</td><td>文件被改好了 / 实验跑完了</td></tr>
+      <tr><td><strong>记忆</strong></td><td>只有这一次对话</td><td>持久日志 + 你磁盘上的文件</td></tr>
+      <tr><td><strong>能不能碰你电脑</strong></td><td class="bad">不能</td><td class="good">能（读文件、跑命令、上网）</td></tr>
+      <tr><td><strong>出错了</strong></td><td>你重新提问</td><td>它看到真实报错，自己改，再试</td></tr>
+      <tr><td><strong>一次交互的代价</strong></td><td>1 次 API 调用</td><td>可能几十次调用 + 几十条命令</td></tr>
+      <tr><td><strong>风险</strong></td><td>说错话</td><td class="bad">真的删错文件 / 花错钱</td></tr>
+    </table>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>不要逐行念。指着最后两行讲：<strong>Agent 的代价是「更贵」和「真的会闯祸」</strong>，这就是为什么它需要审批。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>那你到底该用哪个<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">出现下面任何一条，你才需要 Agent</h1>
+  <div class="body">
+    <div class="cols c3 grow">
+      <div class="card good">
+        <h3>① 任务要碰你的文件</h3>
+        <p class="fs-17">改代码、整理几十个 Excel、批量重命名、跑你的实验脚本。</p>
+      </div>
+      <div class="card good">
+        <h3>② 任务需要多步试探</h3>
+        <p class="fs-17">「跑一下，报错了，改一改，再跑」——需要它自己看到结果再决定下一步。</p>
+      </div>
+      <div class="card good">
+        <h3>③ 中间过程太多，你不想搬运</h3>
+        <p class="fs-17">几十个文件的输出、几万行日志，你不可能复制粘贴给聊天框。</p>
+      </div>
+    </div>
+    <div class="card warn">
+      <h3>一条都不满足？那就别折腾</h3>
+      <p class="fs-17">「解释一下这个概念」「帮我想三个标题」——用聊天网页更快、更便宜。<strong>装工具是有成本的</strong>：要花钱、要配置、它还可能改错你的文件。工具是给「干活」用的，不是给「聊天」用的。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页是防止学生「为了用而用」。很多人装了一堆 Agent，最后还是回去用聊天框——因为他们的任务本来就不需要 Agent。</p>
+    <p>补一句实际经验：<em>写论文的时候，让 Agent 帮你管理参考文献、整理实验数据、跑通复现代码，比让它「帮你写一段话」有价值得多。</em></p>
+  </aside>
+</section>
+
+<!-- ========================= 二、会话模式 ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>第二部分</div>
+  <h1>会话模式</h1>
+  <p class="sub">Agent 的「一次对话」，和你以为的很不一样</p>
+  <aside class="notes"><p>过渡。</p></aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>一次「回复」里发生了什么<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">轮次（Turn）与步骤（Step）</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card accent">
+        <h3>轮次 Turn</h3>
+        <p>你按下回车 → 它一直干到<strong>停下来</strong>。<br>这整个过程叫一轮。</p>
+        <p class="fs-17 dim" style="margin-top:10px">你以为的「一次对话」，就是一轮。</p>
+      </div>
+      <div class="card">
+        <h3>步骤 Step</h3>
+        <p><strong>一次模型请求 + 它引发的工具执行</strong> = 一个步骤。<br>一轮里可以有 0 个，也可以有几十个步骤。</p>
+        <p class="fs-17 dim" style="margin-top:10px">每多一个步骤，就多烧一次 token、多花一点钱。</p>
+      </div>
+    </div>
+    <div class="card flat">
+      <p class="fs-17">实测参考：让它「把这个文件里的 bug 修掉」，通常是 <span class="mono blue">5～30 个步骤</span>。</p>
+      <p class="fs-17">所以 Agent 慢、贵，并不是它笨，而是<strong>它在真的干活</strong>；它给你的「回复」其实是一份<strong>工作日志</strong>，不是一段答案。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页解释学生最常见的困惑：「为什么它这么慢，还这么费钱？」</p>
+    <p>可以现场演示：让它做一件小事，然后展开它的工具调用记录，让学生看到「原来它背后的请求有十几条」。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>它的办公桌有多小<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">上下文窗口：Agent 的桌面，以及「压缩」</h1>
+  <div class="body">
+    <div class="cols c2-1 grow">
+      <div class="stack">
+        <div class="card">
+          <h3>上下文里到底装着什么</h3>
+          <ul class="tight fs-17">
+            <li>系统提示词（它的身份和规矩，你看不见但每轮都在）</li>
+            <li>工具列表（它能用哪些工具、怎么用）</li>
+            <li>这几轮所有的对话历史<strong>和所有工具输出</strong></li>
+            <li>你刚发的那句话</li>
+          </ul>
+        </div>
+        <div class="card bad">
+          <h3>它有一个上限</h3>
+          <p class="fs-17">例如 128K token（大约 6～10 万汉字）。听着很多，但<strong>一条命令的输出就能吃掉几千</strong>——读一个大文件、跑一次测试，桌面立刻满了。</p>
+        </div>
+      </div>
+      <div class="card accent">
+        <h3>满了怎么办 → 压缩</h3>
+        <p class="fs-17">把前面的对话<strong>总结成一段摘要</strong>，用它替换掉原来那一大堆内容，然后接着干。</p>
+        <p class="fs-17" style="margin-top:10px"><strong>代价：细节丢了。</strong>摘要里没写的东西，它就真的再也想不起来。</p>
+        <p class="fs-17" style="margin-top:10px">所以：任务告一段落时<strong>手动压缩</strong>，比系统在关键时刻自动压缩，丢得少。</p>
+      </div>
+    </div>
+    <div class="card good">
+      <h3>由此得到一条最实用的经验</h3>
+      <p class="fs-17"><strong>需要留下来的东西，让 AI 写进文件，不要只留在对话里。</strong>对话会被压缩、会被丢掉；文件不会。这也是为什么 Agent 最好的用法，永远围绕着一个<strong>工作目录</strong>。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这是全课<strong>最值钱的一页</strong>之一。很多学生用 Agent 用得很痛苦，就是因为把所有东西都堆在对话里。</p>
+    <p>举个例子：<em>「这个结论你自己记着」——它记不住，压缩一次就没了。「把这个结论写进 notes.md」——它记得住一辈子。</em></p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>你会用到的四个会话操作<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">新建 · 恢复 · 分叉 · 压缩</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card">
+        <h3>新建 New</h3>
+        <p class="fs-17">换一件<strong>不相关</strong>的任务 → 一定开新会话。</p>
+        <p class="fs-17 dim">混在一个会话里干三件事：前面的无关内容会干扰它判断，而且你每轮都在为那些无关内容付钱。</p>
+      </div>
+      <div class="card">
+        <h3>恢复 Resume</h3>
+        <p class="fs-17">关掉电脑，明天接着干，日志还在。</p>
+        <p class="fs-17 dim">这是 Agent 相对聊天框的一个大优势：任务可以跨天。</p>
+      </div>
+      <div class="card">
+        <h3>分叉 Fork</h3>
+        <p class="fs-17">从当前这一步<strong>复制一份</strong>，去试另一种方案，原来的对话完全不动。</p>
+        <p class="fs-17 dim">典型用法：「这个改法我不满意，但我不想丢掉前面聊的东西。」</p>
+      </div>
+      <div class="card">
+        <h3>压缩 Compact</h3>
+        <p class="fs-17">主动让它总结并清空前面的内容，腾出桌面。</p>
+        <p class="fs-17 dim">典型用法：一个大任务刚做完，准备开始下一个阶段。</p>
+      </div>
+    </div>
+    <p class="fs-19 center"><strong>会不会用 AI，很大程度上看你会不会管会话。</strong></p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>如果学生只记住一句话，就记最后那句。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>管住 Agent 的两个开关<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">计划模式 与 目标模式</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card accent">
+        <h3>计划模式 Plan</h3>
+        <p class="fs-17"><strong>先只出方案，绝不动手。</strong>你看完它写的完整计划，点「同意」，它才开始改文件。</p>
+        <p class="fs-17" style="margin-top:8px">适合：会动到重要文件的重活。<br>不合适：你想让它顺手改个错别字。</p>
+        <p class="fs-17 dim" style="margin-top:8px">它管的是「开始之前」。</p>
+      </div>
+      <div class="card accent">
+        <h3>目标模式 Goal</h3>
+        <p class="fs-17">给一个<strong>长期目标</strong>，它自己一轮一轮接着做下去，不用你每次催。你中途可以暂停、改目标、或者看它卡在哪。</p>
+        <p class="fs-17" style="margin-top:8px">适合：一次讲不完、要跑很久的大任务。</p>
+        <p class="fs-17 dim" style="margin-top:8px">它管的是「中途不跑丢」。</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>还有一个：子代理 Subagent</h3>
+      <p class="fs-17">派一个<strong>干净的分身</strong>去干一件独立的事（查资料、跑一遍测试、审一遍代码），它自己的上下文<strong>不污染你的主对话</strong>，干完只带回来一个结论。</p>
+      <p class="fs-17 dim">类比：你不会让同一个人一边写论文、一边跑腿取快递、还一边记着他所有的事。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>强调「一个管开始前，一个管中途」这个对照，学生好记。</p>
+    <p>子代理是进阶内容，一句带过，知道有这个东西就行。</p>
+  </aside>
+</section>
+
+<!-- ========================= 三、Agent 模式 ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>第三部分</div>
+  <h1>Agent 模式（预设）</h1>
+  <p class="sub">同一个 Agent，给它装不同的工具，就是不同的「模式」</p>
+  <aside class="notes"><p>过渡。</p></aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>四种出厂模式<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">预设 = 给这个会话装什么工具、什么脾气、什么规矩</h1>
+  <div class="body">
+    <table class="kv">
+      <tr><th style="width:20%">模式</th><th style="width:44%">它有什么</th><th>什么时候用</th></tr>
+      <tr>
+        <td><span class="tag">标准 standard</span></td>
+        <td>全套：读写文件、终端、搜索、技能、计划、目标、子代理、工作流</td>
+        <td><strong>默认就用它</strong>，九成任务够用</td>
+      </tr>
+      <tr>
+        <td><span class="tag">极简 minimal</span></td>
+        <td>只有两个工具：持久终端 + 文件编辑器</td>
+        <td>看明白「Agent 到底靠什么活着」；也是最省的模式</td>
+      </tr>
+      <tr>
+        <td><span class="tag">PTC</span></td>
+        <td>标准模式的能力，但让模型<strong>写一段程序</strong>来一次性组合很多步操作</td>
+        <td>步骤很多、又很重复的活（批量处理一堆文件）</td>
+      </tr>
+      <tr>
+        <td><span class="tag">创造 cordis</span></td>
+        <td>标准模式的能力 + 运行时自省 + <strong>改造自己的能力</strong></td>
+        <td>进阶：想自己写一个新模式 / 新插件</td>
+      </tr>
+    </table>
+    <p class="fs-17 center dim">再加两个<strong>会话级</strong>开关：计划模式 Plan（动手前先给你看方案）、目标模式 Goal（给个长期目标自己干）。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>DeepSeek Harness 出厂这四个预设：标准、极简、PTC、创造。第 2 次课装好之后会亲眼看到这个选择器。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>一个反直觉的结论<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">为什么必须先玩「极简模式」</h1>
+  <div class="body">
+    <div class="cols c1-2 grow">
+      <div class="card accent">
+        <h3>只有两个工具，却几乎什么都能干</h3>
+        <p class="fs-17">因为<strong>终端本身就是万能工具</strong>：能读文件、能写文件、能装东西、能跑代码、能上网。</p>
+        <p class="fs-17" style="margin-top:8px">给它 bash，就等于给了它一双手；给它编辑器，就等于给了它一支笔。</p>
+      </div>
+      <div class="stack">
+        <div class="card good">
+          <h3>工具越多 ≠ 越强</h3>
+          <p class="fs-17">工具越多，模型<strong>越容易选错</strong>、越容易在一个小问题上乱试十种办法。多出来的工具，同时也多出了出错的面。</p>
+        </div>
+        <div class="card">
+          <h3>极简模式是最干净的「教学显微镜」</h3>
+          <p class="fs-17">它干了什么，一眼就能看全：读文件、跑命令、看结果、再跑。<strong>Agent 的全部秘密就在这几步里。</strong></p>
+        </div>
+      </div>
+    </div>
+    <p class="fs-19 center">一句话：<strong>Agent 的能力不是来自「很多按钮」，而是来自「一个循环 + 一双能执行命令的手」。</strong></p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>推荐第 3 次课的实操，第一个任务就用极简模式跑，学生的震撼感最强——「就这俩工具，它居然把贪吃蛇写出来了」。</p>
+  </aside>
+</section>
+
+<!-- ========================= 四、Loop Engineering ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>第四部分 · 本讲核心</div>
+  <h1>Loop Engineering</h1>
+  <p class="sub">模型的智力是买来的；循环是你设计的</p>
+  <aside class="notes">
+    <p>提醒学生：这一部分是今天最抽象、也最值钱的一块。听不懂没关系，记住最后一页那句话。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>Agent Loop 解剖<span class="clock">约 2.5 分钟</span></div>
+  <h1 class="sm">Agent 的全部秘密，就是这五步转圈</h1>
+  <div class="body">
+    <div class="flow">
+      <div class="step">1 组装上下文<small>系统提示词 + 工具表 + 历史</small></div>
+      <div class="arrow">→</div>
+      <div class="step">2 请求模型<small>一次 API 调用</small></div>
+      <div class="arrow">→</div>
+      <div class="step">3 模型回答<small>给答案？还是要调工具？</small></div>
+      <div class="arrow">→</div>
+      <div class="step">4 执行工具<small>真去读文件 / 跑命令<br>（常常要人批准）</small></div>
+      <div class="arrow">→</div>
+      <div class="step">5 结果写回日志<small>变成下一步的上下文</small></div>
+    </div>
+    <div class="loopback">↩ 回到第 ① 步，重新请求模型 —— 一直转到第 ③ 步它不再要工具为止</div>
+    <div class="cols c2">
+      <div class="card">
+        <h3>关键点 1：模型是「无状态」的</h3>
+        <p class="fs-17">它不记得上一轮。是<strong>循环</strong>每次都把完整历史重新递给它。所以「记忆」其实住在循环里，不住在模型里。</p>
+      </div>
+      <div class="card">
+        <h3>关键点 2：第 ④ 步才是真本事</h3>
+        <p class="fs-17">模型只会「说要读文件」。<strong>真的去读</strong>、并把真结果喂回去的，是循环。没有第 ④ 步，它还是那个只会打字的模型。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>建议在这里配一个现场演示：让它做一件两秒能干完的事，然后打开它的步骤记录，指给学生看「① 它先列了目录 → ② 读了文件 → ③ 跑了命令 → ④ 又读了一次」。</p>
+    <p><strong>如果只能记住一页，记住这一页。</strong></p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>Loop Engineering 的全部内容<span class="clock">约 2.5 分钟</span></div>
+  <h1 class="sm">这个循环里，真正难的是这四个问题</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card">
+        <h3><span class="num">1</span>上下文里放什么？</h3>
+        <p class="fs-17">系统提示词怎么写？给它几个工具？历史要不要截断？<br><strong>放多了它糊涂，放少了它瞎猜。</strong></p>
+      </div>
+      <div class="card">
+        <h3><span class="num">2</span>怎么防止它跑偏？</h3>
+        <p class="fs-17">什么时候该打断它？哪些操作必须先问过你？什么时候该压缩？<br><strong>权力给太少它干不动，给太多它敢删你的库。</strong></p>
+      </div>
+      <div class="card">
+        <h3><span class="num">3</span>什么时候该停？</h3>
+        <p class="fs-17">怎么判断任务成功了？死循环怎么发现？钱花超了怎么办？<br><strong>不会停的循环，就是一个烧钱的循环。</strong></p>
+      </div>
+      <div class="card">
+        <h3><span class="num">4</span>出错了怎么办？</h3>
+        <p class="fs-17">重试？换模型？还是把<strong>真实的报错原样喂回去</strong>让它自己修？<br><strong>这一步的设计，直接决定它「能不能自己修好」。</strong></p>
+      </div>
+    </div>
+    <div class="card accent">
+      <p class="fs-19"><strong>模型的能力是别人训练好的，你改不了；这四件事，每一件都是你能设计的。</strong>把循环设计好，就叫 Loop Engineering。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>讲第 4 条的时候可以举个反例：<em>有的工具只把「命令失败了」告诉模型，不把报错原文给它——那模型只能靠猜。而把完整报错喂回去的，它往往一次就改对了。</em></p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>最重要的那条原则<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">为什么 Agent 比「复制粘贴给聊天框」强那么多</h1>
+  <div class="body center" style="justify-content:center;gap:24px">
+    <p class="big">让模型每一步都能看到<em>上一步的真实结果</em>。<br><span class="dim" style="font-size:26px">不是你的转述，是原始的文件内容、原始的报错、原始的测试输出。</span></p>
+    <div class="cols c2" style="width:100%">
+      <div class="card bad">
+        <h3>聊天框里</h3>
+        <p class="fs-17">你复制代码 → 它猜 → 给你一段代码 → 你粘贴 → 跑 → 又报错 → 你再复制报错……<br><strong>每一轮都要你搬一次，而且你搬的时候会丢信息。</strong></p>
+      </div>
+      <div class="card good">
+        <h3>Agent 里</h3>
+        <p class="fs-17">它自己打开文件 → 自己跑 → 自己看到完整报错 → 自己改 → 自己再跑。<br><strong>信息一步都没丢，而且不用你搬。</strong></p>
+      </div>
+    </div>
+    <p class="fs-19 dim">所以：把「能自己验证」的任务交给 Agent，收益最大；把「只能靠你判断」的任务交给 Agent，收益最小。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页回答「凭什么值得为 Agent 花更多钱」。</p>
+    <p>落到学生的实际场景：<em>写代码、跑实验、整理数据——能被跑起来验证的，都特别适合 Agent。写论文的「观点」不行，因为它没法验证。</em></p>
+  </aside>
+</section>
+
+<!-- ========================= 五、Harness ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>第五部分</div>
+  <h1>Harness</h1>
+  <p class="sub">模型要变成产品，中间缺的正是它</p>
+  <aside class="notes"><p>过渡。</p></aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>Harness 是什么<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">Harness：把模型包装成「能干活的产品」的那一整套工程</h1>
+  <div class="body">
+    <p class="fs-19">harness 原意是<strong>马具</strong>——把一匹马拉上车的那整套东西：笼头、缰绳、鞍、车辕。马有力量，但没有马具，你既坐不上去，也控制不了方向。</p>
+    <div class="cols c4 grow">
+      <div class="card">
+        <h3>模型适配</h3>
+        <p class="fs-15">把各家五花八门的 API（DeepSeek / Claude / GPT）统一成一种内部格式</p>
+      </div>
+      <div class="card">
+        <h3>Agent 循环</h3>
+        <p class="fs-15">刚刚讲的那五步转圈，就是它实现的</p>
+      </div>
+      <div class="card">
+        <h3>工具与执行</h3>
+        <p class="fs-15">读写文件、跑终端、搜索、跑代码——以及<strong>怎么安全地执行</strong></p>
+      </div>
+      <div class="card">
+        <h3>沙箱与审批</h3>
+        <p class="fs-15">哪些能碰、哪些先问你、哪些一律禁止</p>
+      </div>
+      <div class="card">
+        <h3>会话与日志</h3>
+        <p class="fs-15">把每一步存下来：能恢复、能分叉、能追责</p>
+      </div>
+      <div class="card">
+        <h3>上下文管理</h3>
+        <p class="fs-15">什么时候截断、什么时候压缩、压缩丢什么</p>
+      </div>
+      <div class="card">
+        <h3>界面</h3>
+        <p class="fs-15">终端里的、还是网页里的；怎么让你看见它正在干什么</p>
+      </div>
+      <div class="card">
+        <h3>配置与插件</h3>
+        <p class="fs-15">怎么换模型、怎么加自己的工具、怎么改它的规矩</p>
+      </div>
+    </div>
+    <p class="fs-19 center"><strong>类比：模型是发动机；harness 是底盘、变速箱、方向盘、仪表盘和刹车。</strong>发动机再好，没有底盘你开不走；刹车不好，你不敢踩油门。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>八个格子不要逐个念，扫一眼，说「这些加起来，就是你现在用的每一个 AI 编程工具」。</p>
+    <p>然后重点讲那两句比喻。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>一句话记住它们的层次<span class="clock">约 1 分钟</span></div>
+  <h1 class="sm">模型 ⊂ 循环 ⊂ Harness ⊂ 你面前那个界面</h1>
+  <div class="body center" style="justify-content:center;gap:20px">
+    <div class="stack" style="width:100%;gap:0">
+      <div class="layer l1">你用的产品界面<span>终端里的 Claude Code / Codex · 网页里的 DeepSeek Harness</span></div>
+      <div class="layer l2">Harness<span>循环 + 工具 + 沙箱 + 会话 + 压缩 + 配置</span></div>
+      <div class="layer l3">Agent 循环<span>组装 → 请求 → 调工具 → 写回 → 再请求</span></div>
+      <div class="layer l4">模型<span>DeepSeek · Claude · GPT —— 真正「聪明」的那部分</span></div>
+    </div>
+    <div class="cols c2" style="width:100%">
+      <div class="card good">
+        <h3>模型决定它有多聪明</h3>
+        <p class="fs-17">这是别人训练好的，你只能选，不能改。</p>
+      </div>
+      <div class="card accent">
+        <h3>Harness 决定它能干多少活、以及会不会闯祸</h3>
+        <p class="fs-17">这是<strong>同一个模型在不同工具里表现不同的真正原因</strong>。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页解释学生最常见的疑问：「为什么同样是 DeepSeek，在那个软件里好像更强？」</p>
+  </aside>
+</section>
+
+<!-- ========================= 六、术语 ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>第六部分</div>
+  <h1>六个必须记住的术语</h1>
+  <p class="sub">接下来三次课的每一次报错，都出在这六个词上</p>
+  <aside class="notes"><p>过渡。强调：这部分是最实用、最枯燥、但必须听懂的部分。</p></aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>三要素<span class="clock">约 2.5 分钟</span></div>
+  <h1 class="sm">base_url + API Key + model id</h1>
+  <div class="body">
+    <p class="fs-19">任何一个软件要接上任何一个模型，都必须回答三个问题。<strong>三个全对才通，错一个就报错。</strong></p>
+    <div class="cols c3 grow">
+      <div class="card accent">
+        <h3>base_url 送到哪</h3>
+        <p class="fs-17">请求发给哪台服务器。<br>相当于<strong>去哪家店买</strong>。</p>
+        <pre class="sm" style="margin-top:8px">https://api.deepseek.com
+https://你的中转站域名</pre>
+      </div>
+      <div class="card accent">
+        <h3>API Key 你是谁</h3>
+        <p class="fs-17">一串 <span class="mono">sk-</span> 开头的密钥。<br>它<strong>就是你的钱</strong>——服务器凭它从你账上扣费。</p>
+        <p class="fs-17 bad" style="margin-top:8px">泄露 = 别人花你的钱。<br>不贴群里、不传 GitHub、不发截图。</p>
+      </div>
+      <div class="card accent">
+        <h3>model id 要哪个</h3>
+        <p class="fs-17">同一个地址下往往有很多款模型，靠名字区分。<br>相当于<strong>买哪个型号</strong>。</p>
+        <pre class="sm" style="margin-top:8px">deepseek-flash
+deepseek-v4-pro</pre>
+      </div>
+    </div>
+    <div class="card flat">
+      <p class="fs-17"><strong>报错怎么查：</strong><span class="bad">401</span> → Key 错 &nbsp;·&nbsp; <span class="bad">402</span> → 余额不足 &nbsp;·&nbsp; <span class="bad">404 / Model Not Exist</span> → model id 写错 &nbsp;·&nbsp; <span class="bad">连不上 / 超时 / 返回一个网页</span> → base_url 错。</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页要<strong>放慢</strong>。学生后面每次配工具都要用这三样。</p>
+    <p>现场最好打开 DeepSeek 的模型配置页，指着三个输入框讲一遍。</p>
+    <p><strong>两个往年踩过的坑，今年必须讲清：</strong></p>
+    <ul>
+      <li><em>base_url 别凭印象加 <code>/v1</code></em>。网上很多老教程写 <code>https://api.deepseek.com/v1</code>，而官方现在的文档一律写不带 <code>/v1</code> 的 <code>https://api.deepseek.com</code>。<strong>照着官方文档抄</strong>，不要照着博客抄。</li>
+      <li><em>模型名变了</em>。<code>deepseek-chat</code> 和 <code>deepseek-reasoner</code> 这两个 2025 年到处都在用的名字，<strong>已经在 2026 年 7 月 24 日停止使用</strong>。现在只有 <code>deepseek-flash</code> 和 <code>deepseek-v4-pro</code>。</li>
+    </ul>
+    <p>这一条可以顺势点一句：<em>AI 这个领域，半年前的文章就可能已经失效——包括老师发给你的和我今天讲的。</em></p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>协议：同一个聊天，三种信封<span class="clock">约 2.5 分钟</span></div>
+  <h1 class="sm">response 协议：为什么 Key 和地址都对，还是报错</h1>
+  <div class="body">
+    <p class="fs-17">「回答我这句话」这件事，不同公司用的<strong>信封格式</strong>不一样，连网址路径都不一样。</p>
+    <table class="kv">
+      <tr><th style="width:24%">协议</th><th style="width:30%">请求路径</th><th>谁在用</th></tr>
+      <tr>
+        <td><strong>Chat Completions</strong><br><span class="tag good">最通用</span></td>
+        <td><code>POST {base_url}/chat/completions</code></td>
+        <td>几乎所有模型和中转站都支持。<strong>遇到不兼容，先试它。</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Responses</strong></td>
+        <td><code>POST {base_url}/responses</code></td>
+        <td>OpenAI 的新格式。<strong>Codex 只认它</strong>——旧的 Chat 格式已经不再支持</td>
+      </tr>
+      <tr>
+        <td><strong>Messages</strong></td>
+        <td><code>POST {base_url}/messages</code></td>
+        <td>Anthropic 的格式，<strong>Claude Code 用它</strong></td>
+      </tr>
+    </table>
+    <div class="card good">
+      <p class="fs-17"><strong>关键理解：</strong>协议只是<strong>信封</strong>，跟背后是哪家的模型<strong>没关系</strong>。同一个模型能被包成三种信封 —— 而 DeepSeek 官方<strong>三种都提供</strong>，一个 Key 就够：</p>
+      <pre class="sm" style="margin-top:8px"><span class="c"># OpenAI 格式（最通用）</span>      <span class="k">https://api.deepseek.com</span>
+<span class="c"># Responses（Codex）</span>        <span class="k">https://api.deepseek.com</span>   <span class="c">← 同地址，路径不同</span>
+<span class="c"># Anthropic（Claude Code）</span>  <span class="k">https://api.deepseek.com/anthropic</span></pre>
+    </div>
+    <div class="card warn">
+      <p class="fs-17"><strong>所以：</strong>一个中转站说「支持 Claude Code」，意思是它提供了 Anthropic 格式的端点；说「支持 Codex」，意思是提供了 Responses 格式的端点。<strong>新手 90% 的报错，都是 Key / base_url / 协议这三样没对齐。</strong></p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>不要背路径，记住「有三套信封，装错了寄不到」就够了。</p>
+    <p>最后那块绿色的例子要讲透，因为它<strong>推翻了一个流传很广的说法</strong>：很多人以为「要用 Claude Code 就必须买中转站」。实际上在 2026 年，DeepSeek 官方自己就把 Anthropic 格式的端点开好了——阿里云百炼、智谱、Kimi、MiniMax、硅基流动、火山方舟也都做了同样的事。</p>
+    <p>一句话：<em>协议只是信封，信封可以换，里面的模型才是关键。</em></p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>剩下几个，一句话一个<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">你在报错信息里会反复见到它们</h1>
+  <div class="body">
+    <div class="cols c3 grow">
+      <div class="card">
+        <h3>token</h3>
+        <p class="fs-16">计费和长度的单位。约 1 个汉字 ≈ 0.6～1 token。<br>你花的钱 ≈ <strong>上下文长度 × 请求轮数</strong>。<br>所以「少废话、多写文件」是省钱的。</p>
+      </div>
+      <div class="card">
+        <h3>压缩 compaction</h3>
+        <p class="fs-16">桌面快满了 → 把前面的对话总结成一段摘要替换掉。<br><strong>丢细节。</strong>任务告一段落时主动压缩最划算。</p>
+      </div>
+      <div class="card">
+        <h3>流式 streaming</h3>
+        <p class="fs-16">token 一个个吐出来，所以你看到它「边想边打字」。<br>它<strong>不代表更快</strong>，只是让你更早看见。</p>
+      </div>
+      <div class="card">
+        <h3>系统提示词 system prompt</h3>
+        <p class="fs-16">你每轮看不见、但它每轮都在读的那段话。<br>决定了它的身份、规矩，以及「它知道自己有哪些工具」。</p>
+      </div>
+      <div class="card">
+        <h3>沙箱 / 审批 sandbox · approval</h3>
+        <p class="fs-16">因为它能碰你电脑，所以必须有闸门。<br>默认「要问我」；可以放宽，但<strong>别一上来就全自动</strong>。</p>
+      </div>
+      <div class="card">
+        <h3>幻觉 hallucination</h3>
+        <p class="fs-16">模型编东西。Agent 时代它的形态变了：<br>不是编答案，而是<strong>编一个不存在的命令或文件名</strong>——然后用真实报错纠正它。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>扫讲，每格 15 秒。这些词在第 2、3 次课都会真实出现，到时候再回来对。</p>
+    <p>幻觉那条是重点：<em>Agent 的真正优势是——它编的东西会立刻被真实世界打脸，然后它自己改。</em></p>
+  </aside>
+</section>
+
+<!-- ========================= 钱 ========================= -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>顺带把账算清楚<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">钱是怎么花掉的（以 DeepSeek 为例）</h1>
+  <div class="body">
+    <div class="cols c3 grow">
+      <div class="card">
+        <h3>单价（空闲时段）</h3>
+        <p class="fs-16">单位是<strong>元 / 百万 tokens</strong>：</p>
+        <table class="kv fs-15" style="margin-top:6px">
+          <tr><td class="mono">flash</td><td>输入命中 0.02<br>输入未命中 1<br>输出 4</td></tr>
+          <tr><td class="mono">v4-pro</td><td>输入命中 0.15<br>输入未命中 4.5<br>输出 13.5</td></tr>
+        </table>
+      </div>
+      <div class="card good">
+        <h3>换算成人话</h3>
+        <p class="fs-16"><strong>1 块钱</strong>大约能买 <strong>100 万字</strong>的输入，或者 <strong>20 万字</strong>的输出。</p>
+        <p class="fs-16" style="margin-top:8px">所以：<strong>学生做实验，几块钱能用很久。</strong>真正会烧钱的不是「问问题」，是让 Agent 跑很长的任务。</p>
+      </div>
+      <div class="card warn">
+        <h3>两个反直觉的点</h3>
+        <p class="fs-16"><strong>① 错开高峰</strong>：周一至周五 9:00–12:00、14:00–18:00 是高峰，<strong>价格翻倍</strong>。批量实验放到晚上跑。</p>
+        <p class="fs-16" style="margin-top:8px"><strong>② 缓存命中便宜 50 倍</strong>：连续对话里重复出现的前缀只按 0.02 元收。所以<strong>把稳定的东西放在前面</strong>（系统提示词、大段材料）真的有省钱效果。</p>
+      </div>
+    </div>
+    <div class="card accent">
+      <h3>为什么 Agent 比聊天贵这么多 —— 一句话说清</h3>
+      <p class="fs-17">Agent 的每个步骤，都要把<strong>「到目前为止的全部对话」重新发一遍</strong>。一个 10 步的任务，前面的内容就被重复计费了 10 次。这就是上一页那条经验的另一半：<strong>该压缩就压缩，该开新会话就开新会话，不要把无关的东西堆在一个会话里。</strong></p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这条「每个步骤重发全部上下文」是理解 AI 成本的核心，也是理解「为什么要压缩」的核心。讲了这一页，学生就再也不会问「为什么我只说了几句话就花了钱」。</p>
+    <p>另外可以提一句：并发限制是<strong>按账号算的</strong>（flash 2500、v4-pro 500），<strong>多建几个 Key 不会扩容</strong>——这是个常见的误解。</p>
+    <p>价格会变，讲之前扫一眼官方价格页。</p>
+  </aside>
+</section>
+
+<!-- ========================= 七、一切皆插件 ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>第七部分</div>
+  <h1>一切皆插件</h1>
+  <p class="sub">为什么这个设计理念，决定你以后能走多远</p>
+  <aside class="notes"><p>过渡。</p></aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>DSH 的设计准则<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">内核极小，其他一切都可以换</h1>
+  <div class="body">
+    <div class="cols c1-2 grow">
+      <div class="card accent">
+        <h3>内核里只有什么</h3>
+        <p class="fs-17">几个抽象服务（会话、工具注册表、提示词组装、模型路由）<br>+ <strong>一个</strong> Agent 循环插件。</p>
+        <p class="fs-17" style="margin-top:8px">就这些。其余全部是插件。</p>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h3>「其余全部」包括哪些</h3>
+          <p class="fs-17">模型适配器（DeepSeek / Claude / GPT）· 每一个工具 · 会话日志与存储 · <strong>压缩策略</strong> · 沙箱与审批 · 网页界面 · 甚至那个循环本身。<strong>全都能换。</strong></p>
+        </div>
+        <div class="cols c2" style="gap:12px">
+          <div class="card good">
+            <h3>扩展方式</h3>
+            <p class="fs-16">在<strong>旁边挂一个</strong>插件，而不是给内核打补丁。内核永远干净。</p>
+          </div>
+          <div class="card good">
+            <h3>卸载即撤销</h3>
+            <p class="fs-16">插件带来的东西，在它被卸下时<strong>全部撤回</strong>，不留残渣。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="fs-19 center">所以：<strong>选 harness，其实是选生态</strong>——你选的不只是今天的功能，而是以后能往哪儿长。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这是 DeepSeek Harness 的官方设计准则，原文就叫「一切皆插件」。</p>
+    <p>给一个类比：<em>传统软件像一栋已经盖好的楼，你想加个窗户得砸墙；插件式 harness 像乐高，你想加什么就在旁边插一块。</em></p>
+  </aside>
+</section>
+
+<!-- ========================= 八、工具地图 ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>第八部分</div>
+  <h1>工具地图</h1>
+  <p class="sub">五个名字，各自解决什么问题</p>
+  <aside class="notes"><p>过渡。这部分是学生最想听的。</p></aside>
+</section>
+
+<section class="slide table-slide">
+  <div class="kicker"><span class="dot"></span>五个名字，一张地图<span class="clock">约 2.5 分钟</span></div>
+  <h1 class="sm">先分清：哪些是「AI」，哪些只是「配件」</h1>
+  <div class="body">
+    <table class="kv">
+      <tr><th style="width:17%">名字</th><th style="width:13%">它是什么</th><th style="width:38%">干什么的</th><th>什么时候用</th></tr>
+      <tr>
+        <td><strong>Claude Code</strong></td>
+        <td><span class="tag">Harness</span></td>
+        <td>Anthropic 的终端 Agent，工具设计成熟，读代码 / 改代码最稳</td>
+        <td>写代码、改项目、读别人的代码库</td>
+      </tr>
+      <tr>
+        <td><strong>Codex</strong></td>
+        <td><span class="tag">Harness</span></td>
+        <td>OpenAI 的终端 Agent，沙箱与审批做得细。<strong>只支持 Responses 协议</strong>，挑供应商时要注意</td>
+        <td>写代码、跑命令，尤其是喜欢精细审批的人</td>
+      </tr>
+      <tr>
+        <td><strong>DeepSeek Harness</strong><br><span class="dim mono fs-15">dsh</span></td>
+        <td><span class="tag">Harness</span></td>
+        <td>DeepSeek 的开源 harness：<strong>有网页界面</strong>、多种模式、一切皆插件</td>
+        <td>上课、学习、想看清 Agent 到底在转什么</td>
+      </tr>
+      <tr>
+        <td><strong>cc-switch</strong></td>
+        <td><span class="tag gray">配件</span></td>
+        <td>你电脑上的一个<strong>开关面板</strong>：管理各家供应商配置，一键切换</td>
+        <td>同时用 Claude Code / Codex，懒得手改配置文件</td>
+      </tr>
+      <tr>
+        <td><strong>中转站</strong></td>
+        <td><span class="tag gray">配件</span></td>
+        <td>一个<strong>卖 API 的中间商</strong>：一个入口后面接多家模型，统一计费</td>
+        <td>想用一个 Key 通吃多家模型、想用支付宝付款</td>
+      </tr>
+    </table>
+    <p class="fs-19 center"><strong>前三个不是「三个不同的 AI」，是三个不同的 harness——它们可以接同一个模型。</strong></p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页要慢，逐个点名。最后那句话是全页的落点，务必讲。</p>
+    <p>如果学生问「那我装哪个」——下一张就是答案。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>中转站<span class="clock">约 2 分钟</span></div>
+  <h1 class="sm">最省钱的一环，也是最容易踩坑的一环</h1>
+  <div class="body">
+    <div class="cols c1-2 grow">
+      <div class="card good">
+        <h3>它解决了什么真问题</h3>
+        <p class="fs-17">你只想用 AI，却要面对：没有外币信用卡、各家官网注册麻烦、想对比几个模型要开好几个号……</p>
+        <p class="fs-17" style="margin-top:8px">中转站把这些合成一件事：<strong>一个 base_url、一个 Key、支付宝付款</strong>，背后随你切模型。</p>
+        <p class="fs-17" style="margin-top:8px"><span class="warn">但是</span>：过去「必须用中转站才能让 Claude Code 用上国产模型」——<strong>这个理由在 2026 年已经不成立了</strong>。DeepSeek 官方就提供了 Anthropic 格式的端点。</p>
+      </div>
+      <div class="card bad">
+        <h3>必须知道的风险（不是吓唬人）</h3>
+        <ul class="tight fs-17">
+          <li>它在<strong>中间</strong>——你的每一句对话它都看得见。<strong>这不是它「要不要记录」的问题，是架构决定的</strong></li>
+          <li>可能<strong>跑路</strong>，余额打水漂</li>
+          <li>可能超售、偷偷限速、<strong>用便宜模型冒充贵模型</strong></li>
+          <li>可能把你的对话日志<strong>拿去卖</strong></li>
+          <li>境外模型未备案就向境内提供，本身处在<strong>监管灰区</strong></li>
+        </ul>
+        <p class="fs-15 dim" style="margin-top:8px">国家安全部 2026 年 6 月专门发过「AI 中转站」风险提示，点名了数据留存、模型缩水、植入后门、数据出境四类问题。</p>
+      </div>
+    </div>
+    <div class="card warn">
+      <h3>用它的五条原则</h3>
+      <p class="fs-17">① <strong>能官方就官方</strong>——学生做实验，官方 API 的免费额度/几块钱就够，根本不需要中转站 &nbsp;② 真要买，<strong>小额充值</strong>，把它当一次性消费，别当银行 &nbsp;③ 不放敏感数据（个人信息、未发表的实验数据、别人的代码） &nbsp;④ 没有公开退款条款的平台，默认「钱要不回来」 &nbsp;⑤ 别用别人送的 Key，也别把你的 Key 给别人</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一页是<strong>安全教育</strong>，不要略过。学生最容易被「几块钱用 GPT」吸引。</p>
+    <p>补一句实在话：<em>「你用中转站问作业，风险是你自己的；但如果你以后拿着老师的未发表数据去问，风险是老师的。」</em></p>
+    <p>另外提醒：不要去买别人分享的「共享账号」，那等于把你的对话交给陌生人。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>那到底怎么选<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">给学生的实话版建议</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card">
+        <h3>想省事、想看清楚它在干什么</h3>
+        <p class="fs-17">→ <strong>DeepSeek Harness</strong>：有网页界面，不用记命令，模式多，便宜。<br><span class="dim">本课的主线工具。</span></p>
+      </div>
+      <div class="card">
+        <h3>主要写代码 / 跑实验</h3>
+        <p class="fs-17">→ <strong>Claude Code</strong> 或 <strong>Codex</strong>：终端里最成熟的两个。<br><span class="dim">第 3 次课都装。</span></p>
+      </div>
+      <div class="card">
+        <h3>手头紧</h3>
+        <p class="fs-17">→ <strong>DeepSeek 官方 API</strong>：国内直连、支付宝、便宜。<br><span class="dim">今天我们就买它。</span></p>
+      </div>
+      <div class="card">
+        <h3>只想问问题、不碰文件</h3>
+        <p class="fs-17">→ <strong>直接用聊天网页，别装工具。</strong><br><span class="dim">这一条也是建议。</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>最后那条特意保留——不要让学生以为「装工具」本身就是进步。</p>
+  </aside>
+</section>
+
+<!-- ========================= 收尾 ========================= -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>今天讲完了<span class="clock">约 1 分钟</span></div>
+  <h1 class="sm">一句话总结，加接下来三次课的安排</h1>
+  <div class="body">
+    <p class="big" style="font-size:32px">模型负责<em>聪明</em>，harness 负责<em>干活</em>，<br>你会不会用，看你会不会<em>管会话</em>、会不会<em>设计循环</em>。</p>
+    <div class="cols c3">
+      <div class="card accent">
+        <h3>今天（剩 20 分钟）</h3>
+        <p class="fs-17">注册 DeepSeek、充值、<strong>拿到你自己的第一个 API Key</strong>，并发出第一次 API 请求。</p>
+      </div>
+      <div class="card">
+        <h3>第 2 次课</h3>
+        <p class="fs-17">把 Key 用起来：装 <strong>cc-switch</strong> 统管配置、安装 <strong>DeepSeek Harness</strong>，让 AI 第一次真正动手改你的文件。</p>
+      </div>
+      <div class="card">
+        <h3>第 3 次课</h3>
+        <p class="fs-17">装上 <strong>Codex</strong> 和 <strong>Claude Code</strong>（都直连 DeepSeek，<strong>不经过中转站</strong>），用三个真实任务练手。</p>
+      </div>
+    </div>
+    <p class="fs-19 center dim">下一节课开始前，请确保你：有一个<strong>已实名认证</strong>的 DeepSeek 账号、账上有几块钱、手边有一台能连网的电脑。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>把「预习作业」这一条念出来：下节课要用，现在没弄好下节课就干等。</p>
+  </aside>
+</section>
+
+<!-- ========================= 参考资料 ========================= -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>课后怎么继续学<span class="clock">约 1.5 分钟</span></div>
+  <h1 class="sm">两份推荐资料，一份看思路，一份上手做</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card accent">
+        <h3>① 视频课 · 看思路</h3>
+        <p class="fs-17"><strong>《生成式软件工程》</strong><br>南京大学 蒋炎岩（B 站：绿导师原谅你了）</p>
+        <p class="fs-16" style="margin-top:8px">从「软件工程」的角度讲人怎么跟 AI 协作——<strong>和今天讲的 loop engineering、harness 是同一个问题的另一种讲法</strong>，而且讲得比这节课深得多。</p>
+        <p class="fs-15" style="margin-top:8px"><span class="mono">jyywiki.cn/GSE/2026/</span><br>B 站搜「生成式软件工程」有完整分 P</p>
+        <p class="fs-15 dim" style="margin-top:6px">建议从「欢迎来到未来」那一讲开始看。</p>
+      </div>
+      <div class="card accent">
+        <h3>② 开源教程 · 上手做</h3>
+        <p class="fs-17"><strong>Datawhale《Hello-Agents：从零开始构建智能体》</strong></p>
+        <p class="fs-16" style="margin-top:8px">16 章，从智能体定义一路做到<strong>手写 ReAct、上下文工程、通信协议、Agent 训练、性能评估</strong>，最后有完整综合项目。免费开源，有 PDF。</p>
+        <p class="fs-15" style="margin-top:8px"><span class="mono">datawhalechina.github.io/hello-agents</span></p>
+        <p class="fs-15 dim" style="margin-top:6px">需要一点 Python 基础；不需要算法背景。</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>和今天这节课的对应关系</h3>
+      <p class="fs-16">今天讲的<strong>「模型 vs Agent」</strong>→ Hello-Agents 第 1–2 章 &nbsp;·&nbsp; <strong>「Agent Loop」</strong>→ 第 4 章（ReAct / Plan-and-Solve / Reflection） &nbsp;·&nbsp; <strong>「上下文与压缩」</strong>→ 第 9 章上下文工程 &nbsp;·&nbsp; <strong>「协议」</strong>→ 第 10 章 &nbsp;·&nbsp; <strong>「想自己造一个」</strong>→ 第 7 章（从 0 构建智能体框架）</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这两份资料是<strong>课外补充</strong>，不是作业。明说：这门课只求「会用」，想「会造」的人自己往下走。</p>
+    <p>蒋炎岩那门课的视角特别值得学生对一下：他是站在「软件工程」的历史脉络上讲这次的转变，会让人理解为什么 harness、loop 这些东西会出现——而不是只把它当成几个新工具。</p>
+  </aside>
+</section>
+
+<!-- ========================= 实操 A ========================= -->
+<section class="slide divider">
+  <div class="kicker"><span class="dot"></span>现场实操 · 20 分钟</div>
+  <h1>把它买下来</h1>
+  <p class="sub">注册 → 充值 → 建 Key → 发出你的第一次 API 请求</p>
+  <aside class="notes">
+    <p>切到这一步时<strong>停下讲解，让大家动手</strong>。你自己也开着屏幕，一步步同步操作。</p>
+    <p>节奏：注册 + 充值 8 分钟，建 Key 2 分钟，第一次调用 10 分钟。做不完的回家补，下节课开头检查。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>实操 A · 步骤<span class="clock">现场 20 分钟</span></div>
+  <h1 class="sm">四步，拿到你的第一把钥匙</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card">
+        <h3><span class="num">1</span>注册 + 实名</h3>
+        <p class="fs-17">浏览器打开 <code>platform.deepseek.com</code><br>手机号或邮箱注册 → 到「个人信息」页完成<strong>实名认证</strong>。</p>
+        <p class="fs-17 warn" style="margin-top:6px">顺序不能反：<strong>没实名就充不了值。</strong></p>
+      </div>
+      <div class="card">
+        <h3><span class="num">2</span>充值</h3>
+        <p class="fs-17">「充值」页 → 支付宝 / 微信。<br><strong>充最小的一档就够上完这门课</strong>（学生做实验一次几毛钱）。</p>
+        <p class="fs-17 dim" style="margin-top:6px">余额永久有效，不消费可以申请退款。<br>高峰时段价格是空闲时段的<strong>两倍</strong>，不急的活留到晚上跑。</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">3</span>创建 API Key</h3>
+        <p class="fs-17">左侧「API keys」→ 创建 → 起个名字（比如 <span class="mono">class1</span>）→ <strong>立刻复制保存到本地文件</strong>。</p>
+        <p class="fs-17 bad" style="margin-top:6px">它通常<strong>只显示这一次</strong>，关了页面就再也看不到。</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">4</span>记下三要素</h3>
+        <pre class="sm">base_url : https://api.deepseek.com
+api key  : sk-****************
+model id : deepseek-flash</pre>
+        <p class="fs-17 dim" style="margin-top:6px">贴到你自己的一个文本文件里，下节课直接用。<br><span class="bad">注意：不要加 /v1，不要写 deepseek-chat。</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>提醒三件事：</p>
+    <ul>
+      <li>Key <strong>只显示一次</strong>，没存就删了重建一个，不要慌。</li>
+      <li>不要把 Key 发到班级群里「让同学帮你试试」。</li>
+      <li>充值不要充多，10 块足够。</li>
+    </ul>
+    <p>走得快的同学，让他先做下面那张页面的命令。</p>
+  </aside>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>实操 A · 第一次调用<span class="clock">现场 10 分钟</span></div>
+  <h1 class="sm">在你的终端里，跟模型说第一句话</h1>
+  <div class="body">
+    <p class="fs-17">打开终端（macOS：<strong>终端</strong>；Windows：<strong>PowerShell</strong>；Linux：任意终端），把下面三行里的 Key 换成你自己的，逐行粘贴回车：</p>
+    <pre class="sm">export DS_KEY="sk-把这里换成你自己的Key"
+
+curl https://api.deepseek.com/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $DS_KEY" \
+  -d '{"model":"deepseek-flash","messages":[{"role":"user","content":"用一句话解释什么是Agent"}]}'</pre>
+    <div class="cols c2">
+      <div class="card good">
+        <h3>成功的样子</h3>
+        <p class="fs-16">你会看到一大段 JSON，其中 <code>choices[0].message.content</code> 里就是它的回答，<code>usage</code> 里是这次花了多少 token。</p>
+      </div>
+      <div class="card bad">
+        <h3>失败的四种样子</h3>
+        <p class="fs-16"><span class="bad">401</span> → Key 写错 &nbsp;·&nbsp; <span class="bad">402</span> → 余额不足，去充值 &nbsp;·&nbsp; <span class="bad">400 / Model Not Exist</span> → model id 写错 &nbsp;·&nbsp; <span class="bad">连不上</span> → 地址或网络错</p>
+      </div>
+    </div>
+    <p class="fs-17 center dim">Windows PowerShell 里 <code>curl</code> 是别名，如果报错，把 <code>curl</code> 换成 <code>curl.exe</code>。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 第 1 讲</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>这一步的<strong>教学目的不只是「跑通」</strong>，而是让学生亲眼看到：所谓 AI 对话，本质就是一个 HTTP 请求 + 一段 JSON。</p>
+    <p>看到 JSON 之后追问一句：「你平时用的聊天网页，做的就是这件事，只不过它把这段 JSON 排版好看了。」</p>
+    <p>没跑通的同学不用卡住，记下报错，下节课开头一起解决。</p>
+  </aside>
+</section>
+
+</div>
+</div>
+
+<div id="progress"></div>
+<div id="toast"></div>
+<div id="notes-panel"></div>
+<div id="hud">
+  <button data-act="ov" title="总览 (O)">总览</button>
+  <button data-act="notes" title="讲稿 (S)">讲稿</button>
+  <button data-act="theme" title="明暗 (T)">明暗</button>
+  <button data-act="fs" title="全屏 (F)">全屏</button>
+  <button data-act="print" title="导出 PDF (P)">PDF</button>
+  <button data-act="prev" title="上一页">←</button>
+  <span class="pos">1/1</span>
+  <button data-act="next" title="下一页">→</button>
+</div>
+
+<script src="assets/deck.js"></script>
+</body>
+</html>

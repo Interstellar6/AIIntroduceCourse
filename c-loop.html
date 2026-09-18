@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent 循环 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>Agent 循环</h1>
+        <p class="lede">上一页讲的是「循环里的每一步怎么组织」。这一页退后一步，讲<b>循环本身</b>——它为什么长这样、里面真正难的是什么。这是整套材料里最抽象、也最值钱的一部分：看懂了它，你就能理解为什么同样是 AI，装在不同软件里的能力差别会那么大。</p>
+
+        <h2>Agent 的全部秘密，就是这五步在转圈</h2>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 340" role="img" aria-label="Agent 循环示意图：组装上下文、请求模型、模型回答、执行工具、结果写回，然后回到第一步；当模型不再需要工具时本轮结束">
+            <defs>
+              <marker id="lp1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+              <marker id="lp2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm-g"/>
+              </marker>
+            </defs>
+
+            <!-- ① 组装上下文 -->
+            <rect class="b" x="34" y="34" width="140" height="96" rx="12"/>
+            <circle class="snum" cx="34" cy="34" r="12"/>
+            <text class="t-n t-mid" x="34" y="38.5">1</text>
+            <text class="t-h t-mid" x="104" y="72">组装上下文</text>
+            <text class="t-s t-mid" x="104" y="94">系统提示词</text>
+            <text class="t-s t-mid" x="104" y="111">工具表 · 历史</text>
+
+            <path class="ln" d="M176,82 H203" marker-end="url(#lp1)"/>
+
+            <!-- ② 请求模型 -->
+            <rect class="b" x="207" y="34" width="140" height="96" rx="12"/>
+            <circle class="snum" cx="207" cy="34" r="12"/>
+            <text class="t-n t-mid" x="207" y="38.5">2</text>
+            <text class="t-h t-mid" x="277" y="72">请求模型</text>
+            <text class="t-s t-mid" x="277" y="101">一次 API 调用</text>
+
+            <path class="ln" d="M349,82 H376" marker-end="url(#lp1)"/>
+
+            <!-- ③ 模型回答 -->
+            <rect class="b-a" x="380" y="34" width="140" height="96" rx="12"/>
+            <circle class="snum" cx="380" cy="34" r="12"/>
+            <text class="t-n t-mid" x="380" y="38.5">3</text>
+            <text class="t-h t-mid" x="450" y="72">模型回答</text>
+            <text class="t-s t-mid" x="450" y="94">给最终答案？</text>
+            <text class="t-s t-mid" x="450" y="111">还是要调工具？</text>
+
+            <path class="ln" d="M522,82 H549" marker-end="url(#lp1)"/>
+
+            <!-- ④ 执行工具 -->
+            <rect class="b" x="553" y="34" width="140" height="96" rx="12"/>
+            <circle class="snum" cx="553" cy="34" r="12"/>
+            <text class="t-n t-mid" x="553" y="38.5">4</text>
+            <text class="t-h t-mid" x="623" y="72">执行工具</text>
+            <text class="t-s t-mid" x="623" y="94">真去读文件</text>
+            <text class="t-s t-mid" x="623" y="111">跑命令</text>
+
+            <path class="ln" d="M695,82 H722" marker-end="url(#lp1)"/>
+
+            <!-- ⑤ 结果写回 -->
+            <rect class="b" x="726" y="34" width="140" height="96" rx="12"/>
+            <circle class="snum" cx="726" cy="34" r="12"/>
+            <text class="t-n t-mid" x="726" y="38.5">5</text>
+            <text class="t-h t-mid" x="796" y="72">结果写回</text>
+            <text class="t-s t-mid" x="796" y="94">变成下一步</text>
+            <text class="t-s t-mid" x="796" y="111">的上下文</text>
+
+            <!-- 出口：③ 不再需要工具 -->
+            <path class="ln-g" d="M450,132 V212" marker-end="url(#lp2)"/>
+            <text class="t-g" x="464" y="204">不再需要工具 → 本轮结束</text>
+
+            <!-- 回环：⑤ → ① -->
+            <path class="ln" d="M796,132 V286 H104 V136" marker-end="url(#lp1)"/>
+            <text class="t-s t-mid" x="450" y="308">回到第 1 步，重新请求模型 —— 一直转到第 3 步不再需要工具为止</text>
+          </svg>
+          <figcaption><b>整个 Agent 就是这五步在转圈。</b>下面几节会解释每一圈里到底发生了什么。</figcaption>
+        </figure>
+
+        <p>就这五步。整个 Agent 的所有行为，都是这五步转了很多圈的结果。<a href="c-paradigms.html">上一页</a>那三种范式（ReAct、Plan-and-Solve、Reflection），说的就是这五步里第 ③ 步该怎么组织。</p>
+
+        <h2>两个关键点</h2>
+
+        <h3>关键点一：模型是无状态的，记忆住在循环里</h3>
+        <p>回到上一页说的「模型没有记忆」。那 Agent 为什么能记住前面做过什么？</p>
+        <p>因为<b>循环每次都把完整的历史重新递给它</b>。第 ① 步做的就是这个：把系统提示词、工具列表、所有历史对话和工具输出打包成一大段文字，一起发过去。</p>
+        <p>所以「记忆」这个能力，其实不属于模型，属于<b>循环</b>。这也解释了为什么上下文会满、为什么需要压缩——因为每次都要把全部历史重发一遍。</p>
+
+        <h3>关键点二：第 ④ 步才是真本事</h3>
+        <p>模型只会「说要读那个文件」。<b>真的去读、把真实内容喂回去的，是循环。</b></p>
+        <div class="codeblock"><pre>没有第 ④ 步：  它说「你应该先看看 config.py 里写了什么」   <span class="c">← 还是那个只会打字的模型</span>
+有第 ④ 步：    它自己打开 config.py，看到真实内容，发现端口写错了，改掉  <span class="c">← 这才是 Agent</span></pre></div>
+
+        <div class="callout good">
+          <div class="ic">🔑</div>
+          <div class="bd">
+            <span class="t">如果这份材料你只记住一个东西</span>
+            记住这个循环。它是所有 Agent 工具的共同骨架——DSH、Claude Code、Codex，界面完全不一样，里面转的都是这五步。
+          </div>
+        </div>
+
+        <h2>Loop Engineering：这个循环里真正难的四件事</h2>
+        <p>「写一个循环」本身不难，几十行代码就能写。难的是下面四件事——把它们合起来，就叫 <b>Loop Engineering</b>（循环工程）。</p>
+
+        <div class="cards">
+          <div class="card">
+            <h3><span class="k">1</span> 上下文里放什么？</h3>
+            <p>系统提示词怎么写？给它几个工具？历史要不要截断？</p>
+            <p><b>放多了它糊涂，放少了它瞎猜。</b></p>
+          </div>
+          <div class="card">
+            <h3><span class="k">2</span> 怎么防止它跑偏？</h3>
+            <p>什么时候该打断它？哪些操作必须先问过你？什么时候该压缩？</p>
+            <p><b>权力给太少它干不动，给太多它敢删你的库。</b></p>
+          </div>
+          <div class="card">
+            <h3><span class="k">3</span> 什么时候该停？</h3>
+            <p>怎么判断任务成功了？死循环怎么发现？钱花超了怎么办？</p>
+            <p><b>不会停的循环，就是一个烧钱的循环。</b></p>
+          </div>
+          <div class="card">
+            <h3><span class="k">4</span> 出错了怎么办？</h3>
+            <p>重试？换模型？还是把<b>真实的报错原样喂回去</b>让它自己修？</p>
+            <p><b>这一步的设计，直接决定它「能不能自己修好」。</b></p>
+          </div>
+        </div>
+
+        <h3>第 4 条值得展开讲</h3>
+        <p>有些工具只把「命令失败了」这句话告诉模型，不把报错原文给它。这时候模型只能靠猜。<br>
+        而把<b>完整报错</b>喂回去的工具，它往往一次就改对了。</p>
+        <p>反过来，这也告诉你作为使用者该怎么做：<b>当它卡住的时候，把完整报错原样贴回去</b>，不要只说「还是不行」——那句话里没有任何它能用的信息。这一点在<a href="tasks.html">练习任务</a>那一页还会再强调一次。</p>
+
+        <h2>最重要的一条原则</h2>
+
+        <p class="center" style="font-size:19px;font-weight:700;margin:26px 0">
+          让模型每一步都能看到<b>上一步的真实结果</b>。
+        </p>
+        <p class="center muted" style="margin-top:-14px">不是你的转述，是原始的文件内容、原始的报错、原始的测试输出。</p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>在聊天框里</h3>
+            <p>你复制代码 → 它猜 → 给你一段新代码 → 你粘贴 → 跑 → 又报错 → 你再复制报错……</p>
+            <p><b>每一轮都要你搬一次，而且你搬的时候会丢信息。</b></p>
+          </div>
+          <div class="card accent">
+            <h3>在 Agent 里</h3>
+            <p>它自己打开文件 → 自己跑 → 自己看到完整报错 → 自己改 → 自己再跑。</p>
+            <p><b>信息一步都没丢，而且不用你搬。</b></p>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">🎯</div>
+          <div class="bd">
+            所以：<b>把「能自己验证」的任务交给 Agent，收益最大；把「只能靠你判断」的任务交给 Agent，收益最小。</b><br>
+            写代码、跑实验、整理数据——能被跑起来验证的，都特别适合。而「帮我想一个论文观点」就不行，因为它没法验证。
+          </div>
+        </div>
+
+        <h2>所以：模型是买来的，循环是设计出来的</h2>
+
+        <p>模型的智力是别人训练好的，你只能<b>选</b>，不能改。但这个循环里的每一个决策——放什么进上下文、给多少权力、什么时候停、怎么处理错误——<b>全都是可以设计的</b>。</p>
+
+        <p>这就是为什么 2024 到 2026 年出现了这么多 Agent 工具：它们常常用的是同一个模型，差别几乎全在循环和它外面那一层。</p>
+
+        <div class="callout warn">
+          <div class="ic">🧭</div>
+          <div class="bd">
+            <span class="t">这改变了一个很常见的提问方式</span>
+            以后选工具的时候，不要只问「它用哪个模型」。要问：<b>它的循环是怎么转的？它给模型看的上下文里有什么？它允许模型动哪些东西？出错时它怎么告诉模型？</b><br>
+            这些问题的答案，比模型名字更能预测它好不好用。
+          </div>
+        </div>
+
+        <h2>这套循环在哪儿能看到</h2>
+        <p>这一页讲的东西听起来像原理，但它其实是你在界面上天天见到的：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:44%">界面上的东西</th><th>对应循环的哪一步</th></tr>
+            <tr><td>「正在读取文件…」「正在运行命令…」</td><td>第 ④ 步：执行工具</td></tr>
+            <tr><td>每一步可展开的工具调用记录</td><td>第 ③④⑤ 步的全过程</td></tr>
+            <tr><td>「是否允许执行这条命令？」</td><td>第 ④ 步之前的闸门</td></tr>
+            <tr><td>聊到一半提示「正在压缩上下文」</td><td>第 ① 步：重新组装上下文</td></tr>
+            <tr><td>它自己发现报错并改好了</td><td>第 ⑤ 步把真实结果写回去，下一圈第 ③ 步做出新决定</td></tr>
+          </table>
+        </div>
+
+        <p>装好工具之后，建议你<b>故意展开一次它的步骤记录看一遍</b>。看着这五步真实地转起来，比读十页文档都管用。</p>
+
+        <div class="pagefoot">
+          <p>下一步 → <a href="c-harness.html">Harness：模型怎么变成产品</a>：这个循环之外，还包着哪些东西。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

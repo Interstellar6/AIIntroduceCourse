@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>模型与 Agent · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>模型与 Agent</h1>
+        <p class="lede">上一页说到，光靠「凭感觉让 AI 写」，你没法为结果负责。原因在于大多数人只用了 AI 能力的一小部分——这一页就讲清楚那个被漏掉的部分是什么。理解了这个差别，后面所有的工具、配置、注意事项就都能串起来了。</p>
+
+        <h2>两种用法</h2>
+        <p>绝大多数人对 AI 的使用，停在下面左边这一列。</p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>用法一：把它当搜索引擎</h3>
+            <ul style="font-size:14.5px;margin:10px 0 0">
+              <li>问它问题，复制答案</li>
+              <li>它说错了，你重新问一遍</li>
+              <li>它说「你可以这样删除文件」，然后<b>你自己去删</b></li>
+              <li>用完关掉网页，一切归零</li>
+            </ul>
+            <p style="margin-top:10px">→ 你在<b>搬运</b>信息。</p>
+          </div>
+          <div class="card accent">
+            <h3>用法二：把它当同事</h3>
+            <ul style="font-size:14.5px;margin:10px 0 0">
+              <li>给它一个目标，不是一句话</li>
+              <li>它<b>自己</b>去读文件、跑命令、看报错</li>
+              <li>报错了它自己改，改完自己再试一次</li>
+              <li>干完给你，还留有完整记录</li>
+            </ul>
+            <p style="margin-top:10px">→ 你在<b>派活</b>。</p>
+          </div>
+        </div>
+
+        <p>差别不在于模型有多聪明，而在于<b>它能不能动手，以及动完手之后能不能看到后果</b>。</p>
+
+        <p>举个具体例子。你在聊天框里说「帮我看看我这段代码为什么报错」，实际的流程是：你复制代码 → 它猜 → 给你一段新代码 → 你粘贴 → 跑 → 又报错 → 你再复制报错……来回好几轮。<br>
+        而在 Agent 里，它自己打开文件、自己跑一遍、自己看到完整的报错、自己改、自己再跑。</p>
+
+        <hr>
+
+        <h2>模型是什么</h2>
+        <p>先把「模型」这个词的定义收窄。一个语言模型的全部工作就是：</p>
+
+        <div class="codeblock"><pre><span class="c">输入一段文字</span>  →  <span class="k">算出下一个字</span>  →  再算下一个字  →  ……  →  <span class="c">停下</span>
+
+这就是一次 API 调用的全部内容。没有别的。</pre></div>
+
+        <p>从这句话能推出三件很重要的事：</p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>它没有记忆</h3>
+            <p>你关掉网页，它连你是谁都不知道。<br>
+            「它记得我」这件事，是软件在外面替它把对话存下来、每次重新念给它听的。</p>
+          </div>
+          <div class="card">
+            <h3>它没有手</h3>
+            <p>它唯一的输出是<b>文字</b>。<br>
+            它说「我已经帮你删掉那个文件了」——<b>其实它什么都没删。它在骗你，而且不是故意的。</b></p>
+          </div>
+          <div class="card">
+            <h3>它是一次性的</h3>
+            <p>你问 → 它答 → 这次调用结束。<br>
+            想让它在中间停下来、看一眼结果、再决定下一步？<b>它自己做不到。</b></p>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">💡</div>
+          <div class="bd">
+            <span class="t">一句话记住</span>
+            模型是一台只会打字的机器，<b>只不过它打出来的字经常是对的</b>。
+          </div>
+        </div>
+
+        <h2>Agent 是什么</h2>
+        <p>Agent 不是一个更强的模型。它是<b>给这个模型配上了一套外部机制</b>：</p>
+
+        <div class="codeblock"><pre><span class="k">Agent</span> = 模型 + 循环 + 工具 + 持久日志</pre></div>
+
+        <div class="cards">
+          <div class="card">
+            <h3><span class="k">1</span> 循环</h3>
+            <p>模型说完不算完。如果它说「我要读 a.py」，程序真的去读，把内容塞回去，<b>再问它一次</b>。转很多圈，直到它不再需要工具。</p>
+            <p>下一页会专门讲这个循环。</p>
+          </div>
+          <div class="card">
+            <h3><span class="k">2</span> 工具</h3>
+            <p>读写文件、执行终端命令、上网搜索、跑代码、派分身。</p>
+            <p><b>模型只负责「说要用哪个」，真正执行的是外面的程序。</b></p>
+          </div>
+          <div class="card">
+            <h3><span class="k">3</span> 日志</h3>
+            <p>每一步都写进一份只追加的记录。所以它可以<b>恢复</b>、可以<b>分叉</b>、可以事后追查它到底干了什么。</p>
+          </div>
+          <div class="card">
+            <h3><span class="k">4</span> 闸门</h3>
+            <p>因为它能真的动你的电脑，所以必须有沙箱和审批：哪些能碰、哪些要先问你。</p>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <span class="t">「闸门」不是可有可无的附属品</span>
+            它是 Agent 能存在的前提。<b>一个没有权限控制的 Agent 不叫 Agent，叫定时炸弹。</b>后面你会在每个工具里见到它——Codex 里叫 <code>sandbox_mode</code> 和 <code>approval_policy</code>，DSH 里就是一个弹窗。
+          </div>
+        </div>
+
+        <p>加上这四样之后，它就从「回答问题的」变成了「<b>干活的</b>」。</p>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 440" role="img" aria-label="模型与 Agent 的对比示意图：模型只能在文字和文字之间转换，不能读文件也不能跑命令；Agent 把模型和工具用循环连起来，工具能操作你的电脑，结果再回到模型">
+            <defs>
+              <marker id="ag1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+              <marker id="ag2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm-g"/>
+              </marker>
+            </defs>
+
+            <!-- ---------- 左：模型 ---------- -->
+            <rect class="panel" x="20" y="20" width="400" height="400" rx="16"/>
+            <text class="t-h t-mid" x="220" y="60">模型</text>
+
+            <rect class="b" x="100" y="88" width="240" height="46" rx="10"/>
+            <text class="t t-mid" x="220" y="116">输入：一段文字</text>
+
+            <path class="ln-g" d="M220,136 V162" marker-end="url(#ag2)"/>
+
+            <rect class="b-s" x="100" y="164" width="240" height="52" rx="10"/>
+            <text class="t-h t-mid" x="220" y="196">模型</text>
+
+            <path class="ln-g" d="M220,218 V244" marker-end="url(#ag2)"/>
+
+            <rect class="b" x="100" y="246" width="240" height="46" rx="10"/>
+            <text class="t t-mid" x="220" y="274">输出：一段文字</text>
+
+            <text class="t-s t-mid" x="220" y="362">没有记忆 · 不能碰你的电脑</text>
+            <text class="t-s t-mid" x="220" y="388">每次调用都是独立的、一次性的</text>
+
+            <!-- ---------- 右：Agent ---------- -->
+            <rect class="panel" x="480" y="20" width="400" height="400" rx="16"/>
+            <text class="t-h t-mid" x="680" y="60">Agent</text>
+
+            <rect class="b-a" x="610" y="86" width="140" height="48" rx="10"/>
+            <text class="t-h t-mid" x="680" y="116">模型</text>
+
+            <rect class="b-a" x="610" y="196" width="140" height="62" rx="10"/>
+            <text class="t-h t-mid" x="680" y="220">工具</text>
+            <text class="t-s t-mid" x="680" y="240">读文件 · 跑命令</text>
+
+            <text class="t-s t-mid" x="680" y="172">循环</text>
+
+            <!-- 模型 → 工具 -->
+            <path class="ln" d="M752,110 H786 V227 H752" marker-end="url(#ag1)"/>
+            <text class="t-s" x="794" y="173">要工具</text>
+            <!-- 工具 → 模型 -->
+            <path class="ln" d="M608,227 H574 V110 H608" marker-end="url(#ag1)"/>
+            <text class="t-s t-end" x="566" y="173">看到结果</text>
+
+            <path class="dash" d="M680,258 V292"/>
+
+            <rect class="b" x="560" y="292" width="240" height="52" rx="10"/>
+            <text class="t t-mid" x="680" y="316">你的电脑</text>
+            <text class="t-s t-mid" x="680" y="334">文件 · 终端 · 网络</text>
+
+            <text class="t-s t-mid" x="680" y="362">能看到真实结果</text>
+            <text class="t-s t-mid" x="680" y="388">记得住做过什么</text>
+          </svg>
+          <figcaption>左边只有文字进、文字出；右边多了<b>一双手</b>和<b>一个循环</b>。差别不在模型有多聪明，在于它做完之后能不能看到后果。</figcaption>
+        </figure>
+
+        <h2>一张表看清区别</h2>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:22%"></th><th style="width:39%">模型（聊天网页 / 裸 API）</th><th>Agent（装在 harness 里）</th></tr>
+            <tr><td><b>你给它</b></td><td>一段话</td><td>一个目标 + 一个工作目录</td></tr>
+            <tr><td><b>它给你</b></td><td>一段话</td><td>文件被改好了 / 实验跑完了</td></tr>
+            <tr><td><b>记忆</b></td><td>只有这一次对话</td><td>持久日志 + 你磁盘上的文件</td></tr>
+            <tr><td><b>能不能碰你电脑</b></td><td>不能</td><td>能（读文件、跑命令、上网）</td></tr>
+            <tr><td><b>出错了</b></td><td>你重新提问</td><td>它看到真实报错，自己改，再试</td></tr>
+            <tr><td><b>一次交互的代价</b></td><td>1 次 API 调用</td><td>可能几十次调用 + 几十条命令</td></tr>
+            <tr><td><b>风险</b></td><td>说错话</td><td>真的删错文件 / 花错钱</td></tr>
+          </table>
+        </div>
+
+        <p>看最后两行。<b>Agent 的代价是「更贵」和「真的会闯祸」</b>——这正好解释了为什么它一定要有审批机制，也解释了为什么<a href="api.html">购买 API</a> 那一页要教你怎么看账单。</p>
+
+        <h2>那你到底该用哪个</h2>
+        <p>Agent 不是「更高级的用法」。它是一个有成本的工具，用错地方只会更慢更贵。</p>
+
+        <p><b>出现下面任何一条，你才需要 Agent：</b></p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>① 任务要碰你的文件</h3>
+            <p>改代码、整理几十个 Excel、批量重命名、跑你的实验脚本。</p>
+          </div>
+          <div class="card">
+            <h3>② 任务需要多步试探</h3>
+            <p>「跑一下，报错了，改一改，再跑」——需要它自己看到结果再决定下一步。</p>
+          </div>
+          <div class="card">
+            <h3>③ 中间过程太多，你不想搬运</h3>
+            <p>几十个文件的输出、几万行日志，你不可能复制粘贴给聊天框。</p>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="ic">🤔</div>
+          <div class="bd">
+            <span class="t">一条都不满足？那就别折腾</span>
+            「解释一下这个概念」「帮我想三个标题」——用聊天网页更快、更便宜。<br>
+            <b>装工具是有成本的</b>：要花钱、要配置、它还可能改错你的文件。工具是给「干活」用的，不是给「聊天」用的。
+          </div>
+        </div>
+
+        <p>这条建议不是客套。很多人装了一堆 Agent，最后还是回去用聊天框——因为他们的任务本来就不需要 Agent，只是听说「这个更强」。</p>
+
+        <h2>把这个理解用到你自己身上</h2>
+        <p>作为一个学生，你的任务里哪些符合上面那三条？</p>
+        <ul>
+          <li><b>整理数据、跑复现实验、管理参考文献</b> —— 非常符合。要碰文件、要多步试探、中间输出很多。</li>
+          <li><b>学会用终端、读懂一篇论文</b> —— 也能用，但价值不一样：它是<b>陪练和助教</b>，不是干活的。</li>
+          <li><b>「帮我写一段论文」</b> —— 不太符合。写作的中间结果没法自动验证，最终判断只能是你。</li>
+        </ul>
+        <p>记住这条判断标准：<b>能被跑起来验证的任务，交给 Agent 收益最大；只能靠你判断的任务，它帮不上多少忙。</b></p>
+
+        <div class="pagefoot">
+          <p>下一步 → <a href="c-prompt.html">怎么跟 Agent 说话</a>：知道了它是什么，接下来学第一句话该怎么说。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

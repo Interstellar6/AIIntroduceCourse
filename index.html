@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>这份手册怎么用 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>把 AI 装进你的电脑</h1>
+        <p class="lede">这是「人工智能导论」第 1 到第 3 节课的完整材料。<b>第 1 节课讲原理</b>，弄明白 AI 到底是什么、为什么装在不同软件里能力差那么多；<b>第 2、3 节课动手</b>，把工具装好、接上模型、真的用起来。</p>
+
+        <div class="callout tip">
+          <div class="ic">💡</div>
+          <div class="bd">
+            <span class="t">先看这一句</span>
+            右上角可以切换 <b>macOS / Linux</b> 和 <b>Windows</b>。切换之后，全站所有命令都会自动换成对应系统的写法——不用自己猜哪条命令该改。
+          </div>
+        </div>
+
+        <h2>这份手册怎么读</h2>
+        <p>左边目录已经按顺序分好了，<b>从上往下看就是推荐路线</b>。三块内容互相独立：只想赶在课上把工具装好，可以直接跳到动手部分；想弄明白背后的道理，就从头看。</p>
+
+        <div class="cards">
+          <div class="card accent">
+            <span class="k">开始</span>
+            <h3>先站到一个位置上</h3>
+            <p>这一页告诉你怎么用这份手册；下一页讲 <b>vibe coding</b>——这门课要讲的一大堆东西，其实都是在回应那个词。</p>
+            <p><a href="c-vibe.html">从「先说说 vibe coding」开始 →</a></p>
+          </div>
+          <div class="card accent">
+            <span class="k">原理 · 第 1 节课</span>
+            <h3>它是什么，靠什么活着</h3>
+            <p>模型和 Agent 差在哪、第一句话该怎么说、会话和上下文是怎么回事、ReAct / Plan-and-Solve / Reflection 三种经典范式、Agent 的循环怎么转、harness 是什么、skill 怎么用、几个工具各自解决什么问题。</p>
+            <p><a href="c-agent.html">从「模型与 Agent」开始 →</a></p>
+          </div>
+          <div class="card accent">
+            <span class="k">动手 · 第 2–3 节课</span>
+            <h3>装上，接上，用起来</h3>
+            <p>买 API、装环境、装四个工具、把它们都接到 DeepSeek 上，最后用三个真实任务练手。</p>
+            <p><a href="api.html">从「拿到你的 API Key」开始 →</a></p>
+          </div>
+        </div>
+
+        <h2>你会得到什么</h2>
+        <p>两个部分做完，你手上会有这些东西：</p>
+
+        <ul class="maplist">
+          <li><span class="n">1</span><div class="bd"><b>一个能花钱的 DeepSeek 账号 + API Key</b>
+            <span>一把「钥匙」，工具才能替你调用模型。一节课的实验量只要几块钱。</span></div></li>
+          <li><span class="n">2</span><div class="bd"><b>Node.js 运行环境</b>
+            <span>下面几个工具里有两个要靠它才能装起来。</span></div></li>
+          <li><span class="n">3</span><div class="bd"><b>DeepSeek Harness（DSH）</b>
+            <span>有网页界面的 Agent 工具。第一次用 AI 干活，从这里开始最省事。</span></div></li>
+          <li><span class="n">4</span><div class="bd"><b>Claude Code</b>
+            <span>读代码、改代码最稳。有<b>终端版和编辑器扩展</b>两种界面。接上 DeepSeek 就能用，不需要买 Anthropic 的账号。</span></div></li>
+          <li><span class="n">5</span><div class="bd"><b>Codex</b>
+            <span>沙箱和权限控制做得最细。命令行、编辑器扩展、桌面端共用一份配置。</span></div></li>
+          <li><span class="n">6</span><div class="bd"><b>cc-switch</b>
+            <span>管理上面这些软件的「连接设置」，在多家模型之间一键切换。只用一家模型的话可以先跳过。</span></div></li>
+        </ul>
+
+        <h2>三节课怎么安排</h2>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:20%">课次</th><th style="width:40%">做什么</th><th>对应哪几页</th></tr>
+            <tr>
+              <td><b>第 1 节课</b><br><span class="muted small">讲 25 分钟 + 动手 20 分钟</span></td>
+              <td>讲原理；然后当场注册、实名、充值、创建 Key，并在终端里成功调用一次模型</td>
+              <td><a href="c-vibe.html">vibe coding</a> → <a href="c-agent.html">模型与 Agent</a> → <a href="c-prompt.html">怎么跟 Agent 说话</a> → <a href="c-session.html">会话与上下文</a> → <a href="c-paradigms.html">三种经典范式</a> → <a href="c-loop.html">Agent 循环</a> → <a href="c-harness.html">Harness</a> → <a href="c-skills.html">Skill</a> → <a href="c-tools.html">工具地图</a>，然后 <a href="api.html">拿到你的 API Key</a></td>
+            </tr>
+            <tr>
+              <td><b>第 2 节课</b><br><span class="muted small">全程上机</span></td>
+              <td>装 Node.js 和 DSH，配好模型，跑通第一个任务；再用极简模式做一次对比实验</td>
+              <td><a href="node.html">安装 Node.js</a> → <a href="dsh.html">DeepSeek Harness</a></td>
+            </tr>
+            <tr>
+              <td><b>第 3 节课</b><br><span class="muted small">全程上机</span></td>
+              <td>装 Claude Code 和 Codex（都直连 DeepSeek），需要的话再装 cc-switch；然后做四个练习任务</td>
+              <td><a href="claude-code.html">Claude Code</a> → <a href="codex.html">Codex</a> → <a href="cc-switch.html">cc-switch</a> → <a href="tasks.html">四个练习任务</a></td>
+            </tr>
+          </table>
+        </div>
+
+        <h2>开始前的准备</h2>
+        <p>下面这些准备好了，整个过程会顺很多。没准备好也能开始，中途补也行。</p>
+
+        <ul class="checklist">
+          <li><input type="checkbox"><label>一台你自己的电脑（Windows / macOS / Linux 都行），能连网</label></li>
+          <li><input type="checkbox"><label>能收验证码的手机号或邮箱账号</label></li>
+          <li><input type="checkbox"><label>实名认证需要的信息（中国大陆充值的前置条件）</label></li>
+          <li><input type="checkbox"><label>一点充值预算（学生实验几元到十几元足够）</label></li>
+          <li><input type="checkbox"><label>知道自己的系统是 Windows 还是 macOS / Linux</label></li>
+          <li><input type="checkbox"><label>一个打算用来做实验的空文件夹（后面会建，叫 <code>ai-lab</code>）</label></li>
+        </ul>
+
+        <div class="callout warn">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <span class="t">一条从现在开始就要养成的习惯</span>
+            <b>永远让 AI 在一个专门的练习文件夹里干活。</b>不要一上来就把它指向你的论文、你的代码仓库、你的桌面。等你熟悉它的脾气了，再逐步放开权限。
+          </div>
+        </div>
+
+        <h2>资料的真实性</h2>
+        <p>这份手册里的事实（模型名字、地址、命令、价格）都在 <b>2026 年 9 月 18 日</b>核对过官方文档。</p>
+        <p>但 AI 这个领域的材料半年前就可能失效——网上现在还有大量教程在用已经停用的模型名。如果你发现哪一步和官方文档对不上，<b>以官方文档为准，不要以这份手册为准</b>，包括老师讲的和我写的。</p>
+
+        <div class="callout danger">
+          <div class="ic">🔐</div>
+          <div class="bd">
+            <span class="t">绝对不要做的事</span>
+            不要把你的 API Key 发到班级群、贴到截图里、提交到 GitHub。它就是你账户里的钱，别人拿到就能花。后面每一步都会再提醒你一次。
+          </div>
+        </div>
+
+        <h2>遇到问题</h2>
+        <p>先翻 <a href="help.html">排错 · 术语 · 速查</a>——九成的问题那里都有答案，包括报错对照表、术语表和全部命令的速查。</p>
+
+        <div class="pagefoot">
+          <p>准备好了就从 <a href="c-agent.html">模型与 Agent</a> 开始；如果只想赶紧把工具装上，直接去 <a href="api.html">拿到你的 API Key</a>。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

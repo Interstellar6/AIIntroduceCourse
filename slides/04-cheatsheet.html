@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>速查卡 · 术语 / 命令 / 协议</title>
+<link rel="stylesheet" href="assets/deck.css">
+</head>
+<body>
+
+<div id="viewport">
+<div id="stage">
+
+<!-- ===================== 术语 ===================== -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>速查卡 1 / 4 · 术语</div>
+  <h1 class="sm">这些词，听懂就够用了</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="card">
+        <h3>基本概念</h3>
+        <table class="kv fs-15 compact">
+          <tr><td><strong>模型</strong></td><td>输入文字 → 输出文字。没记忆、没手、一次调用就结束</td></tr>
+          <tr><td><strong>Agent</strong></td><td>模型 + 循环 + 工具 + 持久日志，能把事真的做完</td></tr>
+          <tr><td><strong>Agent Loop</strong></td><td>组装上下文 → 请求模型 → 调工具 → 结果写回 → 再请求</td></tr>
+          <tr><td><strong>Harness</strong></td><td>把模型包装成能干活的产品的那一整套工程</td></tr>
+          <tr><td><strong>轮次 Turn</strong></td><td>你发一句话，它一直干到停下来</td></tr>
+          <tr><td><strong>步骤 Step</strong></td><td>一次模型请求 + 它引发的工具执行</td></tr>
+          <tr><td><strong>预设 Preset</strong></td><td>给一个会话装哪些工具、什么规矩（标准/极简/PTC/创造）</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>上下文与安全</h3>
+        <table class="kv fs-15 compact">
+          <tr><td><strong>上下文窗口</strong></td><td>模型一次能「同时看到」的全部文字，有上限</td></tr>
+          <tr><td><strong>压缩 Compaction</strong></td><td>快满了就把前面的对话总结掉腾地方，<strong>代价是丢细节</strong></td></tr>
+          <tr><td><strong>系统提示词</strong></td><td>你看不见、但它每轮都在读的那段话</td></tr>
+          <tr><td><strong>流式 Streaming</strong></td><td>token 一个个吐出来，不代表更快，只是更早看见</td></tr>
+          <tr><td><strong>沙箱 Sandbox</strong></td><td>它能碰哪些目录、哪些命令</td></tr>
+          <tr><td><strong>审批 Approval</strong></td><td>哪些操作必须先问过你</td></tr>
+          <tr><td><strong>子代理 Subagent</strong></td><td>派一个干净的分身去干独立的事，不污染主对话</td></tr>
+          <tr><td><strong>计划 / 目标模式</strong></td><td>动手前先给你看方案 / 给个长期目标让它自己接着干</td></tr>
+        </table>
+      </div>
+    </div>
+    <p class="fs-17 center dim">两条最实用的经验：<strong>需要留下的东西让它写进文件</strong>；<strong>换任务就开新会话</strong>。</p>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 速查卡</span><span class="pgnum"></span></div>
+  <aside class="notes"><p>可以投影出来让学生拍照，或者按 <code>P</code> 导出 PDF 打印。</p></aside>
+</section>
+
+<!-- ===================== 三要素与协议 ===================== -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>速查卡 2 / 4 · 三要素与协议</div>
+  <h1 class="sm">配任何工具，只需要这三样 + 一个协议</h1>
+  <div class="body">
+    <div class="cols c3">
+      <div class="card accent">
+        <h3>base_url</h3>
+        <p class="fs-15">发到哪台服务器</p>
+        <pre class="sm" style="margin-top:6px">https://api.deepseek.com</pre>
+        <p class="fs-15 bad" style="margin-top:6px">别凭印象加 <code>/v1</code></p>
+      </div>
+      <div class="card accent">
+        <h3>API Key</h3>
+        <p class="fs-15">你是谁，从谁账上扣钱</p>
+        <pre class="sm" style="margin-top:6px">sk-xxxxxxxxxxxx</pre>
+        <p class="fs-15 bad" style="margin-top:6px">就是你的钱，别外传</p>
+      </div>
+      <div class="card accent">
+        <h3>model id</h3>
+        <p class="fs-15">要哪一个模型</p>
+        <pre class="sm" style="margin-top:6px">deepseek-flash
+deepseek-v4-pro</pre>
+        <p class="fs-15 bad" style="margin-top:6px"><code>deepseek-chat</code> 已停用</p>
+      </div>
+    </div>
+    <div class="cols c2 grow">
+      <div class="card">
+        <h3>DeepSeek 三种协议地址（一个 Key 通用）</h3>
+        <table class="kv fs-15 compact">
+          <tr><td>OpenAI 格式</td><td><code>https://api.deepseek.com</code></td></tr>
+          <tr><td>Responses（Codex）</td><td><code>https://api.deepseek.com</code></td></tr>
+          <tr><td>Anthropic（Claude Code）</td><td><code>https://api.deepseek.com/anthropic</code></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>报错对照表</h3>
+        <table class="kv fs-15 compact">
+          <tr><td class="bad">401</td><td>Key 错 / 没填 / 多了空格</td></tr>
+          <tr><td class="bad">402</td><td>余额不足，去充值</td></tr>
+          <tr><td class="bad">400 · Model Not Exist</td><td>model id 写错</td></tr>
+          <tr><td class="bad">404 / 连不上</td><td>base_url 或路径错</td></tr>
+          <tr><td class="bad">429</td><td>请求太快，或并发到顶</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 速查卡</span><span class="pgnum"></span></div>
+  <aside class="notes"><p>这三样填错任何一样都通不了，而这是新手 90% 的报错来源。</p></aside>
+</section>
+
+<!-- ===================== 命令 · 装 ===================== -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>速查卡 3 / 4 · 命令（装工具）</div>
+  <h1 class="sm">从零到有环境</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="stack">
+        <div class="card">
+          <h3>① 第一次调用（任何系统）</h3>
+          <pre class="sm">export DS_KEY="sk-你的Key"
+curl https://api.deepseek.com/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $DS_KEY" \
+  -d '{"model":"deepseek-flash","messages":[
+       {"role":"user","content":"你好"}]}'</pre>
+        </div>
+        <div class="card">
+          <h3>② DeepSeek Harness（网页界面）</h3>
+          <pre class="sm">mkdir -p ~/ai-lab &amp;&amp; cd ~/ai-lab
+npx @deepseek-ai/dsh web
+<span class="c"># 浏览器打开 http://127.0.0.1:3080</span></pre>
+          <p class="fs-15 dim" style="margin-top:6px">先 <code>cd</code> 到工作目录，再启动。</p>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h3>③ cc-switch（管配置的开关面板）</h3>
+          <pre class="sm">brew tap farion1231/ccswitch
+brew install --cask cc-switch
+<span class="c"># 或去 GitHub Releases 下 .dmg / .msi</span></pre>
+        </div>
+        <div class="card">
+          <h3>④ Claude Code</h3>
+          <pre class="sm">curl -fsSL https://claude.ai/install.sh | bash
+claude --version &amp;&amp; claude doctor</pre>
+        </div>
+        <div class="card">
+          <h3>⑤ Codex</h3>
+          <pre class="sm">curl -fsSL https://chatgpt.com/codex/install.sh | sh
+codex   <span class="c"># 先跑一次，建出 ~/.codex 目录</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 速查卡</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>Windows 对应命令：Claude Code → <code>irm https://claude.ai/install.ps1 | iex</code>；Codex → <code>powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"</code>。DSH 的前置条件是 Node 22 或更新。</p>
+  </aside>
+</section>
+
+<!-- ===================== 命令 · 接 ===================== -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span>速查卡 4 / 4 · 命令（接上模型）</div>
+  <h1 class="sm">让两个终端 Agent 都用上 DeepSeek</h1>
+  <div class="body">
+    <div class="cols c2 grow">
+      <div class="stack">
+        <div class="card">
+          <h3>Claude Code → DeepSeek</h3>
+          <pre class="sm">export ANTHROPIC_BASE_URL=\
+  https://api.deepseek.com/anthropic
+export ANTHROPIC_AUTH_TOKEN="sk-你的Key"
+export ANTHROPIC_MODEL=deepseek-flash[1m]
+export ANTHROPIC_DEFAULT_OPUS_MODEL=\
+  deepseek-flash[1m]
+export ANTHROPIC_DEFAULT_SONNET_MODEL=\
+  deepseek-flash[1m]
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek-flash
+export CLAUDE_CODE_SUBAGENT_MODEL=deepseek-flash
+export CLAUDE_CODE_EFFORT_LEVEL=max</pre>
+        </div>
+        <div class="card good">
+          <h3>验证</h3>
+          <pre class="sm">cd 你的项目目录 &amp;&amp; claude
+/status   <span class="c"># 看 base URL 是不是 api.deepseek.com</span></pre>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h3>Codex → DeepSeek（官方一键脚本）</h3>
+          <pre class="sm">bash &lt;(curl -fsSL https://cdn.deepseek.com/\
+api-docs/codex-deepseek-setup.sh)
+
+<span class="c"># 菜单：1 = flash，2 = v4-pro，9 = 还原默认</span></pre>
+        </div>
+        <div class="card">
+          <h3>建议的安全组合</h3>
+          <pre class="sm">codex --sandbox workspace-write \
+      --ask-for-approval on-request</pre>
+          <p class="fs-15 dim" style="margin-top:6px">允许它在工作目录里干活，但每走一步先问你。</p>
+        </div>
+        <div class="card warn">
+          <h3>一句话提醒</h3>
+          <p class="fs-15">这两条路<strong>都不需要中转站</strong>。命令会随版本变化，配不通时以官方文档为准。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">人工智能导论 · 速查卡</span><span class="pgnum"></span></div>
+  <aside class="notes">
+    <p>PowerShell 里 <code>export A=B</code> 要写成 <code>$env:A="B"</code>。</p>
+    <p>Claude Code 的这几行只对当前终端窗口有效，关掉就没了；想永久生效写进 <code>~/.zshrc</code>，或用 cc-switch 一键写进 <code>~/.claude/settings.json</code>。</p>
+  </aside>
+</section>
+
+</div>
+</div>
+
+<div id="progress"></div>
+<div id="toast"></div>
+<div id="notes-panel"></div>
+<div id="hud">
+  <button data-act="ov" title="总览 (O)">总览</button>
+  <button data-act="notes" title="讲稿 (S)">讲稿</button>
+  <button data-act="theme" title="明暗 (T)">明暗</button>
+  <button data-act="fs" title="全屏 (F)">全屏</button>
+  <button data-act="print" title="导出 PDF (P)">导出 PDF</button>
+  <button data-act="prev" title="上一页">←</button>
+  <span class="pos">1/1</span>
+  <button data-act="next" title="下一页">→</button>
+</div>
+
+<script src="assets/deck.js"></script>
+</body>
+</html>

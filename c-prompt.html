@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>怎么跟 Agent 说话 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>怎么跟 Agent 说话</h1>
+        <p class="lede">上一页讲了 Agent 和聊天框的差别。这一页讲一个更实际的问题：<b>知道它是什么之后，第一句话该怎么说？</b>跟 Agent 说话的方式和跟聊天框很不一样——因为它会动手，说错了代价不一样。</p>
+
+        <h2>它不知道的三件事</h2>
+        <p>大部分「它怎么这么笨」的时刻，其实是你漏说了下面某一件事：</p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>它看不到你的屏幕</h3>
+            <p>你在想什么、你刚才试过什么、哪个文件是相关的——它<b>一概不知道</b>，除非你说，或者它自己去翻。</p>
+          </div>
+          <div class="card">
+            <h3>它不知道你的「好」是什么标准</h3>
+            <p>「优化一下」是快？是短？是省内存？是更好懂？<b>你说不清，它就只能自己挑一个。</b></p>
+          </div>
+          <div class="card">
+            <h3>它不知道哪些东西碰了会出事</h3>
+            <p>哪个文件不能动、哪个目录里是重要数据、哪条命令跑了就回不来——<b>它没有这个常识。</b></p>
+          </div>
+        </div>
+
+        <p>所以好的第一句话，本质上是在补上这三个缺口。</p>
+
+        <h2>三件事：目标、边界、验收</h2>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:18%">要素</th><th style="width:34%">回答什么问题</th><th>反例</th></tr>
+            <tr>
+              <td><b>目标</b></td>
+              <td>你要的<b>结果</b>是什么（不是你要它做哪些动作）</td>
+              <td>「把这段改改」</td>
+            </tr>
+            <tr>
+              <td><b>边界</b></td>
+              <td>能碰什么、绝对不能碰什么</td>
+              <td>（大多数人根本不提）</td>
+            </tr>
+            <tr>
+              <td><b>验收</b></td>
+              <td>怎么算做完了？<b>跑什么能证明它是对的？</b></td>
+              <td>「做好一点」</td>
+            </tr>
+          </table>
+        </div>
+
+        <p>第三项是最容易被忽略、也最有用的。<b>如果你能说出一条「跑完看到什么就算成功」的命令，就一定要说出来。</b>它不只是帮你验收，还会直接改变它的做法——因为它知道最后要被检验。</p>
+
+        <h2>一个可以套用的骨架</h2>
+        <div class="codeblock"><pre data-lang="第一句话">目标：<span class="c">一句话说清你要的结果</span>
+位置：<span class="c">相关的文件 / 目录在哪</span>
+验收：<span class="c">跑什么、看到什么就算对</span>
+边界：<span class="c">不要动什么</span></pre></div>
+
+        <p>填进去大概长这样：</p>
+
+        <div class="codeblock"><pre data-lang="例子">data/ 目录下有三个 csv，列的顺序不一样，但表头含义相同。
+把它们合并成一个 merged.csv，统一列顺序，在报告里告诉我
+你按什么规则对齐的列。
+
+验收：merged.csv 的行数应该等于三个文件行数之和，
+     用 python 读一遍确认没有空行和数据错位。
+
+边界：不要改 data/ 里的原始文件。</pre></div>
+
+        <p>对比一下同一件事的另一种说法：<b>「帮我把这几个 csv 合并一下」</b>。</p>
+        <p>后者也能跑起来，但你会得到：列对错了你不知道、原始文件被覆盖了、行数少了几十行也没人告诉你。<b>省下的那两行字，要用三轮来回补。</b></p>
+
+        <h2>好一点的说法 vs 差一点的说法</h2>
+        <div class="tw">
+          <table>
+            <tr><th style="width:32%">差一点</th><th style="width:38%">好一点</th><th>差在哪</th></tr>
+            <tr>
+              <td>帮我改改这个代码</td>
+              <td><code>src/parser.py</code> 里 <code>handle_input</code> 遇到空字符串会崩，修掉它，然后跑 <code>pytest tests/test_parser.py</code> 确认通过</td>
+              <td>给了<b>位置</b>、<b>现象</b>、<b>验收方式</b></td>
+            </tr>
+            <tr>
+              <td>优化一下这个函数</td>
+              <td>把 <code>find_primes</code> 的时间复杂度从 O(n√n) 降到 O(n log log n)，输出必须和现在完全一致</td>
+              <td>「优化」是个没有标准的词，<b>换成可验证的目标</b></td>
+            </tr>
+            <tr>
+              <td>帮我写个脚本</td>
+              <td>写个脚本，把 <code>logs/</code> 下所有 .log 里含 ERROR 的行抽出来按日期汇总。用 Python，依赖越少越好</td>
+              <td>补上了<b>输入在哪、输出是什么、约束是什么</b></td>
+            </tr>
+            <tr>
+              <td>它还是不行</td>
+              <td><span class="muted">（见下一节）</span></td>
+              <td>这句话里<b>没有任何信息</b></td>
+            </tr>
+          </table>
+        </div>
+
+        <h2>反馈的质量，决定结果的质量</h2>
+        <p>这是整页最重要的一节。Agent 是靠<b>真实结果</b>来修正自己的，你反馈的信息量直接决定它能不能改对。</p>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 300" role="img" aria-label="反馈质量对照图：从「还是不行」到「完整报错加期望加实际」，信息量越高，Agent 越能据此行动">
+            <text class="t-s" x="58" y="30">你回给它的那句话</text>
+            <text class="t-s t-end" x="842" y="30">它能不能据此行动</text>
+
+            <rect class="b-r" x="40" y="44" width="820" height="48" rx="10"/>
+            <text class="t-b" x="58" y="74">「还是不行」</text>
+            <text class="t-r t-end" x="842" y="74">✗ 完全没法行动——它只能猜</text>
+
+            <rect class="b-r" x="40" y="100" width="820" height="48" rx="10"/>
+            <text class="t-b" x="58" y="130">「报错了」</text>
+            <text class="t-r t-end" x="842" y="130">✗ 还是只能猜</text>
+
+            <rect class="b-w" x="40" y="156" width="820" height="48" rx="10"/>
+            <text class="t-b" x="58" y="186">「报错了：KeyError: 'name'」</text>
+            <text class="t-w t-end" x="842" y="186">△ 有线索了，但还得猜在哪</text>
+
+            <rect class="b-g" x="40" y="212" width="820" height="48" rx="10"/>
+            <text class="t-b" x="58" y="242">完整报错 + 我期望什么 + 实际发生了什么</text>
+            <text class="t-g t-end" x="842" y="242">✓ 它能直接定位问题</text>
+
+            <text class="t-s t-mid" x="450" y="286">信息越具体，它一次改对的概率越高——你也少来回几轮</text>
+          </svg>
+          <figcaption>把报错<b>原样</b>贴回去，比你自己总结一遍要好。你总结的时候会丢掉关键细节，而它需要那些细节。</figcaption>
+        </figure>
+
+        <h3>什么算「完整的反馈」</h3>
+        <p>一句话里尽量包含这三样：</p>
+        <ol class="steps">
+          <li><h3>我做了什么</h3><p>「我按你说的跑了 <code>python snake.py</code>」</p></li>
+          <li><h3>我看到了什么</h3><p>把真实的输出或报错<b>整段</b>贴出来，不要只挑一行</p></li>
+          <li><h3>我期望什么</h3><p>「我以为会出现游戏画面，结果窗口一闪就没了」——很多人会漏掉这一句</p></li>
+        </ol>
+
+        <div class="callout danger">
+          <div class="ic">🚫</div>
+          <div class="bd">
+            <span class="t">不要说「还是不行」</span>
+            这四个字对它来说等于零信息。它只能靠猜——而它一旦开始猜，你就要陪着它猜很多轮。
+          </div>
+        </div>
+
+        <h2>什么时候说步骤，什么时候别说</h2>
+        <p>一个常见的误区是：把每一步都指挥得死死的。这通常会让结果更差。<b>说清目标和验收，把「怎么做」留给它</b>——它能看到你看不到的报错，随时调整。</p>
+        <p>但有三种情况必须你来说：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:34%">情况</th><th>你该怎么说</th></tr>
+            <tr>
+              <td><b>顺序有严格要求</b></td>
+              <td>「必须先备份再改，顺序不能反」</td>
+            </tr>
+            <tr>
+              <td><b>涉及不可逆的操作</b></td>
+              <td>「先别动手，把你的计划列出来给我看」——对应<a href="c-session.html">计划模式</a></td>
+            </tr>
+            <tr>
+              <td><b>有必须遵守的规范</b></td>
+              <td>「所有输出用中文，代码注释只写为什么、不写是什么」——这类反复出现的要求，更适合写成 <a href="c-skills.html">skill</a></td>
+            </tr>
+          </table>
+        </div>
+
+        <h2>和聊天框说话的五个不同</h2>
+        <div class="tw">
+          <table>
+            <tr><th style="width:32%">在聊天框里</th><th>在 Agent 里</th></tr>
+            <tr>
+              <td>粘贴代码片段</td>
+              <td><b>说路径</b>。「<code>src/app.py</code> 的第 3 个函数」比粘贴整段代码更有效，因为它能自己去看、还能看到上下文</td>
+            </tr>
+            <tr>
+              <td>想问什么问什么</td>
+              <td><b>先划边界</b>。它会真的动手，所以「不要动 X」和「要做什么」一样重要</td>
+            </tr>
+            <tr>
+              <td>你复制报错给它</td>
+              <td><b>让它自己跑</b>。它就在你的电脑上，能拿到第一手的报错，比你转述的完整</td>
+            </tr>
+            <tr>
+              <td>一问一答</td>
+              <td><b>一次可以给一个完整任务</b>。它一轮里能连着做几十步，不用你一句话指挥一个动作</td>
+            </tr>
+            <tr>
+              <td>关掉网页就没了</td>
+              <td><b>相关的东西要在一起</b>。要么放在同一个目录里让它看到，要么写进文件</td>
+            </tr>
+          </table>
+        </div>
+
+        <h2>迭代：一轮一轮来</h2>
+        <p>跟 Agent 干活不是一个「写对提示词」的动作，而是一个来回的过程：</p>
+
+        <ol class="steps">
+          <li>
+            <h3>给任务和目标</h3>
+            <p>用它第一句话的骨架。不要一开始就把所有细节说完——你不确定它会遇到什么。</p>
+          </li>
+          <li>
+            <h3>自己先看结果</h3>
+            <p>别急着夸也别急着骂。<b>跑一遍、打开文件看一眼</b>，你才知道真实情况是什么。</p>
+          </li>
+          <li>
+            <h3>反馈真实差距</h3>
+            <p>用上面那三样：我做了什么、看到什么、期望什么。</p>
+          </li>
+          <li>
+            <h3>连续卡住三次，就改需求</h3>
+            <p>这一条最反直觉，也最省时间——见下。</p>
+          </li>
+        </ol>
+
+        <div class="callout good">
+          <div class="ic">🔁</div>
+          <div class="bd">
+            <span class="t">「卡住三次就改需求」是什么意思</span>
+            <p>如果它在同一个问题上失败了三轮，问题多半不在它的实现，而在于<b>你给的要求本身有问题</b>——可能是目标互相冲突、可能是前提假设不成立、可能是这件事根本做不到。</p>
+            <p>这时候继续让它「再试一次」，只是在烧钱。<b>换一个更容易达成的目标，或者把任务拆小一点。</b></p>
+            <p>改需求，比改代码便宜得多。</p>
+          </div>
+        </div>
+
+        <h2>五句可以立刻用起来的话</h2>
+        <div class="tw">
+          <table>
+            <tr><th style="width:44%">说法</th><th>什么时候用</th></tr>
+            <tr>
+              <td>「先别动手，把你的计划列给我看」</td>
+              <td>任务比较大、或者会动到重要文件时</td>
+            </tr>
+            <tr>
+              <td>「做完之后跑一遍 X，把输出贴给我」</td>
+              <td>你希望它自己验证，而不是嘴上报个「完成了」</td>
+            </tr>
+            <tr>
+              <td>「有不确定的地方先问我，不要自己猜」</td>
+              <td>需求里有你才知道的信息时</td>
+            </tr>
+            <tr>
+              <td>「只改这个文件，其他都不要动」</td>
+              <td>想缩小影响范围的时候</td>
+            </tr>
+            <tr>
+              <td>「说说你为什么这么做」</td>
+              <td>它给的方案你看不懂、或者想顺便学点东西</td>
+            </tr>
+          </table>
+        </div>
+
+        <h2>一个反直觉但很有用的建议：说「为什么」</h2>
+        <p>很多时候，告诉它<b>动机</b>比告诉它<b>要求</b>更有用。因为它可以据此做出你没说出口的取舍。</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:38%">只说要求</th><th>加上动机</th></tr>
+            <tr>
+              <td>「给这个函数写注释」</td>
+              <td>「我要交作业，老师会挨个问每行代码在干什么」<br><span class="small muted">→ 它会写解释性的注释，而不是复述代码</span></td>
+            </tr>
+            <tr>
+              <td>「把这段改快一点」</td>
+              <td>「这个函数每次实验要跑几百万次」<br><span class="small muted">→ 它会去关注算法复杂度，而不是微调写法</span></td>
+            </tr>
+            <tr>
+              <td>「整理一下这些数据」</td>
+              <td>「我要用这些数据画图放进论文里，所以要能说明每个数字从哪来」<br><span class="small muted">→ 它会保留来源，而不是直接覆盖原文件</span></td>
+            </tr>
+          </table>
+        </div>
+
+        <h2>四个常见错误</h2>
+        <div class="tw">
+          <table>
+            <tr><th style="width:34%">错误</th><th>后果</th></tr>
+            <tr>
+              <td><b>一句话里塞十个任务</b></td>
+              <td>它做完前两个就忘了后面。拆成几个任务，或者让它先列个清单</td>
+            </tr>
+            <tr>
+              <td><b>把它当搜索引擎</b></td>
+              <td>「XX 是什么意思」这种问题，用聊天框更快更便宜。Agent 的价值在<b>动手</b></td>
+            </tr>
+            <tr>
+              <td><b>不给验收标准就要求「做好一点」</b></td>
+              <td>它会给你一个它认为的「好」，然后你们对「好」的理解不一致，来回扯</td>
+            </tr>
+            <tr>
+              <td><b>你自己还没想清楚要什么</b></td>
+              <td>这一条无解。<b>先花两分钟把目标写下来</b>，比多来回十轮便宜</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">🧠</div>
+          <div class="bd">
+            <span class="t">一句话总结这一页</span>
+            跟 Agent 说话，与其说是「写提示词」，不如说是<b>在派活</b>：<br>
+            <b>说清要什么、划清范围、给出验收方式，然后把怎么做留给它。</b>
+          </div>
+        </div>
+
+        <div class="pagefoot">
+          <p>下一步 → <a href="c-session.html">会话与上下文</a>：说完这一句话之后，一次对话到底是怎么进行的、什么时候该重开。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

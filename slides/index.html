@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人工智能导论 · 如何用 AI（三节课课程包）</title>
+<style>
+  :root{
+    --blue:#4d6bfe; --blue-d:#2f4be0; --ink:#12172b; --ink2:#3d4560; --ink3:#6b7490;
+    --line:#e3e7f1; --bg:#f6f8fd; --card:#fff; --code:#f2f4fa;
+    --good:#14875a; --good-bg:#e7f7ef; --warn:#a86400; --warn-bg:#fdf3e0; --bad:#c02b46; --bad-bg:#fdecef;
+    --mono:"SF Mono",Menlo,Consolas,monospace;
+    --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.65;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1020px;margin:0 auto;padding:56px 28px 100px}
+  header{border-bottom:2px solid var(--line);padding-bottom:28px;margin-bottom:36px}
+  .tagline{font-size:14px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin:0 0 12px}
+  h1{font-size:40px;line-height:1.2;margin:0 0 14px;letter-spacing:-.02em}
+  .lede{font-size:18px;color:var(--ink2);margin:0;max-width:44em}
+  h2{font-size:22px;margin:46px 0 16px;letter-spacing:-.01em}
+  h2 .n{color:var(--blue);font-family:var(--mono);font-size:16px;margin-right:8px}
+  p{margin:0 0 12px}
+  a{color:var(--blue-d)}
+  code{font-family:var(--mono);font-size:.88em;background:var(--code);border:1px solid var(--line);
+       border-radius:6px;padding:1px 6px}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:1fr 1fr}
+  @media(max-width:820px){.g3,.g2{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .card h3{margin:0 0 6px;font-size:19px}
+  .card .meta{font-size:13px;color:var(--ink3);font-family:var(--mono);margin-bottom:10px}
+  .card p{font-size:15px;color:var(--ink2);margin-bottom:10px}
+  .card ol,.card ul{font-size:15px;color:var(--ink2);margin:0;padding-left:1.3em}
+  .card li{margin-bottom:4px}
+  .btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;
+       font-size:15px;padding:9px 16px;border-radius:9px;margin-top:4px}
+  .btn:hover{background:var(--blue-d)}
+  .btn.ghost{background:transparent;color:var(--blue-d);border:1px solid var(--blue)}
+  table{width:100%;border-collapse:collapse;font-size:15px;background:var(--card);
+        border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);background:#fafbff}
+  tr:last-child td{border-bottom:none}
+  td.mono{font-family:var(--mono);white-space:nowrap;font-size:14px}
+  .note{border-radius:12px;padding:16px 20px;font-size:15px;margin:16px 0}
+  .note.warn{background:var(--warn-bg);border:1px solid #f0dcb4}
+  .note.bad{background:var(--bad-bg);border:1px solid #f4c6cf}
+  .note.good{background:var(--good-bg);border:1px solid #bfe6d3}
+  .note strong{color:var(--ink)}
+  .note ul{margin:8px 0 0;padding-left:1.2em}
+  .note li{margin-bottom:4px}
+  .kbd{font-family:var(--mono);background:#fff;border:1px solid var(--line);border-bottom-width:2px;
+       border-radius:6px;padding:1px 6px;font-size:13px}
+  footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);font-size:14px;color:var(--ink3)}
+  .pill{display:inline-block;font-size:12px;font-weight:800;padding:2px 9px;border-radius:999px;
+        background:#eaefff;color:var(--blue-d);border:1px solid #c9d5ff;margin-right:6px}
+  .pill.g{background:var(--good-bg);color:var(--good);border-color:#bfe6d3}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="tagline">人工智能导论 · 课堂幻灯片</p>
+  <h1>从模型到 Agent：把 AI 装进你的电脑</h1>
+  <p class="lede">一节课讲清概念，两节课动手装好。三节课之后，学生手上会有一个能真的读写文件、跑命令、自己纠错的 AI，而不只是一个会聊天的网页。</p>
+</header>
+
+<div class="note good">
+  <strong>上课用的放映文件在这里。</strong>
+  发给学生自己跟着做的<b>网页版实操手册</b>是另一套，在 <a href="../index.html">../index.html</a>——学生照着那个页面一步步装就行，不需要看幻灯片。
+</div>
+
+<h2><span class="n">01</span>三节课，直接开始讲</h2>
+<div class="grid g3">
+
+  <div class="card">
+    <h3>第 1 讲 · 讲概念</h3>
+    <p class="meta">45 分钟 = 讲 25 + 动手 20</p>
+    <p>模型 vs Agent、会话模式、Agent 模式、Loop Engineering、Harness、基础术语、一切皆插件、工具地图。</p>
+    <p><strong>当场完成：</strong>注册 DeepSeek、充值、拿到 API Key，并在终端跑出第一次调用。</p>
+    <a class="btn" href="01-lecture.html">打开第 1 讲 →</a>
+  </div>
+
+  <div class="card">
+    <h3>第 2 讲 · 装上</h3>
+    <p class="meta">45 分钟 · 全程上机</p>
+    <p>搞懂「配置文件」这件事 → 装 cc-switch → 装 DeepSeek Harness → 配模型、选工作区、跑通第一个会话 → 用极简模式做对比实验。</p>
+    <p><strong>当场完成：</strong>让 AI 在你们的目录里真的创建出文件。</p>
+    <a class="btn" href="02-setup.html">打开第 2 讲 →</a>
+  </div>
+
+  <div class="card">
+    <h3>第 3 讲 · 用起来</h3>
+    <p class="meta">45 分钟 · 全程上机</p>
+    <p>装 Claude Code 和 Codex，都直连 DeepSeek（<strong>全程不用中转站</strong>）。然后做三个任务：教终端、写贪吃蛇、读 Transformer 论文。</p>
+    <p><strong>当场完成：</strong>至少完整做完一个任务并演示。</p>
+    <a class="btn" href="03-tasks.html">打开第 3 讲 →</a>
+  </div>
+
+</div>
+
+<div class="note good">
+  <strong>放映方式：</strong>双击任意 HTML 文件即可，<strong>完全离线、不依赖网络和 CDN</strong>。
+  <span class="kbd">←</span> <span class="kbd">→</span> 翻页 ·
+  <span class="kbd">O</span> 总览 ·
+  <span class="kbd">S</span> 开关讲稿 ·
+  <span class="kbd">F</span> 全屏 ·
+  <span class="kbd">T</span> 明暗 ·
+  <span class="kbd">P</span> 导出 PDF（打印时每页一张）。
+</div>
+
+<h2><span class="n">02</span>时间怎么分配</h2>
+<table>
+  <tr><th style="width:16%">课次</th><th style="width:42%">内容</th><th>时长建议</th></tr>
+  <tr>
+    <td><strong>第 1 讲</strong></td>
+    <td>概念讲解（含 10 个小节的过渡页）</td>
+    <td class="mono">25 min（约 40 秒/页，过渡页更快）</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>实操 A：注册 → 实名 → 充值 → 建 Key → 第一次 curl</td>
+    <td class="mono">20 min</td>
+  </tr>
+  <tr>
+    <td><strong>第 2 讲</strong></td>
+    <td>开场检查上节课作业 + 讲配置文件</td>
+    <td class="mono">8 min</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>实操 1：装 cc-switch</td>
+    <td class="mono">8 min</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>讲 DSH + 实操 2：装好并启动</td>
+    <td class="mono">12 min</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>实操 3–4：配模型、选工作区、第一个会话、极简模式对比</td>
+    <td class="mono">15 min</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>排错 + 作业</td>
+    <td class="mono">2 min</td>
+  </tr>
+  <tr>
+    <td><strong>第 3 讲</strong></td>
+    <td>装 Claude Code + 接 DeepSeek</td>
+    <td class="mono">10 min</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>装 Codex + 接 DeepSeek + 沙箱与审批</td>
+    <td class="mono">10 min</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>三个任务（每人至少完整做完一个）</td>
+    <td class="mono">20 min</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>收尾 + 课后资料</td>
+    <td class="mono">5 min</td>
+  </tr>
+</table>
+
+<div class="note warn">
+  <strong>上机课的节奏原则：讲一段，做一段。</strong>不要一口气讲完再让大家动手——一半人会卡在第一步，而你只有一个人。
+  建议先让跑通的同学举手，把他们分散到各组当「小老师」，自己专门处理最集中的那一类报错。
+</div>
+
+<h2><span class="n">03</span>上课前你要准备的</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>老师 / 助教侧</h3>
+    <ul>
+      <li>自己先把三节课<strong>完整走一遍</strong>（尤其是安装步骤，学生机器千奇百怪）</li>
+      <li>准备一个可用的 DeepSeek API Key 做演示</li>
+      <li>确认教室网络能访问 <code>api.deepseek.com</code>、<code>npm</code>、<code>github.com</code></li>
+      <li>把三份 HTML 拷到教室电脑上（离线可用，但安装步骤需要网络）</li>
+      <li>投影前按 <code>T</code> 试一下明暗——开灯的教室用亮色更清楚</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>学生侧（第 1 讲课前通知）</h3>
+    <ul>
+      <li>带一台<strong>自己的电脑</strong>，能连网</li>
+      <li>准备好<strong>实名认证</strong>需要的信息（国内平台充值的前置条件）</li>
+      <li>准备一点充值预算（学生做实验只需几元到十几元）</li>
+      <li>提前知道自己的系统是 Windows / macOS / Linux</li>
+      <li>第 2 讲前装好 Node.js（22 或更新）——现场装也来得及</li>
+    </ul>
+  </div>
+</div>
+
+<h2><span class="n">04</span>速查卡（可投影 / 可打印）</h2>
+<div class="card">
+  <h3>术语 · 三要素与协议 · 全部命令</h3>
+  <p>三页，覆盖学生配工具时真正会用到的东西。上课时投影出来让大家拍照，或者按 <span class="kbd">P</span> 导出 PDF 打印发下去。</p>
+  <a class="btn" href="04-cheatsheet.html">打开速查卡 →</a>
+</div>
+
+<h2><span class="n">05</span>事实核查：这些内容是按什么日期写的</h2>
+<div class="note bad">
+  <strong>本课程包所有事实的核查日期是 2026-09-18。</strong>
+  AI 这个领域的材料<strong>半年前就可能失效</strong>，而网上大量流传的教程还停留在更早的状态。讲课前请务必核对下面这几项——它们是最容易过时的：
+  <ul>
+    <li><strong>DeepSeek 模型名</strong>：<code>deepseek-chat</code> 和 <code>deepseek-reasoner</code> 已在 <strong>2026-07-24 停止使用</strong>，现在是 <code>deepseek-flash</code> 与 <code>deepseek-v4-pro</code>。这是最容易讲错的一条。</li>
+    <li><strong>base_url</strong>：官方当前文档一律写 <code>https://api.deepseek.com</code>（<strong>不带</strong> <code>/v1</code>）。老教程里的 <code>/v1</code> 写法已从官方文档移除。</li>
+    <li><strong>协议</strong>：Codex 现在<strong>只支持 Responses 协议</strong>，旧的 <code>wire_api = "chat"</code> 已被删除，写它会直接启动失败。</li>
+    <li><strong>价格与峰谷时段</strong>：会变。讲之前扫一眼官方价格页。</li>
+    <li><strong>安装命令</strong>：Claude Code 与 Codex 的官方安装脚本地址、cc-switch 的版本号都更新得很快，以官方文档为准。</li>
+  </ul>
+</div>
+
+<div class="note">
+  <strong>另一个值得在课上讲的态度问题：</strong>这门课的材料本身就是一个例子——它必须在 2026 年 9 月重新核实过才能用。
+  可以顺势告诉学生：<em>「不要相信任何一篇没写日期的 AI 教程，包括我发给你的这一份。」</em>
+</div>
+
+<h2><span class="n">06</span>推荐给学生的课后资料</h2>
+<div class="grid g2">
+  <div class="card">
+    <h3>《生成式软件工程》· 视频课</h3>
+    <p class="meta">南京大学 蒋炎岩（B 站：绿导师原谅你了）</p>
+    <p>从「软件工程」的角度讲人怎么跟 AI 协作——和本课讲的 loop engineering、harness 是同一个问题的另一种讲法，而且讲得更深。</p>
+    <p class="mono" style="font-size:13px">jyywiki.cn/GSE/2026/ · B 站搜「生成式软件工程」</p>
+  </div>
+  <div class="card">
+    <h3>《Hello-Agents》· 开源教程</h3>
+    <p class="meta">Datawhale · 从零开始构建智能体</p>
+    <p>16 章：智能体定义 → 手写 ReAct / Plan-and-Solve / Reflection → 上下文工程 → 通信协议 → Agent 训练 → 性能评估 → 综合项目。免费开源，有 PDF。</p>
+    <p class="mono" style="font-size:13px">datawhalechina.github.io/hello-agents</p>
+  </div>
+</div>
+
+<table style="margin-top:16px">
+  <tr><th style="width:38%">本课讲过的</th><th>对应章节</th></tr>
+  <tr><td>模型 vs Agent</td><td>Hello-Agents 第 1–2 章（智能体定义与发展史）</td></tr>
+  <tr><td>Agent Loop</td><td>第 4 章（ReAct / Plan-and-Solve / Reflection）</td></tr>
+  <tr><td>上下文窗口与压缩</td><td>第 9 章（上下文工程）</td></tr>
+  <tr><td>协议</td><td>第 10 章（MCP / A2A / ANP）</td></tr>
+  <tr><td>「想自己造一个」</td><td>第 7 章（从 0 构建智能体框架）</td></tr>
+</table>
+
+<h2><span class="n">07</span>参考来源</h2>
+<div class="card">
+  <p style="font-size:15px">
+    <span class="pill">官方</span>
+    <a href="https://api-docs.deepseek.com/zh-cn/quick_start/pricing">DeepSeek 模型与价格</a> ·
+    <a href="https://api-docs.deepseek.com/zh-cn/guides/anthropic_api">DeepSeek 使用 Anthropic API</a> ·
+    <a href="https://api-docs.deepseek.com/zh-cn/quick_start/agent_integrations/claude_code">接入 Claude Code</a> ·
+    <a href="https://api-docs.deepseek.com/zh-cn/quick_start/agent_integrations/codex">接入 Codex</a> ·
+    <a href="https://api-docs.deepseek.com/zh-cn/quick_start/error_codes">错误码</a> ·
+    <a href="https://static.deepseek.com/faq/index.html?lang=zh#/category/4">DeepSeek 常见问题（实名 / 充值 / 发票 / Key）</a>
+  </p>
+  <p style="font-size:15px">
+    <span class="pill">官方</span>
+    <a href="https://deepseek-harness.github.io/deepseek-harness/guide/quickstart">DeepSeek Harness 快速开始</a> ·
+    <a href="https://github.com/deepseek-ai/deepseek-harness">DSH 仓库</a> ·
+    <a href="https://code.claude.com/docs/en/setup">Claude Code 安装</a> ·
+    <a href="https://code.claude.com/docs/en/env-vars">Claude Code 环境变量</a> ·
+    <a href="https://github.com/openai/codex">Codex 仓库</a>
+  </p>
+  <p style="font-size:15px">
+    <span class="pill">工具</span>
+    <a href="https://github.com/farion1231/cc-switch">cc-switch</a>（MIT，作者 @farion1231）
+  </p>
+  <p style="font-size:15px;margin-bottom:0">
+    <span class="pill g">资料</span>
+    <a href="https://jyywiki.cn/GSE/2026/">生成式软件工程（蒋炎岩 / NJU）</a> ·
+    <a href="https://datawhalechina.github.io/hello-agents/">Hello-Agents（Datawhale）</a>
+  </p>
+</div>
+
+<footer>
+  <p>人工智能导论 · 第 1–3 讲课程包 · 事实核查日期 2026-09-18</p>
+  <p>工作目录内另有调研原始材料（在 <code>../参考资料/</code> 下）：<code>DeepSeek_API_事实清单_2026-09-18.md</code>、<code>CLI工具调研-事实清单.md</code>、<code>API中转站-事实清单.md</code>，含逐条来源与「未核实」标注。改动课件前建议先对照这几份。</p>
+</footer>
+
+</div>
+</body>
+</html>

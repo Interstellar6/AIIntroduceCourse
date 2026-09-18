@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工具地图与怎么选 · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>工具地图与怎么选</h1>
+        <p class="lede">你会听到五个名字：Claude Code、Codex、DeepSeek Harness、cc-switch、中转站。这一页把它们放进同一张地图，让你知道谁是谁、谁解决什么问题。</p>
+
+        <h2>先分清：哪些是「AI」，哪些只是配件</h2>
+        <p>这是最容易搞混的一点。这五个名字里，<b>只有三个是真正装模型的地方</b>，另外两个是配件。</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:18%">名字</th><th style="width:14%">它是什么</th><th style="width:36%">干什么的</th><th>什么时候用</th></tr>
+            <tr>
+              <td><b>Claude Code</b></td>
+              <td><span class="pill">Harness</span></td>
+              <td>Anthropic 的 Agent，<b>终端 + 编辑器扩展</b>两种界面，工具设计成熟，读代码 / 改代码最稳</td>
+              <td>写代码、改项目、读别人的代码库</td>
+            </tr>
+            <tr>
+              <td><b>Codex</b></td>
+              <td><span class="pill">Harness</span></td>
+              <td>OpenAI 的 Agent，<b>命令行 / 编辑器扩展 / 桌面端共用一份配置</b>，沙箱与审批做得细。只支持 Responses 协议</td>
+              <td>写代码、跑命令；喜欢图形界面的可以直接用编辑器扩展</td>
+            </tr>
+            <tr>
+              <td><b>DeepSeek<br>Harness</b></td>
+              <td><span class="pill">Harness</span></td>
+              <td>DeepSeek 的开源 harness：<b>有网页界面</b>、多种模式、一切皆插件</td>
+              <td>上手、学习、想看清 Agent 到底在转什么</td>
+            </tr>
+            <tr>
+              <td><b>cc-switch</b></td>
+              <td><span class="pill n">配件</span></td>
+              <td>一个<b>开关面板</b>：管理各家供应商配置，一键切换</td>
+              <td>同时用好几个工具、或想在多家模型之间切换</td>
+            </tr>
+            <tr>
+              <td><b>中转站</b></td>
+              <td><span class="pill n">配件</span></td>
+              <td>一个<b>卖 API 的中间商</b>：一个入口后面接多家模型，统一计费</td>
+              <td>想用一个 Key 通吃多家模型时</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="callout danger">
+          <div class="ic">❗</div>
+          <div class="bd">
+            <span class="t">最重要的一句话</span>
+            <b>前三个不是「三个不同的 AI」，是三个不同的 harness——它们可以接同一个模型。</b><br>
+            本手册里，三个都接的是 DeepSeek。所以你装它们不是为了获得三个更聪明的模型，而是为了得到三种不同的干活方式。
+          </div>
+        </div>
+
+        <h2>它们各自的位置</h2>
+        <p>用<a href="c-harness.html">上一页</a>那张层次图来放，就很清楚了：</p>
+
+        <ul class="maplist">
+          <li><span class="n">1</span><div class="bd"><b>模型层</b>
+            <span>DeepSeek、Claude、GPT……你买的是这一层的东西。API Key 就是买它的凭证。</span></div></li>
+          <li><span class="n">2</span><div class="bd"><b>Harness 层</b>
+            <span>Claude Code、Codex、DeepSeek Harness。它们都实现同一个 Agent 循环，区别在工具设计、权限控制、界面和手感。</span></div></li>
+          <li><span class="n">3</span><div class="bd"><b>配件层</b>
+            <span>cc-switch 管配置，中转站管供应。它们本身不产生任何 AI 能力，只是让「连接」这件事更省事或更便宜。</span></div></li>
+        </ul>
+
+        <h2>两个 harness 的手感差在哪</h2>
+        <p>既然三个都接同一个模型，为什么不只装一个？因为它们的取舍不一样。</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:20%"></th><th>DeepSeek Harness</th><th>Claude Code</th><th>Codex</th></tr>
+            <tr><td><b>界面</b></td><td>浏览器网页</td><td>终端</td><td>终端</td></tr>
+            <tr><td><b>最大特点</b></td><td>模式可切换，能看清内部</td><td>工具设计成熟，改代码最稳</td><td>权限控制最细</td></tr>
+            <tr><td><b>适合</b></td><td>第一次用、学习原理</td><td>长期写代码、改项目</td><td>需要精确控制权限的场合</td></tr>
+            <tr><td><b>上手难度</b></td><td>最低（不用记命令）</td><td>中</td><td>中</td></tr>
+          </table>
+        </div>
+
+        <p>建议<b>三个都装一遍</b>。不是为了日常都用，而是为了获得一个对比的经验：<b>同一个模型放进不同的壳里，干活的风格真的不一样。</b>这个体感一旦有了，你对「harness 决定能力上限」这句话的理解就再也不会忘。</p>
+
+        <h2>怎么选：给学生版的实在建议</h2>
+
+        <div class="cards">
+          <div class="card accent">
+            <h3>第一次用，想省事</h3>
+            <p>→ <b>DeepSeek Harness</b><br>有网页界面，不用记命令，装起来只要一行。</p>
+            <p class="muted small">本手册从这里开始。</p>
+          </div>
+          <div class="card accent">
+            <h3>主要写代码、跑实验</h3>
+            <p>→ <b>Claude Code</b> 或 <b>Codex</b><br>长期用下来效率更高的两个，都能在编辑器里用图形界面。</p>
+          </div>
+          <div class="card accent">
+            <h3>手头紧</h3>
+            <p>→ <b>DeepSeek 官方 API</b><br>国内直连、支付宝付款、便宜。几块钱能用很久。</p>
+          </div>
+          <div class="card">
+            <h3>想体验 Claude、GPT</h3>
+            <p>→ 看看<a href="relay.html">中转站</a><br>但先读完那一页的风险提示，小额充值。</p>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="ic">🛑</div>
+          <div class="bd">
+            <span class="t">还有一种情况：什么都别装</span>
+            <b>如果你只是想问问题、不碰文件，直接用聊天网页就好。</b><br>
+            这句话不是客套。装工具有成本：要花钱、要配置、它还可能改错你的东西。<b>不要因为「装工具看起来更专业」而去装它。</b>
+          </div>
+        </div>
+
+        <h2>一个常见误解</h2>
+        <p>「装了 Claude Code，是不是就等于用上了 Claude 模型？」</p>
+        <p><b>不是。</b>工具和模型是两件事。Claude Code 是 Anthropic 做的 harness，但只要你把地址改掉，它调用的是谁家的模型，完全由你决定。</p>
+        <p>这也正是本手册的做法：<b>用 DeepSeek 的 Key 驱动 Claude Code 和 Codex</b>，不需要另买 Anthropic 或 OpenAI 的账号。具体怎么配，后面几页会一步步带你做。</p>
+
+        <div class="callout tip">
+          <div class="ic">🧠</div>
+          <div class="bd">
+            理解这一点之后，你会发现自己选工具的自由度大了很多：<b>模型可以换、harness 可以换，两件事互不绑定。</b>唯一的限制是协议要对得上——这个在<a href="codex.html">配 Codex</a> 那一页会用上。
+          </div>
+        </div>
+
+        <div class="pagefoot">
+          <p>原理部分到这里就结束了——从<a href="c-agent.html">模型与 Agent</a>、<a href="c-session.html">会话与上下文</a>、<a href="c-paradigms.html">三种经典范式</a>，到 <a href="c-loop.html">Agent 循环</a> 和 Harness。接下来是动手部分，从<a href="api.html">拿到你的 API Key</a>开始。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

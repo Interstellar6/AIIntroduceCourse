@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>先说说 vibe coding · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>先说说 vibe coding</h1>
+        <p class="lede">这门课后面要讲的一大堆东西，其实都是在回应同一个词。先把它讲清楚，你才知道自己现在站在哪个位置上、以及这门课想把你带到哪里去。</p>
+
+        <h2>一个词，一种新的编程方式</h2>
+        <p>2025 年 2 月，Andrej Karpathy（OpenAI 创始成员、前特斯拉 AI 负责人）在社交媒体上造了一个词：<b>vibe coding</b>。</p>
+        <p>他描述的工作方式是这样的：</p>
+        <ul>
+          <li>完全<b>凭感觉</b>往下推，不去细想代码到底怎么工作</li>
+          <li>一路点「<b>全部接受</b>」，不再逐行读改动</li>
+          <li>遇到报错就整段复制粘回去，通常这样就好了</li>
+          <li>代码长到超出自己的理解范围，也懒得回头读</li>
+          <li>它修不好某个 bug，就绕过去，或者让它随便改改直到问题消失</li>
+        </ul>
+        <p>他自己也说得很清楚：<b>这种方式适合一次性的、周末做着玩的小项目。</b></p>
+
+        <p>这个词后来被广泛接受，用来指代<b>那种快速、随意、不太负责任的用 AI 写软件的方式</b>——完全由提示词驱动，并且<b>完全不关心代码到底是怎么工作的</b>。</p>
+        <p class="small muted">2026 年，这个词已经被收进韦氏词典（Merriam-Webster）——它不再是小圈子里的黑话，而是一个正式进入日常语言的词。</p>
+
+        <h2>为什么这个词值得知道</h2>
+        <p>因为它标志着<b>一件真的变了的事</b>：不会写代码的人，第一次能够做出真的能跑的软件。</p>
+        <p>以前你要做一个网站，得先学会一门语言、搭环境、理解报错。现在你只要能把要求说清楚就行。这个门槛的下降是真实的，不是营销。</p>
+
+        <div class="callout good">
+          <div class="ic">🎉</div>
+          <div class="bd">
+            <span class="t">所以这不是坏事</span>
+            这是这门课能存在的前提——<b>你们不用先学三年编程，就能开始让 AI 帮你干活。</b>后面几个练习任务，就是建立在这个前提上的。
+          </div>
+        </div>
+
+        <h2>但「能跑」和「能用」之间隔着很远</h2>
+        <p>Vibe coding 的问题不在「快」，而在<b>你不知道它为什么能跑</b>。具体会出这些事：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:30%">你以为</th><th>实际上</th></tr>
+            <tr>
+              <td>「它说完成了」</td>
+              <td>它只是<b>产出了一句「完成了」的文字</b>。文件可能根本没改，或者改错了地方。你必须自己去验证</td>
+            </tr>
+            <tr>
+              <td>「它能跑，所以是对的」</td>
+              <td>能跑只说明你试的那条路径没崩。<b>边界情况、错误输入、数据量大一点会怎样，全都没测过</b></td>
+            </tr>
+            <tr>
+              <td>「我再让它改个小地方」</td>
+              <td>因为你不了解整体结构，<b>改一处可能悄悄弄坏三处</b>，而且你不知道该去哪找</td>
+            </tr>
+            <tr>
+              <td>「反正能用就行」</td>
+              <td>等到它真的坏了那天，<b>你没有能力修</b>——因为这份代码对你来说从来就不是透明的</td>
+            </tr>
+          </table>
+        </div>
+
+        <p>在学生场景里，还有两个更具体的麻烦：</p>
+        <ul>
+          <li><b>作业和答辩要你讲清楚。</b>代码写得再能跑，说不清为什么这么写，就是没学会。</li>
+          <li><b>科研要能验证。</b>实验脚本糊出来的结果，你自己都不敢往论文里放。</li>
+        </ul>
+
+        <h2>于是出现了另一个词</h2>
+        <p>2025 年 10 月，Simon Willison 提出，vibe coding 描述了光谱的一端，但另一端还没有名字——<b>那些经验丰富的工程师，同样用 AI 大幅加速，但依然为自己的产出负责</b>。他把这端叫做 <b>vibe engineering</b>。</p>
+
+        <div class="callout tip">
+          <div class="ic">🔄</div>
+          <div class="bd">
+            <span class="t">一条很新的后续</span>
+            2026 年 2 月，Willison 自己在这篇文章上加了一条更新：<b>「现在看起来，『Agentic Engineering』（智能体工程）这个词正在胜出。」</b><br>
+            所以在今天，你会发现这两个词都在用。它们指的是同一件事：<b>用 AI 干活，但你负责。</b>
+          </div>
+        </div>
+
+        <p>两者最根本的差别不是「用不用 AI」，而是<b>谁为结果负责</b>。</p>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 290" role="img" aria-label="示意图：从纯 vibe coding 到 AI 辅助再到 agentic engineering 的光谱，越往右越费力但越能用在正经项目上">
+            <defs>
+              <marker id="vb1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+            </defs>
+
+            <rect class="b-r" x="40" y="52" width="250" height="124" rx="12"/>
+            <text class="t-h t-mid" x="165" y="84">纯 vibe coding</text>
+            <text class="t-s t-mid" x="165" y="110">全交给感觉</text>
+            <text class="t-s t-mid" x="165" y="132">不读代码，改了也不看</text>
+            <text class="t-r t-mid" x="165" y="160">出了事你修不了</text>
+
+            <rect class="b-w" x="325" y="52" width="250" height="124" rx="12"/>
+            <text class="t-h t-mid" x="450" y="84">AI 辅助</text>
+            <text class="t-s t-mid" x="450" y="110">AI 写，你读、你改</text>
+            <text class="t-s t-mid" x="450" y="132">你会去看它改了什么</text>
+            <text class="t-w t-mid" x="450" y="160">你还在把关</text>
+
+            <rect class="b-g" x="610" y="52" width="250" height="124" rx="12"/>
+            <text class="t-h t-mid" x="735" y="84">Agentic engineering</text>
+            <text class="t-s t-mid" x="735" y="110">你设计循环、定验收标准</text>
+            <text class="t-s t-mid" x="735" y="132">AI 执行，你负责</text>
+            <text class="t-g t-mid" x="735" y="160">能用在本课的任务上</text>
+
+            <path class="ln" d="M40,212 H856" marker-end="url(#vb1)"/>
+            <text class="t-s" x="40" y="240">← 上手最快，但只能用在低风险的小东西上</text>
+            <text class="t-s t-end" x="860" y="240">要学的更多，但能用在正经项目上 →</text>
+
+            <text class="t-s t-mid" x="450" y="274">三个位置没有道德高下，区别是「谁为结果负责」和「代价有多大」</text>
+          </svg>
+          <figcaption>这门课的目标，是把你从最左边往右推一点——<b>不是让你抛弃 vibe coding，而是让你有得选。</b></figcaption>
+        </figure>
+
+        <h2>为什么「会 engineering 的人」用 AI 效果更好</h2>
+        <p>Willison 那篇文章里还有一句很值得记的话：<b>AI 工具会放大你已有的专业能力。</b>你越强，它给你的回报越大。</p>
+        <p>他还列了一串「LLM 会奖励的工程习惯」——有意思的是，这些几乎全是老掉牙的软件工程实践：</p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>它喜欢你有测试</h3>
+            <p>有测试的项目，Agent 能飞快地改；没有测试的项目，它会<b>声称东西能跑，但其实根本没测过</b>。</p>
+          </div>
+          <div class="card">
+            <h3>它喜欢你先规划</h3>
+            <p>先出一个高层计划，和 Agent 一起把计划改好，再让它动手写代码——比直接开干顺得多。</p>
+          </div>
+          <div class="card">
+            <h3>它喜欢你写文档</h3>
+            <p>模型一次也只能看到代码库的一部分。有好的文档，它不用读完代码就能正确调用别的模块。</p>
+          </div>
+          <div class="card">
+            <h3>它喜欢你用好版本控制</h3>
+            <p>能随时回退、能查清哪次改动引入了 bug，在 AI 改代码的时代<b>比从前更重要</b>。</p>
+          </div>
+        </div>
+
+        <p>换句话说：<b>AI 没有让基本功变得不重要，它让基本功的回报变高了。</b></p>
+        <p>这也是为什么这门课要在动手之前先讲原理——你不需要成为软件工程师，但你需要知道那些「别人已经在替你操心的事」到底是什么。</p>
+
+        <h2>那这门课要教你什么</h2>
+        <p>三个转变。它们都不难，但每一个都能让你少踩一堆坑：</p>
+
+        <ol class="steps">
+          <li>
+            <h3>从「它说完成了」到「我知道它真的完成了」</h3>
+            <p>学会<b>用结果验证</b>，而不是相信它的汇报。文件改了没有、命令跑通了没有、结果对不对——这些都要你自己看。</p>
+          </li>
+          <li>
+            <h3>从「凭感觉让它改」到「先看方案再放权」</h3>
+            <p>学会用计划模式、审批、沙箱这些机制，<b>在动手之前就把范围框住</b>。</p>
+          </li>
+          <li>
+            <h3>从「一个会话干到底」到「知道什么时候该收尾」</h3>
+            <p>知道什么时候开新会话、什么时候把结论写进文件、什么时候它已经变笨了该重来。</p>
+          </li>
+        </ol>
+
+        <div class="callout warn">
+          <div class="ic">⚖️</div>
+          <div class="bd">
+            <span class="t">说清楚一点</span>
+            <b>这门课不反对 vibe coding。</b>做个小玩具、写个一次性的脚本、给自己的论文算个数据，尽情 vibe 是完全合理的。<br>
+            这门课反对的是<b>「只会 vibe coding」</b>——手里只有这一种模式，遇到正经任务也只能靠感觉。
+          </div>
+        </div>
+
+        <h3>回头看那四个练习任务</h3>
+        <div class="tw">
+          <table>
+            <tr><th style="width:30%">任务</th><th>能 vibe 到什么程度</th></tr>
+            <tr>
+              <td><b>让 AI 教你用终端</b></td>
+              <td>一半一半。命令可以让它给，但<b>你得自己手敲</b>，否则学不到东西</td>
+            </tr>
+            <tr>
+              <td><b>让 AI 教你用 Git</b></td>
+              <td>一半一半。命令可以让它教，但<b>「改坏 → 用 Git 恢复」必须你自己动手做过一遍</b>，看会了不算会</td>
+            </tr>
+            <tr>
+              <td><b>做一个贪吃蛇</b></td>
+              <td><b>尽情 vibe。</b>这就是典型的低风险小玩具，重点在体验「一个人带一个团队」</td>
+            </tr>
+            <tr>
+              <td><b>读懂 Transformer 论文</b></td>
+              <td><b>完全不能 vibe。</b>这件事的产出是「你懂了」，AI 替你懂不了</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="pagefoot">
+          <p>下一步 → <a href="c-agent.html">模型与 Agent</a>：先搞清楚你天天在用的那个东西，到底是什么。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

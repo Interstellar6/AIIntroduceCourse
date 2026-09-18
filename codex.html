@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codex · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>Codex</h1>
+        <p class="lede">OpenAI 出的 Agent，既有终端版也有图形界面版。它的特点是权限控制做得特别细——你可以非常精确地规定它「能碰哪里」和「什么时候必须先问你」。装它有一点跟别的工具不一样，这一页会讲清楚。</p>
+
+        <div class="osbar">
+          <span>当前显示的是 <b class="only-mac">macOS / Linux</b><b class="only-win">Windows</b> 的命令</span>
+          <div class="os-switch" role="group" aria-label="切换操作系统">
+            <button data-set-os="mac">macOS / Linux</button>
+            <button data-set-os="win">Windows</button>
+          </div>
+        </div>
+
+        <h2>装之前必须知道的一件事</h2>
+        <p>Codex 和模型说话时用的格式叫 <b>Responses</b>。这是一个比较新的格式，而<b>它现在只支持这一种</b>——更早的 Chat Completions 格式已经被官方移除了。</p>
+
+        <div class="callout danger">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <span class="t">这一条会影响你以后选服务商</span>
+            网上很多老教程会教你写 <code>wire_api = "chat"</code> 来「兼容旧服务」——<b>这个写法已经失效了，写上去 Codex 会直接启动失败。</b><br>
+            好消息是 DeepSeek 原生支持 Responses 格式，所以下面这套配置是直连的，不需要任何中间转换。<br>
+            以后如果你想接别的服务商，先确认它「支持 Responses 接口」，否则 Codex 用不了它。
+          </div>
+        </div>
+
+        <h2>安装</h2>
+
+        <div class="only-mac">
+          <h3>推荐：官方安装脚本</h3>
+          <div class="codeblock"><pre data-lang="bash">curl -fsSL https://chatgpt.com/codex/install.sh | sh</pre></div>
+
+          <h3>或者用 Homebrew</h3>
+          <div class="codeblock"><pre data-lang="bash">brew install --cask codex</pre></div>
+
+          <h3>或者用 npm</h3>
+          <div class="codeblock"><pre data-lang="bash">npm install -g @openai/codex</pre></div>
+        </div>
+
+        <div class="only-win">
+          <h3>推荐：官方安装脚本</h3>
+          <p>在 PowerShell 里运行这一整行（注意引号要完整）：</p>
+          <div class="codeblock"><pre data-lang="powershell">powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"</pre></div>
+          <p>里面那段 <code>-ExecutionPolicy ByPass</code> 是为了让这条安装脚本能执行。它只对这一次生效，不会永久改你的系统设置。</p>
+
+          <h3>或者用 npm</h3>
+          <div class="codeblock"><pre data-lang="powershell">npm install -g @openai/codex</pre></div>
+          <p>Codex 对 Node 版本要求不高，16 以上就行。</p>
+
+          <div class="callout good">
+            <div class="ic">✅</div>
+            <div class="bd">
+              <span class="t">Windows 用户体验提示</span>
+              Codex 对 Windows 的原生支持比 Claude Code 好。如果你在 <a href="claude-code.html">Claude Code</a> 那一页卡住了，<b>先用 Codex 完全没问题。</b>
+            </div>
+          </div>
+        </div>
+
+        <h2>关键的一步：先随便跑一次</h2>
+        <p>装完之后，<b>先在终端里运行一次 <code>codex</code></b>，跟它随便说句话，然后退出（按 <kbd>Ctrl</kbd> + <kbd>C</kbd>）。</p>
+
+        <div class="codeblock"><pre data-lang="bash">codex</pre></div>
+
+        <p>这一步看起来毫无意义，但它是必须的：<b>Codex 的配置目录 <code>~/.codex</code> 是在它第一次运行时才创建的</b>，而下一步的配置脚本需要这个目录已经存在。</p>
+
+        <div class="callout tip">
+          <div class="ic">💡</div>
+          <div class="bd">
+            如果它在这个时候让你登录 ChatGPT，跳过或者随便走一下都行。我们下一步就把它改成走 DeepSeek，用不到 ChatGPT 账号。
+          </div>
+        </div>
+
+        <h2>接上 DeepSeek</h2>
+        <p>DeepSeek 官方提供了一个一键配置脚本，会自动做好全部配置。</p>
+
+        <div class="only-mac">
+          <div class="codeblock"><pre data-lang="bash">bash &lt;(curl -fsSL https://cdn.deepseek.com/api-docs/codex-deepseek-setup.sh)</pre></div>
+        </div>
+
+        <div class="only-win">
+          <div class="codeblock"><pre data-lang="powershell">irm https://cdn.deepseek.com/api-docs/codex-deepseek-setup.ps1 | iex</pre></div>
+        </div>
+
+        <p>运行后会出一个菜单，按数字选择：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th>选项</th><th>作用</th></tr>
+            <tr><td class="mono">1</td><td>用 <code>deepseek-flash</code> 模型，<b>推荐选这个</b>（它同时支持图片输入）</td></tr>
+            <tr><td class="mono">2</td><td>用 <code>deepseek-v4-pro</code> 模型（更强，也更贵）</td></tr>
+            <tr><td class="mono">9</td><td>恢复默认配置，把 DeepSeek 相关设置删掉</td></tr>
+          </table>
+        </div>
+
+        <p>第一次运行会提示你输入 API Key，就是 <code>sk-</code> 开头那一串。</p>
+
+        <h3>它到底改了什么</h3>
+        <p>知道这个，以后出问题你自己就能查：</p>
+        <ul>
+          <li><b>备份</b>你原来的 <code>~/.codex/config.toml</code> 到 <code>~/.codex/backup-deepseek/</code>——所以随时可以还原</li>
+          <li>写一个 <code>~/.codex/models.json</code>，告诉 Codex「DeepSeek 这个模型有什么能力」（上下文多长、支持不支持图片、支持哪些思考档位）</li>
+          <li>在 <code>config.toml</code> 里加上一段 <code>[model_providers.deepseek]</code>，也就是「去哪里找 DeepSeek」</li>
+        </ul>
+        <p>它只改必要的字段，你原有的其他配置（比如 MCP 服务、项目信任设置）都会保留。写入前会校验语法，校验不过就中止，不会把你的配置改坏。</p>
+
+        <div class="callout good">
+          <div class="ic">♻️</div>
+          <div class="bd">
+            再运行一次脚本就能重新配置；选菜单里的 <b>9</b> 可以恢复到你安装前的状态。所以放心试，改坏了能退回去。
+          </div>
+        </div>
+
+        <h2>验证</h2>
+        <p>进入你的练习文件夹，启动 Codex：</p>
+
+        <div class="codeblock"><pre data-lang="bash">cd ~/ai-lab
+codex</pre></div>
+
+        <p>然后问它一句：</p>
+        <div class="codeblock"><pre data-lang="提示词">用一句话介绍你自己，并告诉我你现在用的是哪个模型。</pre></div>
+
+        <p>能正常回答，就说明接上了。可以再看看登录状态：</p>
+        <div class="codeblock"><pre data-lang="bash">codex login status</pre></div>
+
+        <h2>图形界面版：不用待在终端里</h2>
+        <p>Codex 不只有命令行。它有好几种界面，而且——这是最省事的一点——<b>它们共用同一份配置文件</b>。</p>
+
+        <p>也就是说：<b>你刚才跑的配置脚本，一次就把下面所有形态都配好了</b>，不需要为每个界面重配一遍。</p>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 300" role="img" aria-label="示意图：一份 ~/.codex/config.toml 配置同时供 Codex 命令行、VS Code 扩展和 ChatGPT 桌面端使用">
+            <defs>
+              <marker id="cx1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+            </defs>
+
+            <rect class="b-g" x="40" y="116" width="230" height="68" rx="12"/>
+            <text class="t-m t-mid" x="155" y="144">~/.codex/config.toml</text>
+            <text class="t-s t-mid" x="155" y="166">跑一次配置脚本就写好了</text>
+
+            <path class="ln" d="M270,150 H344" marker-end="url(#cx1)"/>
+            <path class="ln-g" d="M352,66 V234"/>
+            <path class="ln-g" d="M352,66 H388" marker-end="url(#cx1)"/>
+            <path class="ln-g" d="M352,150 H388" marker-end="url(#cx1)"/>
+            <path class="ln-g" d="M352,234 H388" marker-end="url(#cx1)"/>
+
+            <rect class="b-a" x="396" y="38" width="370" height="56" rx="10"/>
+            <text class="t-b t-mid" x="581" y="62">Codex 命令行（CLI）</text>
+            <text class="t-s t-mid" x="581" y="82">在终端里敲 codex</text>
+
+            <rect class="b-a" x="396" y="122" width="370" height="56" rx="10"/>
+            <text class="t-b t-mid" x="581" y="146">VS Code / Cursor / Windsurf 扩展</text>
+            <text class="t-s t-mid" x="581" y="166">编辑器侧边栏，能引用你打开的文件</text>
+
+            <rect class="b-a" x="396" y="206" width="370" height="56" rx="10"/>
+            <text class="t-b t-mid" x="581" y="230">ChatGPT 桌面端</text>
+            <text class="t-s t-mid" x="581" y="250">同一个配置文件，同一套模型</text>
+
+            <text class="t-s t-mid" x="155" y="230">配一次</text>
+          </svg>
+          <figcaption><b>一份配置，三种界面。</b>不用为了用图形界面再折腾一遍。</figcaption>
+        </figure>
+
+        <h3>怎么装图形界面版</h3>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:30%">界面</th><th>怎么装</th></tr>
+            <tr>
+              <td><b>VS Code / Cursor / Windsurf</b></td>
+              <td>在扩展面板里搜 <b>Codex</b>（发布者是 OpenAI），或者从 VS Code 应用市场搜 <code>openai.chatgpt</code>。装完编辑器里会多一个 Codex 图标，点开就是侧边栏面板</td>
+            </tr>
+            <tr>
+              <td><b>JetBrains 系列</b></td>
+              <td>用 JetBrains 的 AI Assistant，在里面选 Codex 作为 agent</td>
+            </tr>
+            <tr>
+              <td><b>Xcode</b></td>
+              <td>用 Xcode 的编码助手，选 Codex 作为 agent</td>
+            </tr>
+            <tr>
+              <td><b>ChatGPT 桌面端</b></td>
+              <td>装 ChatGPT 桌面应用。它和命令行共享 <code>~/.codex</code> 那份配置</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="callout good">
+          <div class="ic">✅</div>
+          <div class="bd">
+            <span class="t">装上之后不用再配一遍</span>
+            直接打开侧边栏，选一个项目文件夹，然后开始提问就行。它读的是你已经配好的 DeepSeek。
+          </div>
+        </div>
+
+        <p>图形界面版的好处是<b>上下文已经在你眼前</b>：可以把打开的文件、选中的代码、最近的对话直接带进提问里，改动也能在你的代码旁边直接看 diff、逐个决定接受还是拒绝。适合一边读代码一边小步修改。</p>
+        <p>终端版适合让它跑一长串命令、做比较大的改动。<b>两个都在，按场景切就行。</b></p>
+
+        <div class="callout tip">
+          <div class="ic">💡</div>
+          <div class="bd">
+            <span class="t">给课上同学的建议</span>
+            如果你更喜欢图形界面，<b>完全可以只用 VS Code 扩展</b>——安装更简单，而且能直接沿用你已经配好的 DeepSeek。终端版那几步装不上的话，不影响你用扩展。
+          </div>
+        </div>
+
+        <h2>给它多大的权力：两个开关</h2>
+        <p>这是 Codex 做得最好的部分，也是所有 Agent 工具都有的两个概念。</p>
+
+        <h3>沙箱：它能碰哪里</h3>
+        <div class="tw">
+          <table>
+            <tr><th>取值</th><th>含义</th></tr>
+            <tr><td><code>read-only</code></td><td>只能看，不能改任何东西</td></tr>
+            <tr><td><code>workspace-write</code></td><td>只能在当前工作目录里写（推荐）</td></tr>
+            <tr><td><code>danger-full-access</code></td><td>整个系统随便动（危险，除非你很确定）</td></tr>
+          </table>
+        </div>
+
+        <h3>审批：什么时候必须先问你</h3>
+        <div class="tw">
+          <table>
+            <tr><th>取值</th><th>含义</th></tr>
+            <tr><td><code>untrusted</code></td><td>除了确定安全的只读命令，其他全都要问你</td></tr>
+            <tr><td><code>on-request</code></td><td>由模型自己判断何时该问（默认值）</td></tr>
+            <tr><td><code>never</code></td><td>从不问，直接执行（只适合无人值守的自动化）</td></tr>
+          </table>
+        </div>
+
+        <div class="callout good">
+          <div class="ic">🛡️</div>
+          <div class="bd">
+            <span class="t">给学生的建议组合</span>
+            <div class="codeblock" style="margin:10px 0 8px"><pre data-lang="bash">codex --sandbox workspace-write --ask-for-approval on-request</pre></div>
+            这是官方的「低摩擦组合」：<b>允许它在工作目录里干活，但每走一步都先问你。</b>等你摸清它的脾气了，再逐步放宽。<br>
+            一句话记住：<b>沙箱管「能碰哪里」，审批管「什么时候停下来问你」。</b>
+          </div>
+        </div>
+
+        <h2>进阶：手工配置</h2>
+        <p>一键脚本已经够用。但如果你想知道背后是什么样子，或者需要接别的服务商，可以看这里。</p>
+
+        <p>供应商配置必须写在<b>用户级</b>的配置文件里：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th>文件</th><th>位置</th></tr>
+            <tr><td>主配置</td><td><code>~/.codex/config.toml</code></td></tr>
+            <tr><td>模型目录</td><td><code>~/.codex/models.json</code></td></tr>
+            <tr><td>登录凭据</td><td><code>~/.codex/auth.json</code></td></tr>
+          </table>
+        </div>
+
+        <div class="callout danger">
+          <div class="ic">🚫</div>
+          <div class="bd">
+            <span class="t">最常见的坑</span>
+            把 <code>model_provider</code> 写进项目目录里的 <code>.codex/config.toml</code>——<b>这个会被忽略，而且启动时会打印警告。</b>供应商配置必须在用户级目录（也就是你的个人主目录）下的那份文件里。
+          </div>
+        </div>
+
+        <p>一个最小的配置长这样（假设你已经设了环境变量 <code>DEEPSEEK_API_KEY</code>）：</p>
+
+        <div class="codeblock"><pre data-lang="toml"><span class="c"># ~/.codex/config.toml</span>
+model = "deepseek-flash"
+model_provider = "deepseek"
+
+[model_providers.deepseek]
+name = "DeepSeek"
+base_url = "https://api.deepseek.com"
+env_key = "DEEPSEEK_API_KEY"
+
+<span class="c"># 沙箱与审批</span>
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"</pre></div>
+
+        <div class="callout tip">
+          <div class="ic">📝</div>
+          <div class="bd">
+            TOML 格式有个容易忘的规则：<b>不带方括号的顶层设置必须写在所有 <code>[方括号段落]</code> 之前。</b>顺序写反了会解析失败。
+          </div>
+        </div>
+
+        <h2>常见问题</h2>
+
+        <h3>配置脚本报错说找不到目录</h3>
+        <p>你还没跑过第一次 <code>codex</code>，<code>~/.codex</code> 目录不存在。回到上面「先随便跑一次」那一步。</p>
+
+        <h3>启动时提示 <code>wire_api</code> 相关错误</h3>
+        <p>你的配置里有 <code>wire_api = "chat"</code> 这种老写法。删掉那一行（或者改成 <code>"responses"</code>），或者直接重跑一遍配置脚本、选菜单里的 <b>9</b> 恢复默认后再重配。</p>
+
+        <h3>提示模型不存在</h3>
+        <p>检查 <code>model</code> 那一行的名字。必须是 <code>deepseek-flash</code> 或 <code>deepseek-v4-pro</code>——<code>deepseek-chat</code> 已经在 2026 年 7 月停用了。</p>
+
+        <h3>它老问我要权限，很烦</h3>
+        <p>那是审批在工作，不是 bug。刚开始用的时候让它多问几次是好事。<b>不要一上来就设成 <code>never</code> 或者 <code>danger-full-access</code>。</b></p>
+
+        <h3>和 Claude Code 能共存吗</h3>
+        <p>能，它们的配置在不同的目录，互不干扰。如果你要同时用好几个工具、还要在多家服务商之间切换，装 <a href="cc-switch.html">cc-switch</a> 会省很多事。</p>
+
+        <div class="pagefoot">
+          <p>这一步做完，两个 Agent 都装好了，而且都接着 DeepSeek。用不惯终端的话，直接去装 VS Code 扩展也行。</p>
+          <p class="muted">下一步 → <a href="cc-switch.html">cc-switch</a></p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

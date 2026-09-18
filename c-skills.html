@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>怎么用 Skill · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>怎么用 Skill</h1>
+        <p class="lede">你有没有过这种经历：同一段要求、同一套步骤，反复粘给 AI 好几次？<b>skill 就是为这件事准备的</b>——把「你反复教它的东西」写成一个文件，以后它自己会去用。</p>
+
+        <h2>一句话：skill 是什么</h2>
+        <p>一个文件夹，里面放一个 <code>SKILL.md</code>，内容就是「遇到这类任务，请按这个流程做」。写完之后：</p>
+        <ul>
+          <li>你可以手动敲 <code>/名字</code> 直接调用它</li>
+          <li>或者，<b>模型自己在判断「这活儿正好该用它」的时候自动加载</b></li>
+        </ul>
+        <p>它和「在对话里多写几句要求」最大的区别，在于下面这一点。</p>
+
+        <div class="callout good">
+          <div class="ic">💡</div>
+          <div class="bd">
+            <span class="t">skill 是按需加载的</span>
+            平时，模型只能在上下文里看到 skill 的<b>名字和一句话描述</b>。只有真的要用它的时候，那整份正文才会被加载进来。<br>
+            所以：<b>你写一份很长的操作手册放在 skill 里，平时几乎不花钱；写在系统提示词里，则是每一轮都在花钱。</b>
+          </div>
+        </div>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 280" role="img" aria-label="示意图：skill 的按需加载机制。常驻上下文里只有系统提示词、工具列表和 skill 目录（名字加一句话）；模型判断需要时，才把磁盘上 SKILL.md 的正文加载进上下文">
+            <defs>
+              <marker id="sk1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+            </defs>
+
+            <text class="t-h t-mid" x="205" y="34">模型每次请求都能看到的</text>
+            <rect class="panel" x="40" y="46" width="330" height="188" rx="14"/>
+            <rect class="b-a" x="54" y="62" width="302" height="34" rx="8"/>
+            <text class="t-b t-mid" x="205" y="84">系统提示词</text>
+            <rect class="b-s" x="54" y="104" width="302" height="34" rx="8"/>
+            <text class="t-b t-mid" x="205" y="126">工具列表</text>
+            <rect class="b-g" x="54" y="146" width="302" height="34" rx="8"/>
+            <text class="t-b t-mid" x="205" y="168">skill 目录：只有名字 + 一句话</text>
+            <text class="t-s t-mid" x="205" y="212">这部分每一轮都在花钱</text>
+
+            <text class="t-h t-mid" x="695" y="34">存在你磁盘上的</text>
+            <rect class="panel" x="530" y="46" width="330" height="188" rx="14"/>
+            <rect class="b" x="544" y="62" width="302" height="34" rx="8"/>
+            <text class="t-b t-mid" x="695" y="84">SKILL.md 正文</text>
+            <rect class="b" x="544" y="104" width="302" height="34" rx="8"/>
+            <text class="t-b t-mid" x="695" y="126">附加的参考资料</text>
+            <rect class="b" x="544" y="146" width="302" height="34" rx="8"/>
+            <text class="t-b t-mid" x="695" y="168">脚本 / 模板</text>
+            <text class="t-s t-mid" x="695" y="212">不用就不加载，不花钱</text>
+
+            <text class="t-s t-mid" x="450" y="106">模型判断该用它了</text>
+            <path class="ln" d="M376,120 H524" marker-end="url(#sk1)"/>
+            <path class="ln" d="M524,170 H376" marker-end="url(#sk1)"/>
+            <text class="t-s t-mid" x="450" y="194">正文进入上下文</text>
+
+            <text class="t-s t-mid" x="450" y="264">写多长都行——只要你不用它，它就不占地方</text>
+          </svg>
+          <figcaption>这就是 skill 比「一大段写死的提示词」划算的地方：<b>长参考资料平时几乎零成本，需要时才有。</b></figcaption>
+        </figure>
+
+        <h2>它解决什么问题</h2>
+        <p>出现下面任何一种情况，就该考虑写一个 skill：</p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>你在反复粘同一段要求</h3>
+            <p>「按这个格式输出」「先做 A 再做 B，别跳步」——第三次粘贴的时候就该写成 skill 了。</p>
+          </div>
+          <div class="card">
+            <h3>你的操作步骤很长</h3>
+            <p>一份检查清单、一套固定流程、一个多步骤的规程。<b>留在对话里会被压缩掉，写成 skill 就一直在。</b></p>
+          </div>
+          <div class="card">
+            <h3>你希望每次都按同一套标准来</h3>
+            <p>比如「审代码时必须检查这几项」——写一次，以后每次都会照做。</p>
+          </div>
+        </div>
+
+        <h2>它长什么样</h2>
+        <p>最简单的形式就是一个文件夹加一个文件：</p>
+
+        <div class="codeblock"><pre data-lang="目录结构">~/.claude/skills/
+└── review-my-changes/
+    ├── SKILL.md          <span class="c">← 必须有，名字固定</span>
+    └── checklist.md      <span class="c">← 可选：附加的参考资料</span></pre></div>
+
+        <p>文件内容分两部分：上面是 <code>---</code> 包起来的几行元信息，下面是正文。</p>
+
+        <div class="codeblock"><pre data-lang="SKILL.md">---
+description: 审查我还没提交的改动，指出风险。当用户问「我改了什么」、
+  要写提交信息、或者要审阅自己的 diff 时使用。
+---
+
+## 当前改动
+
+!`git diff HEAD`
+
+## 要求
+
+把上面的改动总结成两三条要点，然后列出你注意到的风险：
+缺少错误处理、写死的路径、该补的测试没补。
+如果 diff 是空的，就说没有未提交的改动。</pre></div>
+
+        <div class="callout warn">
+          <div class="ic">🎯</div>
+          <div class="bd">
+            <span class="t">frontmatter 里最重要的就是 <code>description</code></span>
+            因为<b>模型只能看到名字和这句话，然后靠它决定「这个任务该不该用这个 skill」</b>。<br>
+            写得太笼统（「帮助处理代码」），它就永远不会被触发；写得具体（说清什么场景下用），命中率才高。<br>
+            <b>描述里写「什么时候用」，比写「它是什么」更重要。</b>
+          </div>
+        </div>
+
+        <h2>两种触发方式</h2>
+        <div class="tw">
+          <table>
+            <tr><th style="width:26%">方式</th><th>说明</th></tr>
+            <tr>
+              <td><b>你手动调用</b></td>
+              <td>在输入框敲 <code>/</code>，菜单里会列出可用的 skill；敲 <code>/skill-名字</code> 直接调用</td>
+            </tr>
+            <tr>
+              <td><b>模型自己判断</b></td>
+              <td>它看到目录里那句 <code>description</code>，觉得跟当前任务对得上，就自己加载</td>
+            </tr>
+          </table>
+        </div>
+        <p>如果你只想让它「由人决定什么时候用」，可以在 frontmatter 里加一行，把它从模型的视野里藏起来：</p>
+        <div class="codeblock"><pre data-lang="yaml">disable-model-invocation: true</pre></div>
+
+        <h2>放在哪里</h2>
+        <p>位置决定了它在哪些项目里生效。这是最实用的一张表：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:22%">放哪里</th><th style="width:38%">路径</th><th>生效范围</th></tr>
+            <tr>
+              <td><b>个人</b></td>
+              <td><code>~/.claude/skills/</code><br><code>~/.dsh/skills/</code></td>
+              <td>你这台机器上的所有项目</td>
+            </tr>
+            <tr>
+              <td><b>项目</b></td>
+              <td><code>项目/.claude/skills/</code><br><code>项目/.dsh/skills/</code></td>
+              <td>这个项目里的所有会话。<b>提交进仓库，同组的人也能用</b></td>
+            </tr>
+            <tr>
+              <td><b>共享 / 插件</b></td>
+              <td>随插件分发</td>
+              <td>装了这个插件的所有人</td>
+            </tr>
+          </table>
+        </div>
+
+        <p>几个容易踩的细节（以 DSH 为例）：</p>
+        <ul>
+          <li>名字必须是 <b>kebab-case</b>：小写字母、数字、中间用连字符，比如 <code>review-changes</code></li>
+          <li>两种写法都认：一个文件夹加 <code>SKILL.md</code>，或者一个扁平的 <code>名字.md</code></li>
+          <li>项目目录的判定方式是「往上找到最近的含 <code>.git</code> 的目录」，所以你在子目录里启动也能读到项目根目录下的 skill</li>
+          <li>同名冲突时有优先级：<b>项目里的压过用户目录里的</b>——所以你可以在某个项目里覆盖自己的个人习惯</li>
+        </ul>
+
+        <h2>四个值得学的进阶用法</h2>
+
+        <h3>1. 把命令的真实输出直接塞进去</h3>
+        <p>在 skill 正文里写 <code>!`命令`</code>，它会在内容发给模型<b>之前</b>先执行，把输出替换进来：</p>
+        <div class="codeblock"><pre data-lang="SKILL.md">## 当前改动
+
+!`git diff HEAD`</pre></div>
+        <p>这样模型拿到的是<b>真实的 diff 内容</b>，而不是靠猜。这正好呼应了<a href="c-loop.html">Agent 循环</a>那一页的原则：让模型看到上一步的真实结果。</p>
+
+        <h3>2. 传参数</h3>
+        <p>正文里写 <code>$ARGUMENTS</code>，调用时后面跟的内容就会填进去：</p>
+        <div class="codeblock"><pre data-lang="SKILL.md">---
+description: 按编号修一个 GitHub issue
+---
+
+修掉 issue $ARGUMENTS，按我们的代码规范来。</pre></div>
+        <p>然后 <code>/fix-issue 123</code> 就会变成「修掉 issue 123……」。</p>
+
+        <h3>3. 让它在一个独立的「分身」里跑</h3>
+        <p>有些 skill 会干很多活、翻很多文件。如果直接在主对话里跑，一堆中间过程会占满上下文。<br>
+        加一行配置，就能把它丢给一个子代理执行，<b>干完只把结论带回来</b>：</p>
+        <div class="codeblock"><pre data-lang="yaml">context: fork        <span class="c"># 在一个隔离的上下文里跑</span>
+agent: Explore       <span class="c"># 用只读探索型的 agent</span></pre></div>
+
+        <h3>4. 预先授权某些命令</h3>
+        <p>有些 skill 每次都要跑 github 命令，而每一步都弹一次审批很烦。可以在 frontmatter 里预先授权：</p>
+        <div class="codeblock"><pre data-lang="yaml">allowed-tools: Bash(gh *)</pre></div>
+        <div class="callout danger">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <b>只对你自己的 skill 这么干。</b>别人仓库里带的 skill 也可能声明了很宽的工具权限——<b>用别人的 skill 之前，先看一眼它写了什么</b>，尤其是 <code>allowed-tools</code> 和里面要执行的命令。
+          </div>
+        </div>
+
+        <h2>为什么这门课要讲 skill</h2>
+        <p>回到 <a href="c-harness.html">Harness</a> 那一页说的「一切皆插件」：skill 就是<b>你能用到的最日常的那种「扩展」</b>。你不需要会写代码、不需要改内核，只要写一个 Markdown 文件，就改变了这个 Agent 的行为。</p>
+
+        <div class="tw">
+          <table>
+            <tr><th style="width:34%">你已经在用的两个层次</th><th>区别</th></tr>
+            <tr>
+              <td><b>把结论写进文件</b><br><span class="small muted">（会话与上下文那一页）</span></td>
+              <td>让 AI <b>记住事实</b>。「这个项目用 DeepSeek，Key 在 xxx」</td>
+            </tr>
+            <tr>
+              <td><b>把流程写成 skill</b><br><span class="small muted">（就是这一页）</span></td>
+              <td>让 AI <b>记住怎么做</b>。「每次读完论文，都要按这个格式给我一份笔记」</td>
+            </tr>
+          </table>
+        </div>
+
+        <p>两者合起来，就是「不用每次都从零教它」的完整办法。</p>
+
+        <h2>你现在就可以写的三个 skill</h2>
+        <p>不用等学完，今天就值得写：</p>
+
+        <div class="cards">
+          <div class="card accent">
+            <h3>读论文的固定流程</h3>
+            <p>让它读完 PDF 后，必须输出：核心问题、方法、实验结果、局限、我不懂的地方。<br>
+            <span class="small muted">正好对应<a href="tasks.html">任务四</a>。</span></p>
+          </div>
+          <div class="card accent">
+            <h3>跑实验的固定步骤</h3>
+            <p>先跑哪个脚本、结果存到哪、失败时先看什么日志。<br>
+            <span class="small muted">下次换台机器，它也能照着做。</span></p>
+          </div>
+          <div class="card accent">
+            <h3>交作业前的自查清单</h3>
+            <p>格式对不对、引用全不全、有没有跑过一遍、有没有写清 AI 使用声明。</p>
+          </div>
+        </div>
+
+        <h2>三个常见误区</h2>
+        <div class="tw">
+          <table>
+            <tr><th style="width:36%">误区</th><th>实际上</th></tr>
+            <tr>
+              <td>「description 随便写写，反正我能手动调用」</td>
+              <td>写得笼统，<b>自动触发就永远不会发生</b>——你会白白丢掉一半的价值</td>
+            </tr>
+            <tr>
+              <td>「skill 越多越好」</td>
+              <td>每个 skill 的<b>名字和描述都常驻在上下文里</b>，装太多会白占地方，也会干扰模型的判断。只留真正常用的</td>
+            </tr>
+            <tr>
+              <td>「skill 就是一段长一点的提示词」</td>
+              <td>它更像<b>一份放在抽屉里的操作手册</b>：平时只有标签露在外面，用到才抽出来</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">🔍</div>
+          <div class="bd">
+            <span class="t">一个立刻能做的动作</span>
+            打开你已经装好的工具，<b>敲一个 <code>/</code> 看看菜单里有什么</b>。很多工具出厂就带了一批 skill（比如 <code>/code-review</code>、<code>/debug</code> 这类），它们会告诉你「一个 skill 用起来是什么感觉」。<br>
+            看懂了再自己写一个，就顺理成章了。
+          </div>
+        </div>
+
+        <div class="pagefoot">
+          <p>下一步 → <a href="c-tools.html">工具地图与怎么选</a>：把这些概念对应到具体的几个软件上。</p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>

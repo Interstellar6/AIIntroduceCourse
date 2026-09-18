@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-os="mac">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>拿到你的 API Key · 人工智能导论实操手册</title>
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div id="shell">
+  <aside id="sidebar"></aside>
+  <div>
+    <header id="topbar"></header>
+    <main id="main">
+      <article>
+
+        <h1>拿到你的 API Key</h1>
+        <p class="lede">工具是空的，模型才是它的大脑。这一步你要做的就是：买一个能调用模型的账号，拿到一把钥匙。做完之后，你会在终端里亲眼看到模型回你一句话。</p>
+
+        <div class="osbar">
+          <span>当前显示的是 <b class="only-mac">macOS / Linux</b><b class="only-win">Windows</b> 的命令</span>
+          <div class="os-switch" role="group" aria-label="切换操作系统">
+            <button data-set-os="mac">macOS / Linux</button>
+            <button data-set-os="win">Windows</button>
+          </div>
+        </div>
+
+        <h2>为什么必须有这一步</h2>
+        <p>你在网页上用过的那些 AI，背后都是「某个软件 + 一个模型」。软件本身是免费的，但<b>每一次提问都在消耗模型</b>，而模型是按用量收费的。</p>
+        <p>API Key 就是你的付费凭证。把它填进任何一个 AI 工具，工具就替你向模型提问，费用从你的账户扣。</p>
+
+        <div class="callout tip">
+          <div class="ic">💡</div>
+          <div class="bd">
+            <span class="t">它和「网页版聊天」的区别</span>
+            网页版聊天是别人替你付了费、再把界面给你用。拿到自己的 Key 之后，你用的是<b>同一个模型</b>，但可以把它接到任何工具上——包括能读写你文件、能跑命令的那些。这才是这门课的重点。
+          </div>
+        </div>
+
+        <h2>第一步：注册账号</h2>
+        <p>浏览器打开 <a href="https://platform.deepseek.com" target="_blank" rel="noopener">platform.deepseek.com</a>，用手机号或邮箱注册。</p>
+        <p>几个要注意的地方：</p>
+        <ul>
+          <li>部分邮箱域名不能注册，建议用 Gmail、Outlook、Hotmail、Yahoo 这类通用邮箱</li>
+          <li>微信登录目前不支持海外 IP；Google 登录目前不支持中国大陆 IP——如果卡住，换另一种登录方式</li>
+          <li>注册用的手机号/邮箱要能收到验证码，后面还会用到</li>
+        </ul>
+
+        <h2>第二步：实名认证</h2>
+        <div class="callout danger">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <span class="t">顺序不能反</span>
+            中国大陆用户<b>必须先完成实名认证，才能充值</b>。很多人卡在「充不了值」，原因就是这一步没做。
+          </div>
+        </div>
+        <p>入口在控制台的「个人信息」页：<code>platform.deepseek.com/profile</code>，找到「实名认证」，按提示提交。</p>
+        <ul>
+          <li>个人认证和企业认证在使用权益上没有差别，只是材料和流程不同</li>
+          <li>认证失败最常见的原因：证件号绑定账号数量超限，或者证件号连续输错被临时锁定</li>
+          <li>如果以后需要变成企业认证，个人可以改为企业，但反过来不行</li>
+        </ul>
+
+        <h2>第三步：充值</h2>
+        <p>打开「充值」页 <code>platform.deepseek.com/top_up</code>，用支付宝或微信支付。</p>
+        <ul>
+          <li><b>充最小的一档就够。</b>学生做实验，几元到十几元能跑很久</li>
+          <li>余额<b>永久有效，不会过期</b>；未消费的金额支持退款（在账单页有「退款管理」）</li>
+          <li>公司或社团报销的话：开票入口在「账单」页的「发票管理」，电子发票会发到你填的邮箱</li>
+        </ul>
+        <div class="callout warn">
+          <div class="ic">📄</div>
+          <div class="bd">
+            <span class="t">要报销的同学注意两条</span>
+            ① 企业认证<b>只能开企业主体抬头</b>的发票。② <b>已经开票的金额不能退款</b>，必须先作废发票。这两条提前想清楚，别到报销时才发现。
+          </div>
+        </div>
+
+        <h2>第四步：创建 API Key</h2>
+        <p>左侧菜单找到「API keys」页（<code>platform.deepseek.com/api_keys</code>），点创建，起一个能认出来的名字，比如 <code>class1</code>。</p>
+
+        <div class="callout danger">
+          <div class="ic">🔑</div>
+          <div class="bd">
+            <span class="t">Key 通常只完整显示这一次</span>
+            关掉页面就再也看不到明文了。<b>创建后立刻复制，存到你自己的一个文本文件里。</b>没存下来也不要慌——删掉重建一个就行，不影响余额。
+          </div>
+        </div>
+
+        <p>Key 的格式是以 <code>sk-</code> 开头的一长串字符。</p>
+
+        <h3>如果 Key 泄露了怎么办</h3>
+        <p>不要先改代码，<b>先去删 Key</b>：在「API keys」页选中它 → 点回收箱图标 → 确认删除。<b>删除后立即失效</b>，然后尽快建一个新的替换。中间那段时间如果 Key 还有效，别人就能继续花你的钱。</p>
+
+        <h2>记下这三样东西</h2>
+        <p>从现在开始，你要配置的每一个工具都只会问你同样三个问题。把它们写在一个文本文件里，后面会反复用到：</p>
+
+        <div class="codeblock"><pre><span class="c"># 三要素 · 抄到你自己的笔记里</span>
+<span class="k">base_url</span> : https://api.deepseek.com
+<span class="k">api key</span>  : sk-你的这一长串
+<span class="k">model id</span> : deepseek-flash</pre></div>
+
+        <div class="tw">
+          <table>
+            <tr><th>它是什么</th><th>填空式理解</th><th>写错的后果</th></tr>
+            <tr><td><code>base_url</code></td><td>请求发到哪台服务器 —— 「去哪家店买」</td><td>连不上、超时，或者返回一个奇怪的网页</td></tr>
+            <tr><td><code>api key</code></td><td>你是谁、从谁的账上扣钱 —— 「刷谁的卡」</td><td><code>401</code>（Key 错）或 <code>402</code>（余额不足）</td></tr>
+            <tr><td><code>model id</code></td><td>要哪一个模型 —— 「买哪个型号」</td><td><code>400</code> / 模型不存在</td></tr>
+          </table>
+        </div>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 312" role="img" aria-label="三要素与一次 API 调用的关系示意图：base_url、api key、model id 三者合起来构成一次调用，发给模型服务器，服务器把回答返回给你的工具">
+            <defs>
+              <marker id="ap1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+            </defs>
+
+            <rect class="b-a" x="20" y="36" width="210" height="56" rx="10"/>
+            <text class="t-b" x="34" y="60">base_url</text>
+            <text class="t-s" x="34" y="80">送到哪台服务器</text>
+
+            <rect class="b-a" x="20" y="104" width="210" height="56" rx="10"/>
+            <text class="t-b" x="34" y="128">api key</text>
+            <text class="t-s" x="34" y="148">你是谁，从谁账上扣钱</text>
+
+            <rect class="b-a" x="20" y="172" width="210" height="56" rx="10"/>
+            <text class="t-b" x="34" y="196">model id</text>
+            <text class="t-s" x="34" y="216">要哪一个模型</text>
+
+            <!-- 三合一 -->
+            <path class="ln-g" d="M230,64 H260 M230,132 H260 M230,200 H260"/>
+            <path class="ln-g" d="M260,64 V200"/>
+            <path class="ln" d="M260,132 H314" marker-end="url(#ap1)"/>
+
+            <rect class="b" x="320" y="104" width="140" height="56" rx="10"/>
+            <text class="t-b t-mid" x="390" y="128">你的工具</text>
+            <text class="t-s t-mid" x="390" y="148">或任何 AI 软件</text>
+
+            <path class="ln" d="M460,132 H534" marker-end="url(#ap1)"/>
+            <text class="t-s t-mid" x="497" y="176">一次 API 调用</text>
+
+            <rect class="b-g" x="540" y="104" width="210" height="56" rx="10"/>
+            <text class="t-m t-mid" x="645" y="128">api.deepseek.com</text>
+            <text class="t-s t-mid" x="645" y="148">模型在这里</text>
+
+            <path class="ln" d="M645,160 V246 H390 V164" marker-end="url(#ap1)"/>
+            <text class="t-s t-mid" x="517" y="266">它回你一段文字</text>
+
+            <text class="t-s t-mid" x="450" y="300">三样全对才通 —— 错一个就报错</text>
+          </svg>
+          <figcaption>不管是网页界面还是终端工具，要接一个模型，问的都是<b>同样三个问题</b>。后面你会看到，每个软件的「配置」本质就是填这三个空。</figcaption>
+        </figure>
+
+        <div class="callout warn">
+          <div class="ic">📌</div>
+          <div class="bd">
+            <span class="t">两个 2026 年必须知道的变更</span>
+            ① <b>模型名变了。</b>网上 2025 年的教程几乎都在用 <code>deepseek-chat</code> 和 <code>deepseek-reasoner</code>，这两个名字<b>已经在 2026 年 7 月 24 日停止使用</b>。现在只有 <code>deepseek-flash</code> 和 <code>deepseek-v4-pro</code>。<br>
+            ② <b>base_url 不要加 <code>/v1</code>。</b>老教程里写的 <code>https://api.deepseek.com/v1</code> 已经不在官方文档里了，官方现在一律写不带 <code>/v1</code> 的地址。
+          </div>
+        </div>
+
+        <h2>顺带说清：为什么同一个模型有三个地址</h2>
+        <p>你以后会看到 DeepSeek 出现在三个不同的地址下，很容易以为是三个不同的服务。其实不是。</p>
+        <p>模型和模型说话时，请求要装进一个「信封」。<b>不同软件认的信封格式不一样</b>，所以同一个模型要开三个入口。DeepSeek 官方三个都提供了：</p>
+
+        <figure class="fig">
+          <svg viewBox="0 0 900 285" role="img" aria-label="协议示意图：Claude Code 用 Anthropic 格式、Codex 用 Responses 格式、其他工具用 OpenAI 格式，三种信封背后是同一个模型和同一把钥匙">
+            <defs>
+              <marker id="ap2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" class="ahm"/>
+              </marker>
+            </defs>
+
+            <rect class="b" x="40" y="30" width="250" height="76" rx="10"/>
+            <text class="t-h t-mid" x="165" y="58">Claude Code</text>
+            <text class="t-s t-mid" x="165" y="79">Anthropic 格式</text>
+            <text class="t-m t-mid" x="165" y="98">…/anthropic</text>
+
+            <rect class="b" x="325" y="30" width="250" height="76" rx="10"/>
+            <text class="t-h t-mid" x="450" y="58">Codex</text>
+            <text class="t-s t-mid" x="450" y="79">Responses 格式</text>
+            <text class="t-m t-mid" x="450" y="98">同一地址，路径不同</text>
+
+            <rect class="b" x="610" y="30" width="250" height="76" rx="10"/>
+            <text class="t-h t-mid" x="735" y="58">其他工具</text>
+            <text class="t-s t-mid" x="735" y="79">OpenAI 格式</text>
+            <text class="t-m t-mid" x="735" y="98">最通用</text>
+
+            <path class="ln" d="M165,106 V168" marker-end="url(#ap2)"/>
+            <path class="ln" d="M450,106 V168" marker-end="url(#ap2)"/>
+            <path class="ln" d="M735,106 V168" marker-end="url(#ap2)"/>
+
+            <rect class="b-g" x="170" y="172" width="560" height="66" rx="12"/>
+            <text class="t-h t-mid" x="450" y="200">同一个模型 · 同一个 API Key</text>
+            <text class="t-m t-mid" x="450" y="222">https://api.deepseek.com</text>
+
+            <text class="t-s t-mid" x="450" y="266">协议只是信封，跟背后是哪家的模型没有关系</text>
+          </svg>
+          <figcaption>记住这个因果关系：一个中转站说「支持 Claude Code」，意思是它提供了 Anthropic 格式的端点；说「支持 Codex」，意思是它提供了 Responses 格式的端点。<br><b>新手 90% 的报错，都是 Key / 地址 / 协议这三样没对齐。</b></figcaption>
+        </figure>
+
+        <div class="callout tip">
+          <div class="ic">💡</div>
+          <div class="bd">
+            <span class="t">这一页只需要记住一句话</span>
+            <b>协议只是信封，信封可以换，里面的模型才是关键。</b><br>
+            所以「要用 Claude Code 就必须买中转站」这个说法是不成立的——DeepSeek 官方自己就把 Anthropic 格式的入口开好了。
+          </div>
+        </div>
+
+        <h2>验证：发出你的第一次调用</h2>
+        <p>打开终端（<span class="only-mac">macOS 的「终端」，Linux 的任意终端</span><span class="only-win">Windows 的 PowerShell</span>），把下面命令里的 Key 换成你自己的，逐行粘贴回车。</p>
+
+        <div class="only-mac">
+          <div class="codeblock"><pre data-lang="bash"><span class="k">export</span> DS_KEY=<span class="s">"sk-把这里换成你自己的Key"</span>
+
+curl https://api.deepseek.com/chat/completions \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -H <span class="s">"Authorization: Bearer $DS_KEY"</span> \
+  -d <span class="s">'{"model":"deepseek-flash","messages":[{"role":"user","content":"用一句话解释什么是Agent"}]}'</span></pre></div>
+        </div>
+
+        <div class="only-win">
+          <div class="codeblock"><pre data-lang="powershell"><span class="k">$env:</span>DS_KEY=<span class="s">"sk-把这里换成你自己的Key"</span>
+
+curl.exe https://api.deepseek.com/chat/completions `
+  -H <span class="s">"Content-Type: application/json"</span> `
+  -H <span class="s">"Authorization: Bearer $env:DS_KEY"</span> `
+  -d <span class="s">'{"model":"deepseek-flash","messages":[{"role":"user","content":"用一句话解释什么是Agent"}]}'</span></pre></div>
+          <div class="callout tip">
+            <div class="ic">💡</div>
+            <div class="bd">Windows 上一定要写 <code>curl.exe</code>。PowerShell 里的 <code>curl</code> 是另一个内置命令的别名，直接用会报错。另外 PowerShell 的换行符是反引号 <code>`</code>，不是反斜杠。</div>
+          </div>
+        </div>
+
+        <h3>成功长什么样</h3>
+        <p>你会看到一大段 JSON。你要找的是两处：</p>
+        <ul>
+          <li><code>choices[0].message.content</code> —— 模型回你的那句话</li>
+          <li><code>usage</code> —— 这次花了多少 token，也就是花了多少钱</li>
+        </ul>
+        <p>看到这段 JSON 之后，可以停下来想一件事：<b>你平时用的聊天网页，做的就是这件事，只不过它把这段 JSON 排版好看了。</b>所谓「AI 对话」，本质就是一个 HTTP 请求。</p>
+
+        <h3>失败长什么样</h3>
+        <div class="tw">
+          <table>
+            <tr><th>报错</th><th>意思</th><th>怎么办</th></tr>
+            <tr><td><code>401</code></td><td>认证失败</td><td>Key 复制错了，或者前后多了空格</td></tr>
+            <tr><td><code>402</code></td><td>余额不足</td><td>去充值页充值</td></tr>
+            <tr><td><code>400</code> / Model Not Exist</td><td>模型名不对</td><td>检查是不是写成了 <code>deepseek-chat</code></td></tr>
+            <tr><td>连不上 / 超时</td><td>地址或网络问题</td><td>检查 <code>base_url</code> 有没有多写 <code>/v1</code></td></tr>
+            <tr><td><code>429</code></td><td>请求太快或并发到上限</td><td>稍等再试；正常学习用量碰不到</td></tr>
+          </table>
+        </div>
+
+        <h2>钱到底花在哪里</h2>
+        <p>知道计价方式，你才能放心大胆地用。以下单位都是<b>元 / 百万 tokens</b>：</p>
+
+        <div class="tw">
+          <table>
+            <tr><th>计费项</th><th>flash 空闲</th><th>flash 高峰</th><th>v4-pro 空闲</th><th>v4-pro 高峰</th></tr>
+            <tr><td>输入（缓存命中）</td><td class="mono">0.02</td><td class="mono">0.04</td><td class="mono">0.15</td><td class="mono">0.30</td></tr>
+            <tr><td>输入（缓存未命中）</td><td class="mono">1</td><td class="mono">2</td><td class="mono">4.5</td><td class="mono">9.0</td></tr>
+            <tr><td>输出</td><td class="mono">4</td><td class="mono">8</td><td class="mono">13.5</td><td class="mono">27.0</td></tr>
+          </table>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <h3>换算成人话</h3>
+            <p><b>1 块钱</b>大约能买 <b>100 万字</b>的输入，或者 <b>20 万字</b>的输出。</p>
+            <p>所以问问题几乎不花钱。真正花钱的是让 Agent 跑很长的任务。</p>
+          </div>
+          <div class="card">
+            <h3>错开高峰能省一半</h3>
+            <p>高峰时段是<b>北京时间周一至周五 9:00–12:00、14:00–18:00</b>，其余时间价格减半。</p>
+            <p>批量实验放到晚上跑。</p>
+          </div>
+          <div class="card">
+            <h3>缓存命中便宜 50 倍</h3>
+            <p>连续对话里重复出现的前缀只按缓存价收费。</p>
+            <p>所以「把稳定的内容放在前面」是真的省钱。</p>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="ic">🧮</div>
+          <div class="bd">
+            <span class="t">为什么 Agent 比聊天贵</span>
+            Agent 的<b>每一个步骤</b>都要把「到目前为止的全部对话」重新发一遍。一个 10 步的任务，前面的内容就被重复计费了 10 次。这不是 bug——正是因为这个，才有「上下文压缩」和「该开新会话就开新会话」这些操作。
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <span class="t">一个常见误解</span>
+            用量限制是<b>按账号算的</b>（flash 并发 2500、v4-pro 并发 500），<b>多建几个 Key 不会扩容</b>。而且官方现在的限速口径是「并发」而不是每分钟请求数。
+          </div>
+        </div>
+
+        <h2>关于你的 Key 的三条纪律</h2>
+        <ul class="checklist">
+          <li><input type="checkbox"><label>不把 Key 发到任何群里、聊天里、论坛上（官方原文：不要与他人共享）</label></li>
+          <li><input type="checkbox"><label>不把 Key 写进网页前端代码、截图、录屏里（官方原文：不要暴露在浏览器或客户端代码中）</label></li>
+          <li><input type="checkbox"><label>泄露后第一动作是<b>删掉这个 Key</b>，不是先改代码</label></li>
+        </ul>
+
+        <h2>想用 DeepSeek 之外的模型？</h2>
+        <p>DeepSeek 已经够上这门课了，而且国内直连、支付宝付款、便宜。但如果你想知道 Claude、GPT 这些模型是什么感觉，可以看这一页：</p>
+        <p><a href="relay.html">想用别的模型 →</a></p>
+
+        <div class="pagefoot">
+          <p>做完这一步，你应该有：一个能登录的账号、账上有一点余额、一个存在本地文件里的 API Key，以及一次成功的调用记录。</p>
+          <p class="muted">下一步 → <a href="node.html">安装 Node.js</a></p>
+        </div>
+
+      </article>
+      <nav id="pager"></nav>
+    </main>
+  </div>
+  <aside id="toc"></aside>
+</div>
+<script src="assets/docs.js"></script>
+</body>
+</html>
