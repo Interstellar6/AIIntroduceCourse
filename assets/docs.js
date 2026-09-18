@@ -41,7 +41,15 @@
   var FLAT = [];
   NAV.forEach(function (g) { g.items.forEach(function (it) { FLAT.push(it); }); });
 
-  var here = (location.pathname.split('/').pop() || 'index.html');
+  /* 当前是哪个页面。
+     注意：Cloudflare 的 assets 用 auto-trailing-slash，会把 /c-loop.html 307 跳到 /c-loop，
+     所以 location 最后一段可能没有 .html，必须归一化后再跟 NAV 比对，
+     否则 curIdx 会变成 -1 —— 侧栏就没有当前项高亮，上下页按钮也会双双变空。 */
+  var here = (function (path) {
+    var last = decodeURIComponent(path.split('/').pop() || '');
+    last = last.replace(/\.html?$/i, '');
+    return last ? last + '.html' : 'index.html';
+  })(location.pathname);
   var curIdx = -1;
   FLAT.forEach(function (it, i) { if (it.f === here) curIdx = i; });
   var cur = curIdx >= 0 ? FLAT[curIdx] : FLAT[0];
