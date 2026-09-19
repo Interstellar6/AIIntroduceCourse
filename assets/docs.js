@@ -32,7 +32,7 @@
     ]},
     { group: '其他', items: [
       { f: 'relay.html',        n: '16', t: '想用别的模型' },
-      { f: 'tasks.html',        n: '17', t: '三个练习任务' }
+      { f: 'tasks.html',        n: '17', t: '四个练习任务' }
     ]},
     { group: '帮助', items: [
       { f: 'help.html',         n: '18', t: '排错 · 术语 · 速查' }
