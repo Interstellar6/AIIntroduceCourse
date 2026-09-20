@@ -97,6 +97,53 @@
 
   /* ---------------- 侧栏 ---------------- */
 
+  /* ---------------- 手机端：目录抽屉 ---------------- */
+
+  /* 窄屏下侧栏变成浮层。加一层遮罩，点遮罩或按 Esc 都能关掉，
+     否则手指划到正文却还在抽屉里，只能再点一次「目录」。 */
+  function setNav(open) {
+    var sb = document.getElementById('sidebar');
+    if (!sb) return;
+    sb.classList.toggle('open', open);
+    document.body.classList.toggle('nav-open', open);
+    var mb = document.getElementById('menubtn');
+    if (mb) mb.setAttribute('aria-expanded', open ? 'true' : 'false');
+    var bd = document.getElementById('navbackdrop');
+    if (open && !bd) {
+      bd = el('div'); bd.id = 'navbackdrop';
+      bd.addEventListener('click', function () { setNav(false); });
+      document.body.appendChild(bd);
+    }
+    if (bd) bd.hidden = !open;
+  }
+
+  /* ---------------- 窄屏：宽表 / 大图的可滑动提示 ---------------- */
+
+  /* 那些图是按 600px 画的，手机上必须横向滑才看得清（缩到 390px 字就糊了）。
+     但「能滑」这件事本身没有提示，很多人以为内容被截断了 —— 溢出时才加一行字。 */
+  function buildScrollHints() {
+    ['.fig', '.tw'].forEach(function (sel) {
+      Array.prototype.forEach.call(document.querySelectorAll(sel), function (box) {
+        var need = box.scrollWidth > box.clientWidth + 2;
+        var prev = box.previousElementSibling;
+        var has = prev && prev.classList && prev.classList.contains('scrollhint');
+        if (need && !has) {
+          var h = el('div', 'scrollhint', '← 左右滑动看完整内容 →');
+          box.parentNode.insertBefore(h, box);
+        } else if (!need && has) {
+          prev.remove();
+        }
+      });
+    });
+  }
+
+  var hintTimer = 0;
+  window.addEventListener('resize', function () {
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(buildScrollHints, 180);
+  });
+  window.addEventListener('orientationchange', function () { setTimeout(buildScrollHints, 320); });
+
   function buildSidebar() {
     var sb = document.getElementById('sidebar');
     if (!sb) return;
@@ -122,8 +169,8 @@
       '<div class="crumb">实操手册 <span class="muted">/</span> <b>' + cur.t + '</b></div>' +
       '<div class="spacer"></div>' +
       '<div class="os-switch" role="group" aria-label="切换操作系统">' +
-        '<button data-set-os="mac">macOS / Linux</button>' +
-        '<button data-set-os="win">Windows</button>' +
+        '<button data-set-os="mac"><span class="full">macOS / Linux</span><span class="short">Mac</span></button>' +
+        '<button data-set-os="win"><span class="full">Windows</span><span class="short">Win</span></button>' +
       '</div>' +
       '<button class="iconbtn" id="themebtn" title="切换明暗">◐</button>';
 
@@ -134,9 +181,13 @@
       });
     });
     var mb = document.getElementById('menubtn');
-    if (mb) mb.addEventListener('click', function () {
-      document.getElementById('sidebar').classList.toggle('open');
-    });
+    if (mb) {
+      mb.setAttribute('aria-expanded', 'false');
+      mb.addEventListener('click', function () {
+        var sb = document.getElementById('sidebar');
+        setNav(!(sb && sb.classList.contains('open')));
+      });
+    }
     var tb2 = document.getElementById('themebtn');
     if (tb2) tb2.addEventListener('click', function () {
       applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
@@ -303,6 +354,7 @@
   buildCopy();
   buildChecklist();
   buildPager();
+  buildScrollHints();
 
   // 页面标题补全
   if (cur && document.title.indexOf('·') < 0) {
@@ -339,6 +391,10 @@
   })();
 
   // 点击正文里的锚点后关掉移动端菜单
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setNav(false);
+  });
+
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href^="#"]');
     if (a && window.innerWidth <= 860) {
