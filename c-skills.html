@@ -94,7 +94,7 @@
         <h2>它长什么样</h2>
         <p>最简单的形式就是一个文件夹加一个文件：</p>
 
-        <div class="codeblock"><pre data-lang="目录结构">~/.claude/skills/
+        <div class="codeblock"><pre data-lang="目录结构">~/.dsh/skills/
 └── review-my-changes/
     ├── SKILL.md          <span class="c">← 必须有，名字固定</span>
     └── checklist.md      <span class="c">← 可选：附加的参考资料</span></pre></div>
@@ -106,15 +106,15 @@ description: 审查我还没提交的改动，指出风险。当用户问「我�
   要写提交信息、或者要审阅自己的 diff 时使用。
 ---
 
-## 当前改动
-
-!`git diff HEAD`
-
 ## 要求
 
-把上面的改动总结成两三条要点，然后列出你注意到的风险：
+先用 git diff 看一下当前还没提交的改动，然后：
+
+把改动总结成两三条要点，列出你注意到的风险：
 缺少错误处理、写死的路径、该补的测试没补。
-如果 diff 是空的，就说没有未提交的改动。</pre></div>
+如果没有任何未提交的改动，就直说。</pre></div>
+
+        <p>注意正文里没写「用哪个工具去拿 diff」——它自己会去跑。<b>你只要说清要什么、怎么算合格。</b></p>
 
         <div class="callout warn">
           <div class="ic">🎯</div>
@@ -148,15 +148,15 @@ description: 审查我还没提交的改动，指出风险。当用户问「我�
 
         <div class="tw">
           <table>
-            <tr><th style="width:22%">放哪里</th><th style="width:38%">路径</th><th>生效范围</th></tr>
+            <tr><th style="width:16%">放哪里</th><th style="width:44%">路径</th><th>生效范围</th></tr>
             <tr>
               <td><b>个人</b></td>
-              <td><code>~/.claude/skills/</code><br><code>~/.dsh/skills/</code></td>
+              <td><code>~/.dsh/skills/</code> <span class="muted">DSH</span><br><code>~/.claude/skills/</code> <span class="muted">Claude Code</span></td>
               <td>你这台机器上的所有项目</td>
             </tr>
             <tr>
               <td><b>项目</b></td>
-              <td><code>项目/.claude/skills/</code><br><code>项目/.dsh/skills/</code></td>
+              <td><code>项目/.dsh/skills/</code> <span class="muted">DSH</span><br><code>项目/.claude/skills/</code> <span class="muted">Claude Code</span></td>
               <td>这个项目里的所有会话。<b>提交进仓库，同组的人也能用</b></td>
             </tr>
             <tr>
@@ -167,6 +167,16 @@ description: 审查我还没提交的改动，指出风险。当用户问「我�
           </table>
         </div>
 
+        <div class="callout warn">
+          <div class="ic">⚠️</div>
+          <div class="bd">
+            <span class="t">路径按工具分，<b>不要混着放</b></span>
+            两行不是「二选一随便放哪个」——<b>每个工具只扫自己那个目录</b>：<br>
+            <b>DSH 只认 <code>.dsh/skills/</code></b>，它<b>不会</b>去读 <code>.claude/skills/</code>；反过来也一样。<br>
+            本课程第 2 节课先用 DSH，所以<b>现在统一放 <code>~/.dsh/skills/</code></b> 就行；到第 3 节课装 Claude Code 时，再往 <code>.claude/skills/</code> 放。
+          </div>
+        </div>
+
         <p>几个容易踩的细节（以 DSH 为例）：</p>
         <ul>
           <li>名字必须是 <b>kebab-case</b>：小写字母、数字、中间用连字符，比如 <code>review-changes</code></li>
@@ -175,7 +185,18 @@ description: 审查我还没提交的改动，指出风险。当用户问「我�
           <li>同名冲突时有优先级：<b>项目里的压过用户目录里的</b>——所以你可以在某个项目里覆盖自己的个人习惯</li>
         </ul>
 
-        <h2>四个值得学的进阶用法</h2>
+        <h2>四个值得学的进阶用法<span class="muted" style="font-size:15px;font-weight:400">（Claude Code）</span></h2>
+
+        <div class="callout warn">
+          <div class="ic">📌</div>
+          <div class="bd">
+            <span class="t">先看清楚：这四个是 <b>Claude Code</b> 的写法，<b>DSH 目前不支持</b></span>
+            下面四个用法属于 Claude Code 的 skill 规范。你们第 2 节课装的 <b>DSH 只支持三个字段</b>：
+            <code>name</code>、<code>description</code>、<code>disable-model-invocation</code>。<br>
+            <b>先知道有这些写法就够了</b>——前面讲的原理一个都不少，等第 3 节课装了 Claude Code 再回来用。<br>
+            <span class="muted">课上前 20 分钟只需要会一件事：写一个 <code>SKILL.md</code>，把 <code>description</code> 写具体。</span>
+          </div>
+        </div>
 
         <h3>1. 把命令的真实输出直接塞进去</h3>
         <p>在 skill 正文里写 <code>!`命令`</code>，它会在内容发给模型<b>之前</b>先执行，把输出替换进来：</p>
