@@ -11,7 +11,7 @@
 demo-assets/
 ├── README.md                    ← 你正在看的文件
 ├── harness/                     ← 讲 Harness / Loop Engineering 时投屏
-│   ├── 01-harness如何控制模型.svg
+│   ├── 01-agent和harness差在哪.svg
 │   └── 02-循环工程四道缰绳.svg
 ├── paper/                       ← 任务四用；也可以第一节课就发给同学
 │   ├── Attention-Is-All-You-Need-arXiv-1706.03762v7.pdf
@@ -30,7 +30,7 @@ demo-assets/
 |---|---|---|---|
 | 第六段 · Agent 循环（五步） | 14.5 分起 | 站内页面的五步流程图 | 这块用页面自带的图就够 |
 | **第六段 · Loop Engineering** | 第六段后半 | **`harness/02-循环工程四道缰绳.svg`** | 讲「难的不是写循环，是这四道控制」，讲完可以留在屏幕上 |
-| **第七段 · Harness** | 18–20.5 分 | **`harness/01-harness如何控制模型.svg`** | 全屏打开，整段对着它讲「模型只会打字，是这一圈让它能干活」 |
+| **第七段 · Harness** | 18–20.5 分 | **`harness/01-agent和harness差在哪.svg`** | 全屏打开，整段对着它讲「模型只会打字，是这一圈让它能干活」 |
 | **第八段 · Skill** | 20.5–22.5 分 | **`skills/`** 整个目录 | 按 `skills/README.md` 的两分钟脚本走，A/B 对比是高潮 |
 | 收尾 · 布置任务四 | 下课前 | **`paper/`** | 把 PDF 发到班级群，配 `怎么读这篇论文.md` |
 
@@ -41,7 +41,7 @@ demo-assets/
 SVG 就是文本，**浏览器直接拖进去就能全屏看**，放大不糊（矢量图）。
 
 ```bash
-open demo-assets/harness/01-harness如何控制模型.svg      # macOS
+open demo-assets/harness/01-agent和harness差在哪.svg      # macOS
 ```
 
 - 按 `⌘ +`（Windows `Ctrl +`）放大到铺满屏幕
@@ -52,8 +52,12 @@ open demo-assets/harness/01-harness如何控制模型.svg      # macOS
 
 | 图 | 讲什么 | 一句话 |
 |---|---|---|
-| `01-harness如何控制模型.svg` | **控制结构**：模型在中间，外面一圈是 Harness；五步怎么转、闸门在哪、结果怎么回到上下文；底部一张「模型做不到的五件事」对照 | 模型只会「文字进、文字出」，是 Harness 让它能干活并且不闯祸 |
+| `01-agent和harness差在哪.svg` | **两者的分界**：① 三个词各回答什么问题（模型=能力来源 / Agent=一套机制、是个开关 / Harness=一个产品、是个刻度）② 嵌套关系——Harness 把 Agent 机制（五步循环）包在里面，并在外面多管六件事 ③ Harness 比机制多出来的五样，每样都写了「没有它会怎样」 | **Agent 回答「能不能动手」，Harness 回答「动手动得多好、会不会闯祸」** |
 | `02-循环工程四道缰绳.svg` | **四道控制**：笼头（看见什么）· 缰绳（能碰什么）· 勒停（什么时候停）· 回缰（错了怎么办），每道都有「太紧/太松」两个失败模式 | 写一个循环只要几十行，难的是这四件事 |
+
+> **第一张图是专门为「Harness 和 Agent 不是一回事」重画过的。**
+> 上一版画的是「循环 / 工具 / 日志 / 闸门」——那正好是站点对 **Agent** 的定义，标题换成 Agent 也成立，等于没讲出 Harness 的特殊性。
+> 现在这张图的主线就是两者的分界，不能再对调了。
 
 ---
 
