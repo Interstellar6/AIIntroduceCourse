@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1010" width="1240" height="1010"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1066" width="1240" height="1066"
      font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
   <defs>
     <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -9,7 +9,7 @@
       <stop offset="100%" stop-color="#3f57d8"/>
     </linearGradient>
   </defs>
-  <rect width="1240" height="1010" fill="#ffffff"/>
+  <rect width="1240" height="1066" fill="#ffffff"/>
 
   <!-- 标题 -->
   <text x="40" y="52" font-size="30" font-weight="700" fill="#1b2033">Agent 和 Harness：一个是机制，一个是产品</text>
@@ -170,4 +170,9 @@
     <text x="998" y="940" font-size="12.5" fill="#b08a4a">和插件才能真正改变</text>
     <text x="998" y="960" font-size="12.5" fill="#b08a4a">这个 Agent 的行为</text>
   </g>
+
+  <!-- 收尾结论 -->
+  <line x1="40" y1="996" x2="1200" y2="996" stroke="#e2e8f7"/>
+  <text x="40" y="1028" font-size="16" font-weight="700" fill="#1b2033">这五样没有一样是模型的智力，<tspan fill="#3f57d8">全都是工程</tspan>。</text>
+  <text x="40" y="1052" font-size="14.5" fill="#40496a">所以除了「哪个模型更强」，你手上还有另一层可以挑、可以调的东西 —— 这就是这门课接下来三节课要教你的那层。</text>
 </svg>
