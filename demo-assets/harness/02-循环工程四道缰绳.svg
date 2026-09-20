@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 680" width="1240" height="680"
+     font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
+  <rect width="1240" height="680" fill="#ffffff"/>
+
+  <text x="40" y="52" font-size="30" font-weight="700" fill="#1b2033">Loop Engineering：循环里真正难的四件事</text>
+  <text x="40" y="84" font-size="15.5" fill="#6b7490">
+    <tspan>循环本身几十行代码就能写。难的是下面这四道控制——它们决定了同一个模型装进不同软件里，为什么能力差那么多。</tspan>
+  </text>
+  <text x="40" y="118" font-size="14.5" fill="#3f57d8" font-weight="700">用马具打比方：马有力量，但你能不能坐上去、能不能控制方向，全看这四样装得怎么样。</text>
+
+  <!-- 卡片 1 -->
+  <rect x="40" y="140" width="278" height="366" rx="14" fill="#f7f9ff" stroke="#c9d5ff" stroke-width="1.6"/>
+  <rect x="40" y="140" width="278" height="6" rx="3" fill="#3f57d8"/>
+  <text x="62" y="182" font-size="19" font-weight="700" fill="#1b2033">笼头</text>
+  <text x="62" y="206" font-size="13.5" fill="#3f57d8" font-weight="700">决定它「看得见什么」</text>
+  <line x1="62" y1="222" x2="296" y2="222" stroke="#dbe3fb"/>
+  <text x="62" y="250" font-size="13.5" fill="#40496a">系统提示词怎么写？</text>
+  <text x="62" y="274" font-size="13.5" fill="#40496a">给它几个工具？</text>
+  <text x="62" y="298" font-size="13.5" fill="#40496a">历史要不要截断？</text>
+  <text x="62" y="322" font-size="13.5" fill="#40496a">压缩的时候丢掉什么？</text>
+  <rect x="62" y="342" width="234" height="60" rx="9" fill="#ffffff" stroke="#dbe3fb"/>
+  <text x="76" y="366" font-size="12.5" fill="#c0392b">太紧：放太少 → 它只能瞎猜</text>
+  <text x="76" y="390" font-size="12.5" fill="#a5670f">太松：放太多 → 它反而糊涂</text>
+  <text x="62" y="430" font-size="13" fill="#3f57d8" font-weight="700">对应循环第 1 步</text>
+  <text x="62" y="456" font-size="12.5" fill="#8590ad">这一层决定它有没有信息可用</text>
+  <text x="62" y="478" font-size="12.5" fill="#8590ad">——也是你唯一能直接改的一层</text>
+
+  <!-- 卡片 2 -->
+  <rect x="334" y="140" width="278" height="366" rx="14" fill="#f6fbf8" stroke="#bfe3d2" stroke-width="1.6"/>
+  <rect x="334" y="140" width="278" height="6" rx="3" fill="#1f8a5f"/>
+  <text x="356" y="182" font-size="19" font-weight="700" fill="#1b2033">缰绳</text>
+  <text x="356" y="206" font-size="13.5" fill="#1f8a5f" font-weight="700">决定它「能碰什么」</text>
+  <line x1="356" y1="222" x2="590" y2="222" stroke="#d6ece1"/>
+  <text x="356" y="250" font-size="13.5" fill="#40496a">给多少工具权限？</text>
+  <text x="356" y="274" font-size="13.5" fill="#40496a">哪些操作必须先问你？</text>
+  <text x="356" y="298" font-size="13.5" fill="#40496a">沙箱圈多大？</text>
+  <text x="356" y="322" font-size="13.5" fill="#40496a">工作目录限定在哪？</text>
+  <rect x="356" y="342" width="234" height="60" rx="9" fill="#ffffff" stroke="#d6ece1"/>
+  <text x="370" y="366" font-size="12.5" fill="#c0392b">太紧：给太少 → 它根本干不动</text>
+  <text x="370" y="390" font-size="12.5" fill="#a5670f">太松：给太多 → 它敢删你的库</text>
+  <text x="356" y="430" font-size="13" fill="#1f8a5f" font-weight="700">对应循环第 4 步之前的闸门</text>
+  <text x="356" y="456" font-size="12.5" fill="#8590ad">这一层决定它会不会闯祸</text>
+  <text x="356" y="478" font-size="12.5" fill="#8590ad">——也是「Agent 比聊天框贵」的来源</text>
+
+  <!-- 卡片 3 -->
+  <rect x="628" y="140" width="278" height="366" rx="14" fill="#fffaf0" stroke="#f0c07a" stroke-width="1.6"/>
+  <rect x="628" y="140" width="278" height="6" rx="3" fill="#e08b2f"/>
+  <text x="650" y="182" font-size="19" font-weight="700" fill="#1b2033">勒停</text>
+  <text x="650" y="206" font-size="13.5" fill="#a5670f" font-weight="700">决定它「什么时候停」</text>
+  <line x1="650" y1="222" x2="884" y2="222" stroke="#f4dcb6"/>
+  <text x="650" y="250" font-size="13.5" fill="#40496a">怎么判断任务成功了？</text>
+  <text x="650" y="274" font-size="13.5" fill="#40496a">死循环怎么发现？</text>
+  <text x="650" y="298" font-size="13.5" fill="#40496a">最大步数设多少？</text>
+  <text x="650" y="322" font-size="13.5" fill="#40496a">钱花超了怎么办？</text>
+  <rect x="650" y="342" width="234" height="60" rx="9" fill="#ffffff" stroke="#f4dcb6"/>
+  <text x="664" y="366" font-size="12.5" fill="#c0392b">太紧：停太早 → 活干了一半</text>
+  <text x="664" y="390" font-size="12.5" fill="#a5670f">太松：停不下 → 烧钱的循环</text>
+  <text x="650" y="430" font-size="13" fill="#a5670f" font-weight="700">对应循环第 3 步的判断</text>
+  <text x="650" y="456" font-size="12.5" fill="#8590ad">不会停的循环，就是一个烧钱的循环</text>
+  <text x="650" y="478" font-size="12.5" fill="#8590ad">——所以目标模式一定要能暂停</text>
+
+  <!-- 卡片 4 -->
+  <rect x="922" y="140" width="278" height="366" rx="14" fill="#faf7ff" stroke="#d9c8f5" stroke-width="1.6"/>
+  <rect x="922" y="140" width="278" height="6" rx="3" fill="#7b3fd8"/>
+  <text x="944" y="182" font-size="19" font-weight="700" fill="#1b2033">回缰</text>
+  <text x="944" y="206" font-size="13.5" fill="#7b3fd8" font-weight="700">决定它「错了怎么办」</text>
+  <line x1="944" y1="222" x2="1178" y2="222" stroke="#e4d9f7"/>
+  <text x="944" y="250" font-size="13.5" fill="#40496a">失败信息怎么回灌？</text>
+  <text x="944" y="274" font-size="13.5" fill="#40496a">重试几次？换不换模型？</text>
+  <text x="944" y="298" font-size="13.5" fill="#40496a">报错原文给到什么程度？</text>
+  <text x="944" y="322" font-size="13.5" fill="#40496a">什么时候该放弃？</text>
+  <rect x="944" y="342" width="234" height="60" rx="9" fill="#ffffff" stroke="#e4d9f7"/>
+  <text x="958" y="366" font-size="12.5" fill="#c0392b">太紧：只说「失败了」→ 它靠猜</text>
+  <text x="958" y="390" font-size="12.5" fill="#a5670f">太松：全倒进去 → 上下文被灌满</text>
+  <text x="944" y="430" font-size="13" fill="#7b3fd8" font-weight="700">对应循环第 5 步的写回</text>
+  <text x="944" y="456" font-size="12.5" fill="#8590ad">把完整报错原样喂回去，</text>
+  <text x="944" y="478" font-size="12.5" fill="#8590ad">它往往一次就改对了</text>
+
+  <!-- 页脚（SVG 的 text 不会自动换行，手动断成三行） -->
+  <line x1="40" y1="536" x2="1200" y2="536" stroke="#e2e8f7"/>
+  <text x="40" y="568" font-size="14.5" fill="#40496a">
+    <tspan font-weight="700" fill="#1b2033">这四道控制全在模型外面</tspan>
+    <tspan>—— 模型的智力是别人训练好的，你只能选；但这四样是可以设计的。</tspan>
+  </text>
+  <text x="40" y="596" font-size="14.5" fill="#40496a">
+    <tspan>这就是为什么同一个 DeepSeek 装在不同软件里表现不一样，也是为什么你要学的是「怎么调」，而不是「哪个模型更强」。</tspan>
+  </text>
+  <text x="40" y="638" font-size="16" font-weight="700" fill="#3f57d8">模型是买来的，循环是设计出来的。</text>
+</svg>

@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 880" width="1240" height="880"
+     font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4d6bfe"/>
+    </marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e08b2f"/>
+    </marker>
+    <linearGradient id="gm" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5b78ff"/>
+      <stop offset="100%" stop-color="#3f57d8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1240" height="880" fill="#ffffff"/>
+
+  <!-- 标题 -->
+  <text x="40" y="52" font-size="30" font-weight="700" fill="#1b2033">Harness 如何控制模型</text>
+  <text x="40" y="82" font-size="15.5" fill="#6b7490">模型只会「文字进、文字出」。是 Harness 在它外面加了一圈控制，让它能干活、并且不闯祸。</text>
+
+  <!-- Harness 外圈 -->
+  <rect x="40" y="110" width="1160" height="580" rx="20" fill="#f7f9ff" stroke="#c9d5ff" stroke-width="2" stroke-dasharray="9 7"/>
+  <text x="62" y="141" font-size="15.5" font-weight="700" fill="#3f57d8">Harness（马具）</text>
+  <text x="178" y="141" font-size="14" fill="#8590ad">＝ 把马拉上车的那一整套：模型适配 · 循环 · 工具 · 沙箱审批 · 日志 · 上下文管理 · 界面 · 插件</text>
+
+  <!-- ① 组装上下文 -->
+  <rect x="70" y="252" width="232" height="204" rx="12" fill="#ffffff" stroke="#c9d5ff" stroke-width="1.6"/>
+  <circle cx="92" cy="276" r="12" fill="#3f57d8"/>
+  <text x="92" y="281" font-size="12.5" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+  <text x="112" y="281" font-size="15.5" font-weight="700" fill="#1b2033">组装上下文</text>
+  <text x="86" y="312" font-size="13.5" fill="#40496a">系统提示词（你看不见）</text>
+  <text x="86" y="338" font-size="13.5" fill="#40496a">工具列表</text>
+  <text x="86" y="364" font-size="13.5" fill="#40496a">所有历史对话</text>
+  <text x="86" y="390" font-size="13.5" fill="#40496a">所有工具输出</text>
+  <line x1="86" y1="408" x2="286" y2="408" stroke="#e2e8f7"/>
+  <text x="86" y="432" font-size="13" fill="#8590ad">打包成一大段文字 ⤵</text>
+
+  <!-- 箭头 1→2 -->
+  <line x1="302" y1="352" x2="352" y2="352" stroke="#4d6bfe" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="327" y="336" font-size="12" fill="#8590ad" text-anchor="middle">每次</text>
+  <text x="327" y="374" font-size="12" fill="#8590ad" text-anchor="middle">全发一遍</text>
+
+  <!-- ② 模型 -->
+  <rect x="356" y="262" width="188" height="182" rx="12" fill="url(#gm)"/>
+  <text x="450" y="296" font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">模型</text>
+  <text x="450" y="326" font-size="13.5" fill="#dfe5ff" text-anchor="middle">文字进 → 文字出</text>
+  <line x1="386" y1="344" x2="514" y2="344" stroke="#8ea2ff"/>
+  <text x="450" y="370" font-size="13" fill="#dfe5ff" text-anchor="middle">无状态</text>
+  <text x="450" y="392" font-size="13" fill="#dfe5ff" text-anchor="middle">没有手</text>
+  <text x="450" y="414" font-size="13" fill="#dfe5ff" text-anchor="middle">一次调用就结束</text>
+
+  <!-- 箭头 2→闸门 -->
+  <line x1="548" y1="352" x2="596" y2="352" stroke="#4d6bfe" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="572" y="336" font-size="12" fill="#8590ad" text-anchor="middle">它说</text>
+  <text x="572" y="374" font-size="12" fill="#8590ad" text-anchor="middle">要用工具</text>
+
+  <!-- 闸门 -->
+  <rect x="600" y="290" width="166" height="126" rx="12" fill="#fffaf0" stroke="#f0c07a" stroke-width="1.8"/>
+  <text x="683" y="320" font-size="15.5" font-weight="700" fill="#a5670f" text-anchor="middle">闸门</text>
+  <line x1="622" y1="332" x2="744" y2="332" stroke="#f4dcb6"/>
+  <text x="683" y="356" font-size="12.5" fill="#8a5a12" text-anchor="middle">审批：这条要问你</text>
+  <text x="683" y="378" font-size="12.5" fill="#8a5a12" text-anchor="middle">沙箱：这些碰不了</text>
+  <text x="683" y="400" font-size="12" fill="#b08a4a" text-anchor="middle">拦在这里，而不是事后</text>
+
+  <!-- 箭头 闸门→工具 -->
+  <line x1="770" y1="352" x2="818" y2="352" stroke="#4d6bfe" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="794" y="336" font-size="12" fill="#8590ad" text-anchor="middle">放行</text>
+
+  <!-- ④ 执行工具 -->
+  <rect x="822" y="252" width="184" height="204" rx="12" fill="#ffffff" stroke="#c9d5ff" stroke-width="1.6"/>
+  <circle cx="844" cy="276" r="12" fill="#3f57d8"/>
+  <text x="844" y="281" font-size="12.5" font-weight="700" fill="#ffffff" text-anchor="middle">4</text>
+  <text x="864" y="281" font-size="15.5" font-weight="700" fill="#1b2033">执行工具</text>
+  <text x="838" y="312" font-size="13.5" fill="#40496a">读文件 / 写文件</text>
+  <text x="838" y="338" font-size="13.5" fill="#40496a">跑终端命令</text>
+  <text x="838" y="364" font-size="13.5" fill="#40496a">搜索 / 跑代码</text>
+  <line x1="838" y1="382" x2="990" y2="382" stroke="#e2e8f7"/>
+  <text x="838" y="406" font-size="13" font-weight="700" fill="#3f57d8">真本事在这一步</text>
+  <text x="838" y="430" font-size="13" fill="#8590ad">是程序去执行，不是模型</text>
+
+  <!-- 箭头 工具→真实世界 -->
+  <line x1="1010" y1="352" x2="1056" y2="352" stroke="#4d6bfe" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 真实世界 -->
+  <rect x="1060" y="272" width="120" height="164" rx="12" fill="#eef2ff" stroke="#c9d5ff" stroke-width="1.6"/>
+  <text x="1120" y="304" font-size="14" font-weight="700" fill="#1b2033" text-anchor="middle">你的电脑</text>
+  <line x1="1080" y1="318" x2="1160" y2="318" stroke="#dbe3fb"/>
+  <text x="1120" y="344" font-size="13.5" fill="#40496a" text-anchor="middle">文件</text>
+  <text x="1120" y="370" font-size="13.5" fill="#40496a" text-anchor="middle">终端</text>
+  <text x="1120" y="396" font-size="13.5" fill="#40496a" text-anchor="middle">网络</text>
+  <text x="1120" y="422" font-size="11.5" fill="#8590ad" text-anchor="middle">真实后果</text>
+
+  <!-- ⑤ 结果写回：从工具下方绕回上下文 -->
+  <path d="M 914 456 L 914 528 L 186 528 L 186 460" fill="none" stroke="#4d6bfe" stroke-width="2"
+        stroke-dasharray="7 5" marker-end="url(#ar)"/>
+  <rect x="380" y="510" width="470" height="36" rx="8" fill="#ffffff" stroke="#dbe3fb"/>
+  <text x="615" y="534" font-size="13.5" font-weight="700" fill="#3f57d8" text-anchor="middle">5 · 结果写回 —— 原始文件内容、原始报错，不是你的转述</text>
+
+  <!-- 本轮结束提示 -->
+  <path d="M 450 262 L 450 208" fill="none" stroke="#8590ad" stroke-width="1.6" marker-end="url(#arw)" stroke-dasharray="5 4"/>
+  <text x="462" y="200" font-size="12.5" fill="#8590ad">不再需要工具 → 本轮结束（否则回到第 1 步，继续转）</text>
+
+  <!-- 持久日志 -->
+  <rect x="64" y="596" width="1112" height="72" rx="12" fill="#ffffff" stroke="#dbe3fb" stroke-width="1.4"/>
+  <text x="88" y="626" font-size="14.5" font-weight="700" fill="#1b2033">持久日志</text>
+  <text x="184" y="626" font-size="13.5" fill="#40496a">每一步都写进一份只追加的记录 —— 所以它可以恢复、可以分叉、可以事后追查它到底干了什么。</text>
+  <text x="88" y="652" font-size="13" fill="#8590ad">这四样（循环 · 工具 · 日志 · 闸门）加上模型，才是 Agent。少一样，它就退回成一个只会打字的聊天框。</text>
+
+  <!-- 底部对照 -->
+  <text x="40" y="730" font-size="15.5" font-weight="700" fill="#1b2033">模型做不到的五件事，全部由 Harness 补上</text>
+
+  <g font-size="13">
+    <rect x="40" y="748" width="222" height="86" rx="10" fill="#f7f9ff" stroke="#dbe3fb"/>
+    <text x="58" y="776" font-size="13.5" font-weight="700" fill="#3f57d8">它没有记忆</text>
+    <text x="58" y="800" fill="#40496a">循环每一轮重新组装</text>
+    <text x="58" y="820" fill="#40496a">上下文，把历史再念一遍</text>
+
+    <rect x="274" y="748" width="222" height="86" rx="10" fill="#f7f9ff" stroke="#dbe3fb"/>
+    <text x="292" y="776" font-size="13.5" font-weight="700" fill="#3f57d8">它没有手</text>
+    <text x="292" y="800" fill="#40496a">工具真的去读、去跑</text>
+    <text x="292" y="820" fill="#40496a">把真实内容喂回来</text>
+
+    <rect x="508" y="748" width="222" height="86" rx="10" fill="#f7f9ff" stroke="#dbe3fb"/>
+    <text x="526" y="776" font-size="13.5" font-weight="700" fill="#3f57d8">它不会停</text>
+    <text x="526" y="800" fill="#40496a">停止条件、最大步数</text>
+    <text x="526" y="820" fill="#40496a">和花超了怎么办</text>
+
+    <rect x="742" y="748" width="222" height="86" rx="10" fill="#f7f9ff" stroke="#dbe3fb"/>
+    <text x="760" y="776" font-size="13.5" font-weight="700" fill="#3f57d8">它不知道对错</text>
+    <text x="760" y="800" fill="#40496a">把完整的真实报错喂回去</text>
+    <text x="760" y="820" fill="#40496a">它往往一次就改对</text>
+
+    <rect x="976" y="748" width="224" height="86" rx="10" fill="#fffaf0" stroke="#f0c07a"/>
+    <text x="994" y="776" font-size="13.5" font-weight="700" fill="#a5670f">它真的会闯祸</text>
+    <text x="994" y="800" fill="#8a5a12">沙箱 · 审批 · 日志</text>
+    <text x="994" y="820" fill="#8a5a12">让它闯的祸可以被收回</text>
+  </g>
+</svg>

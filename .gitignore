@@ -1,0 +1,5 @@
+# 第三方论文 PDF 不进公开仓库：arXiv 授权是 non-exclusive-distrib，
+# 只授权 arXiv 分发，未授权第三方再分发。课堂分发请用本地文件。
+demo-assets/paper/*.pdf
+
+.DS_Store
